@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "mechanized",
+  "version": "${version}",
+
+  "name": "Mechanized",
+  "description": "This is an example description! Tell everyone what your mod is about!",
+  "authors": [
+    "Me!"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "MIT",
+  "icon": "assets/mechanized/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.snakefangox.mechanized.Mechanized"
+    ],
+	"client": [
+      "net.snakefangox.mechanized.Mechanized"
+    ]
+  },
+  "mixins": [
+    "mechanized.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.15.2",
+	"libgui": ">=1.8.0",
+	"libblockattributes": ">=0.6.6"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}

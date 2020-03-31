@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,lit=true": { "model": "mechanized:block/steam_boiler" },
+    "facing=south,lit=true": { "model": "mechanized:block/steam_boiler", "y": 180 },
+    "facing=west,lit=true": { "model": "mechanized:block/steam_boiler", "y": 270 },
+    "facing=east,lit=true": { "model": "mechanized:block/steam_boiler", "y": 90 },
+	"facing=north,lit=false": { "model": "mechanized:block/steam_boiler" },
+    "facing=south,lit=false": { "model": "mechanized:block/steam_boiler", "y": 180 },
+    "facing=west,lit=false": { "model": "mechanized:block/steam_boiler", "y": 270 },
+    "facing=east,lit=false": { "model": "mechanized:block/steam_boiler", "y": 90 }
+  }
+}

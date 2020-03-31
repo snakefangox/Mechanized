@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "mechanized:block/alloy_furnace",
+    "down": "mechanized:block/alloy_furnace",
+    "up": "mechanized:block/alloy_furnace",
+    "east": "mechanized:block/alloy_furnace",
+    "west": "mechanized:block/alloy_furnace",
+    "north": "mechanized:block/alloy_furnace",
+    "south": "mechanized:block/alloy_furnace"
+  }
+}

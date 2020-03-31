@@ -1,0 +1,23 @@
+{
+    "multipart": [
+        {   "apply": { "model": "mechanized:block/steam_pipe" }},
+        {   "when": { "north": "true" },
+            "apply": { "model": "mechanized:block/steam_pipe_end", "uvlock": true }
+        },
+        {   "when": { "east": "true" },
+            "apply": { "model": "mechanized:block/steam_pipe_end", "y": 90, "uvlock": true }
+        },
+        {   "when": { "south": "true" },
+            "apply": { "model": "mechanized:block/steam_pipe_end", "y": 180, "uvlock": true }
+        },
+        {   "when": { "west": "true" },
+            "apply": { "model": "mechanized:block/steam_pipe_end", "y": 270, "uvlock": true }
+        },
+		{   "when": { "up": "true" },
+            "apply": { "model": "mechanized:block/steam_pipe_end", "x": -90, "uvlock": true }
+        },
+		{   "when": { "down": "true" },
+            "apply": { "model": "mechanized:block/steam_pipe_end", "x": 90, "uvlock": true }
+        }
+    ]
+}
