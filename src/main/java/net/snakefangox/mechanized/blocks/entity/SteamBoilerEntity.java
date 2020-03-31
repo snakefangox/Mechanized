@@ -67,9 +67,11 @@ public class SteamBoilerEntity extends BlockEntity
 			} else if (oldFuel != fuel) {
 				updateBlockState();
 			}
+		}else if(oldFuel != fuel && fuel == 0){
+			updateBlockState();
 		}
 		if(world.getTime() % 5 == 0) {
-			SteamUtil.pushSteam(world, this, pos, null);
+			SteamUtil.equalizeSteam(world, this, pos, null);
 		}
 	}
 

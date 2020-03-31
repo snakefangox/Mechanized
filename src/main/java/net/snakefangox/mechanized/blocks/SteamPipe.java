@@ -5,7 +5,11 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EntityContext;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
@@ -16,7 +20,9 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
+import net.snakefangox.mechanized.blocks.entity.SteamPipeEntity;
 import net.snakefangox.mechanized.steam.Steam;
+import net.snakefangox.mechanized.steam.SteamPipeNetworkStorage;
 
 public class SteamPipe extends Block implements BlockEntityProvider {
 
@@ -79,8 +85,47 @@ public class SteamPipe extends Block implements BlockEntityProvider {
 	@Override
 	public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos neighborPos,
 			boolean moved) {
-		world.setBlockState(pos, getStateForPipe(world, pos));
 		super.neighborUpdate(state, world, pos, block, neighborPos, moved);
+		world.setBlockState(pos, getStateForPipe(world, pos));
+	}
+
+	@Override
+	public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+		super.onPlaced(world, pos, state, placer, itemStack);
+		if (!(world instanceof ServerWorld))
+			return;
+		BlockEntity be = world.getBlockEntity(pos);
+		boolean firstNetwork = true;
+		if (be instanceof SteamPipeEntity) {
+			for (int i = 0; i < Direction.values().length; i++) {
+				BlockEntity beo = world.getBlockEntity(pos.offset(Direction.values()[i]));
+				if (beo instanceof SteamPipeEntity) {
+					if (firstNetwork) {
+						firstNetwork = false;
+						SteamPipeNetworkStorage.getInstance((ServerWorld) world)
+								.addToPipeNetwork(((SteamPipeEntity) beo).getNetwork(), pos, world);
+					} else {
+						SteamPipeNetworkStorage.getInstance((ServerWorld) world).mergePipeNetworks(
+								((SteamPipeEntity) be).getNetwork(), ((SteamPipeEntity) beo).getNetwork(), world);
+					}
+				}
+			}
+			if (firstNetwork) {
+				SteamPipeNetworkStorage.getInstance((ServerWorld) world).createNewPipeNetwork(pos, world);
+			}
+		}
+	}
+
+	@Override
+	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		super.onBreak(world, pos, state, player);
+		if (!(world instanceof ServerWorld))
+			return;
+		BlockEntity be = world.getBlockEntity(pos);
+		if (be instanceof SteamPipeEntity) {
+			SteamPipeNetworkStorage.getInstance((ServerWorld) world)
+					.removePipeFromNetwork(((SteamPipeEntity) be).getNetwork(), pos, world);
+		}
 	}
 
 	private BlockState getStateForPipe(World world, BlockPos pos) {
@@ -90,12 +135,8 @@ public class SteamPipe extends Block implements BlockEntityProvider {
 		BlockEntity west = world.getBlockEntity(pos.offset(Direction.WEST));
 		BlockEntity up = world.getBlockEntity(pos.offset(Direction.UP));
 		BlockEntity down = world.getBlockEntity(pos.offset(Direction.DOWN));
-		BlockEntity[] dirEntities = new BlockEntity[] { north, south, east, west, up, down };
-
-		// for(BlockEntity be: dirEntities) {
-		// if(be instanceof SteamPipeEntity)
-		// ;
-		// }
+		// BlockEntity[] dirEntities = new BlockEntity[] { north, south, east, west, up,
+		// down };
 
 		return getDefaultState().with(CONNECTED_NORTH, north instanceof Steam)
 				.with(CONNECTED_SOUTH, south instanceof Steam).with(CONNECTED_EAST, east instanceof Steam)

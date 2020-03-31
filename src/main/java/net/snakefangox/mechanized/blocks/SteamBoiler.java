@@ -30,14 +30,14 @@ import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.entity.SteamBoilerEntity;
 
 public class SteamBoiler extends Block implements BlockEntityProvider, AttributeProvider {
-	
+
 	public static final BooleanProperty LIT = BooleanProperty.of("lit");
 
 	public SteamBoiler(Settings settings) {
 		super(settings);
 		setDefaultState(getDefaultState().with(LIT, false));
 	}
-	
+
 	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
 			BlockHitResult hit) {
@@ -47,12 +47,14 @@ public class SteamBoiler extends Block implements BlockEntityProvider, Attribute
 		BlockEntity be = world.getBlockEntity(pos);
 		ItemStack heldItem = player.getStackInHand(hand);
 		if (be != null && be instanceof SteamBoilerEntity) {
-			SteamBoilerEntity sb = (SteamBoilerEntity)be;
+			SteamBoilerEntity sb = (SteamBoilerEntity) be;
 			if (heldItem.getItem() == Items.WATER_BUCKET) {
-				FluidVolume fluid = new FluidVolume(FluidKeys.WATER, FluidAmount.BUCKET) {};
-				if(sb.waterTank.attemptInsertion(fluid, Simulation.SIMULATE).isEmpty()) {
+				FluidVolume fluid = new FluidVolume(FluidKeys.WATER, FluidAmount.BUCKET) {
+				};
+				if (sb.waterTank.attemptInsertion(fluid, Simulation.SIMULATE).isEmpty()) {
 					sb.waterTank.attemptInsertion(fluid, Simulation.ACTION);
-					player.setStackInHand(hand, new ItemStack(Items.BUCKET));
+					if (!player.isCreative())
+						player.setStackInHand(hand, new ItemStack(Items.BUCKET));
 				}
 			} else {
 				ContainerProviderRegistry.INSTANCE.openContainer(MRegister.STEAM_BOILER_CONTAINER, player,
@@ -65,14 +67,14 @@ public class SteamBoiler extends Block implements BlockEntityProvider, Attribute
 
 	@Override
 	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-		
+
 	}
-	
+
 	@Override
 	public int getLuminance(BlockState state) {
 		return state.get(LIT) ? 10 : 0;
 	}
-	
+
 	@Override
 	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		super.onBreak(world, pos, state, player);

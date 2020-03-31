@@ -18,6 +18,10 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.container.BlockContext;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.LiteralText;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.snakefangox.mechanized.blocks.AlloyFurnace;
@@ -34,6 +38,7 @@ import net.snakefangox.mechanized.gui.SteamBoilerContainer;
 import net.snakefangox.mechanized.gui.SteamBoilerContainer.SteamBoilerScreen;
 import net.snakefangox.mechanized.gui.SteamTankContainer;
 import net.snakefangox.mechanized.gui.SteamTankContainer.SteamTankScreen;
+import net.snakefangox.mechanized.steam.SteamPipeNetworkStorage;
 
 public class MRegister {
 
@@ -66,17 +71,31 @@ public class MRegister {
 	public static final Item COPPER_INGOT = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
 	public static final Item ZINC_INGOT = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
 	public static final Item BRASS_INGOT = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
-	
-	
+	public static final Item DEBUG_TOOL = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP)) {
+		public net.minecraft.util.ActionResult useOnBlock(net.minecraft.item.ItemUsageContext context) {
+			if (context.getWorld().isClient)
+				return ActionResult.SUCCESS;
+			if (context.getWorld().getBlockEntity(context.getBlockPos()) != null)
+				context.getPlayer().addChatMessage(new LiteralText(
+						context.getWorld().getBlockEntity(context.getBlockPos()).toTag(new CompoundTag()).asString()),
+						true);
+			System.out.println(SteamPipeNetworkStorage.getInstance((ServerWorld) context.getWorld()));
+			return ActionResult.SUCCESS;
+		};
+	};
 
 	@SuppressWarnings("unchecked")
 	public static void registerEverything() {
 		registerBlock(COPPER_ORE, new Identifier(Mechanized.MODID, "copper_ore"), RenderLayerEnum.CUTOUT);
 		registerBlock(ZINC_ORE, new Identifier(Mechanized.MODID, "zinc_ore"), RenderLayerEnum.CUTOUT);
-		ALLOY_FURNACE_ENTITY = (BlockEntityType<AlloyFurnaceEntity>) registerBlock(ALLOY_FURNACE, new Identifier(Mechanized.MODID, "alloy_furnace"), AlloyFurnaceEntity::new);
-		STEAM_BOILER_ENTITY = (BlockEntityType<SteamBoilerEntity>) registerBlock(STEAM_BOILER, new Identifier(Mechanized.MODID, "steam_boiler"), SteamBoilerEntity::new);
-		STEAM_PIPE_ENTITY = (BlockEntityType<SteamPipeEntity>) registerBlock(STEAM_PIPE, new Identifier(Mechanized.MODID, "steam_pipe"), SteamPipeEntity::new);
-		STEAM_TANK_ENTITY = (BlockEntityType<SteamTankEntity>) registerBlock(STEAM_TANK, new Identifier(Mechanized.MODID, "steam_tank"), SteamTankEntity::new);
+		ALLOY_FURNACE_ENTITY = (BlockEntityType<AlloyFurnaceEntity>) registerBlock(ALLOY_FURNACE,
+				new Identifier(Mechanized.MODID, "alloy_furnace"), AlloyFurnaceEntity::new);
+		STEAM_BOILER_ENTITY = (BlockEntityType<SteamBoilerEntity>) registerBlock(STEAM_BOILER,
+				new Identifier(Mechanized.MODID, "steam_boiler"), SteamBoilerEntity::new);
+		STEAM_PIPE_ENTITY = (BlockEntityType<SteamPipeEntity>) registerBlock(STEAM_PIPE,
+				new Identifier(Mechanized.MODID, "steam_pipe"), SteamPipeEntity::new);
+		STEAM_TANK_ENTITY = (BlockEntityType<SteamTankEntity>) registerBlock(STEAM_TANK,
+				new Identifier(Mechanized.MODID, "steam_tank"), SteamTankEntity::new);
 
 		ContainerProviderRegistry.INSTANCE.registerFactory(ALLOY_FURNACE_CONTAINER,
 				(syncId, id, player, buf) -> new AlloyFurnaceContainer(syncId, player.inventory,
@@ -91,6 +110,7 @@ public class MRegister {
 		registerItem(COPPER_INGOT, new Identifier(Mechanized.MODID, "copper_ingot"));
 		registerItem(ZINC_INGOT, new Identifier(Mechanized.MODID, "zinc_ingot"));
 		registerItem(BRASS_INGOT, new Identifier(Mechanized.MODID, "brass_ingot"));
+		registerItem(DEBUG_TOOL, new Identifier(Mechanized.MODID, "debug_tool"));
 	}
 
 	public static void registerClient() {
@@ -117,15 +137,19 @@ public class MRegister {
 
 	}
 
-	private static BlockEntityType<? extends BlockEntity> registerBlock(Block block, Identifier id, Supplier<BlockEntity> be) {
+	private static BlockEntityType<? extends BlockEntity> registerBlock(Block block, Identifier id,
+			Supplier<BlockEntity> be) {
 		registerBlock(block, id);
 		return Registry.register(Registry.BLOCK_ENTITY_TYPE, id, BlockEntityType.Builder.create(be, block).build(null));
 	}
-	
-	/*private static BlockEntityType<? extends BlockEntity> registerBlock(Block block, Identifier id, Supplier<BlockEntity> be, RenderLayerEnum layer) {
-		registerBlock(block, id, layer);
-		return Registry.register(Registry.BLOCK_ENTITY_TYPE, id, BlockEntityType.Builder.create(be, block).build(null));
-	}*/
+
+	/*
+	 * private static BlockEntityType<? extends BlockEntity> registerBlock(Block
+	 * block, Identifier id, Supplier<BlockEntity> be, RenderLayerEnum layer) {
+	 * registerBlock(block, id, layer); return
+	 * Registry.register(Registry.BLOCK_ENTITY_TYPE, id,
+	 * BlockEntityType.Builder.create(be, block).build(null)); }
+	 */
 
 	@Environment(EnvType.CLIENT)
 	private static void setRenderLayer(Block block, RenderLayerEnum layer) {

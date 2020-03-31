@@ -19,8 +19,13 @@ public class SteamPipeEntity extends BlockEntity implements Steam, NetworkMember
 	}
 	
 	@Override
-	public void recheckForNetwork() {
-		
+	public void setNetwork(int id) {
+		pipeNetworkID = id;
+	}
+	
+	@Override
+	public int getNetwork() {
+		return pipeNetworkID;
 	}
 
 	@Override

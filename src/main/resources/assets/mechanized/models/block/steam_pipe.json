@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
 	"textures": {
-		"0": "mechanized:block/steam_boiler",
-		"particle": "mechanized:block/steam_boiler"
+		"0": "mechanized:block/brass_plate",
+		"particle": "mechanized:block/brass_plate"
 	},
 	"elements": [
 		{

@@ -1,17 +1,20 @@
 package net.snakefangox.mechanized.steam;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import blue.endless.jankson.annotation.Nullable;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.PersistentState;
+import net.minecraft.world.World;
 import net.snakefangox.mechanized.Mechanized;
 
 public class SteamPipeNetworkStorage extends PersistentState {
@@ -19,26 +22,21 @@ public class SteamPipeNetworkStorage extends PersistentState {
 	public static final String KEY = Mechanized.MODID + "pipe_network";
 
 	List<PipeNetwork> pipe_networks = new ArrayList<PipeNetwork>();
+	int nextID = 0;
 
 	public SteamPipeNetworkStorage() {
 		super(KEY);
 	}
 
-	public int createNewPipeNetwork(BlockPos pos) {
+	public void createNewPipeNetwork(BlockPos pos, World world) {
 		PipeNetwork pn = new PipeNetwork();
 		pn.addPipe(pos, this);
-		int index = pipe_networks.size();
+		int index = getNextID();
 		// Shouldn't actually need the index here but better safe then sorry
 		pipe_networks.add(index, pn);
-		return index;
-	}
-
-	public void removeFromPipeNetwork(int id, BlockPos pos) {
-		PipeNetwork pn = getPipeNetwork(id);
-		if (pn != null) {
-			pn.removePipe(pos, this);
-			if(pn.isEmpty())
-				pipe_networks.remove(id);
+		BlockEntity be = world.getBlockEntity(pos);
+		if (be instanceof NetworkMember) {
+			((NetworkMember) be).setNetwork(index);
 		}
 	}
 
@@ -49,28 +47,92 @@ public class SteamPipeNetworkStorage extends PersistentState {
 		return null;
 	}
 
-	public void addToPipeNetwork(int id, BlockPos pos) {
+	public void addToPipeNetwork(int id, BlockPos pos, World world) {
 		PipeNetwork pn = getPipeNetwork(id);
 		if (pn != null)
 			pn.addPipe(pos, this);
+		BlockEntity be = world.getBlockEntity(pos);
+		if (be instanceof NetworkMember)
+			((NetworkMember) be).setNetwork(id);
 	}
 
-	public void mergePipeNetworks(int id1, int id2) {
+	public void mergePipeNetworks(int id1, int id2, World world) {
 		PipeNetwork pn1 = getPipeNetwork(id1);
 		PipeNetwork pn2 = getPipeNetwork(id2);
 		if (pn1 != null && pn2 != null) {
 			pn1.appendNetwork(pn2.getNetwork());
 			pn1.addSteam(null, pn2.getSteamAmount(null));
-			pipe_networks.remove(id2);
+			for (BlockPos pos : pn2.network) {
+				BlockEntity be = world.getBlockEntity(pos);
+				if (be instanceof NetworkMember) {
+					((NetworkMember) be).setNetwork(id1);
+				}
+			}
+			pipe_networks.set(id2, null);
 			markDirty();
 		}
 	}
 
-	public void splitPipeNetworks(int id, BlockPos splitPoint) {
+	public void removePipeFromNetwork(int id, BlockPos splitPoint, World world) {
 		PipeNetwork pn = getPipeNetwork(id);
 		if (pn != null) {
-			
+			pn.removePipe(splitPoint, this);
+			scanPipeNetworkCasacading(splitPoint, pn, world);
+			pipe_networks.set(id, null);
 		}
+	}
+
+	/**
+	 * Jesus I'm so fucking sorry
+	 * 
+	 * @param start
+	 * @param pn
+	 */
+	private void scanPipeNetworkCasacading(BlockPos start, PipeNetwork pn, World world) {
+		@SuppressWarnings("unchecked")
+		List<BlockPos>[] searchList = new ArrayList[6];
+		for (int i = 0; i < searchList.length; i++) {
+			BlockPos bp = start.offset(Direction.values()[i]);
+			if (pn.contains(bp)) {
+				searchList[i] = new ArrayList<BlockPos>();
+				searchList[i].add(bp);
+				for (int j = 0; j < searchList[i].size(); j++) {
+					for (int k = 0; k < Direction.values().length; k++) {
+						BlockPos bpo = searchList[i].get(j).offset(Direction.values()[k]);
+						if (pn.contains(bpo) && !searchList[i].contains(bpo))
+							searchList[i].add(bpo);
+					}
+					boolean stop = false;
+					for (int l = 0; l < searchList.length; l++) {
+						if (l != i && searchList[l] != null && searchList[i] != null
+								&& searchList[l].contains(searchList[i].get(j))) {
+							searchList[i] = null;
+							stop = true;
+						}
+					}
+					if (stop)
+						break;
+				}
+			}
+		}
+		for (int i = 0; i < searchList.length; i++) {
+			if (searchList[i] != null) {
+				PipeNetwork newPn = new PipeNetwork();
+				newPn.addAllPipes(searchList[i]);
+				int index = getNextID();
+				// Shouldn't actually need the index here but better safe then sorry
+				pipe_networks.add(index, newPn);
+				for (BlockPos pos : searchList[i]) {
+					BlockEntity be = world.getBlockEntity(pos);
+					if (be instanceof NetworkMember)
+						((NetworkMember) be).setNetwork(index);
+				}
+			}
+		}
+	}
+
+	public int getNextID() {
+		return nextID++;
 	}
 
 	public static SteamPipeNetworkStorage getInstance(ServerWorld world) {
@@ -79,10 +141,16 @@ public class SteamPipeNetworkStorage extends PersistentState {
 
 	@Override
 	public void fromTag(CompoundTag tag) {
-		for (String index : tag.getKeys()) {
-			PipeNetwork network = new PipeNetwork();
-			network.fromTag(tag.getCompound(index));
-			pipe_networks.add(Integer.valueOf(index), network);
+		nextID = tag.getInt("nextID");
+		for (int i = 0; i < nextID; i++) {
+			String s = String.valueOf(i);
+			if (tag.contains(s)) {
+				PipeNetwork network = new PipeNetwork();
+				network.fromTag(tag.getCompound(s));
+				pipe_networks.add(i, network);
+			} else {
+				pipe_networks.add(i, null);
+			}
 		}
 	}
 
@@ -93,7 +161,21 @@ public class SteamPipeNetworkStorage extends PersistentState {
 			if (pn != null)
 				tag.put(String.valueOf(i), pn.toTag(new CompoundTag()));
 		}
+		tag.putInt("nextID", nextID);
 		return tag;
+	}
+
+	@Override
+	public String toString() {
+		String value = "";
+		int nonNullCount = 0;
+		for (PipeNetwork net : pipe_networks) {
+			if (net != null) {
+				value += net.toString() + " \n ";
+				nonNullCount++;
+			}
+		}
+		return value + " \n Contains:" + nonNullCount;
 	}
 
 	public static class PipeNetwork implements Steam {
@@ -112,11 +194,19 @@ public class SteamPipeNetworkStorage extends PersistentState {
 			network.remove(pos);
 			instance.markDirty();
 		}
-		
+
+		public void addAllPipes(Collection<BlockPos> coll) {
+			network.addAll(coll);
+		}
+
+		public boolean contains(BlockPos pos) {
+			return network.contains(pos);
+		}
+
 		public boolean isEmpty() {
 			return network.isEmpty();
 		}
-		
+
 		public Set<BlockPos> getNetwork() {
 			return network;
 		}
@@ -159,9 +249,16 @@ public class SteamPipeNetworkStorage extends PersistentState {
 		public int getMaxSteamAmount(Direction dir) {
 			return STEAM_CAPACITY;
 		}
+
+		@Override
+		public String toString() {
+			return network.toString() + " Amount: " + String.valueOf(steamAmount);
+		}
 	}
 
 	public static interface NetworkMember {
-		public void recheckForNetwork();
+		public void setNetwork(int id);
+
+		public int getNetwork();
 	}
 }

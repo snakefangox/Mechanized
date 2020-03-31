@@ -25,7 +25,7 @@ public class SteamTankEntity extends BlockEntity implements Steam, Tickable, Pro
 		if (world.isClient)
 			return;
 		if (world.getTime() % 5 == 0) {
-			SteamUtil.pushSteam(world, this, pos, null);
+			SteamUtil.equalizeSteam(world, this, pos, null);
 		}
 	}
 

@@ -8,5 +8,6 @@
 "block.mechanized.alloy_furnace": "Alloy Furnace",
 "block.mechanized.steam_boiler": "Steam Boiler",
 "block.mechanized.steam_pipe": "Steam Pipe",
-"block.mechanized.steam_tank": "Steam Tank"
+"block.mechanized.steam_tank": "Steam Tank",
+"item.mechanized.debug_tool": "Debug Tool"
 }

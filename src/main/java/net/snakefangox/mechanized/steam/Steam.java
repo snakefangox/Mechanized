@@ -33,6 +33,21 @@ public interface Steam {
 	public int getMaxSteamAmount(Direction dir);
 
 	/**
+	 * Calls add or remove as needed
+	 * 
+	 * @param dir
+	 * @param amount
+	 * @return the amount of steam that was accepted or removed
+	 */
+	default public int addOrRemoveSteam(Direction dir, int amount) {
+		if(amount > 0) {
+			return addSteam(dir, amount);
+		}else {
+			return removeSteam(dir, amount * -1) * -1;
+		}
+	}
+	
+	/**
 	 * Adds steam to the tank linked to the given facing
 	 * 
 	 * @param dir
