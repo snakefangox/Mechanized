@@ -29,7 +29,7 @@ public class SteamTank extends Block implements BlockEntityProvider {
 
 		BlockEntity be = world.getBlockEntity(pos);
 		if (be != null && be instanceof SteamTankEntity) {
-			ContainerProviderRegistry.INSTANCE.openContainer(MRegister.STEAM_TANK_CONTAINER, player,
+			ContainerProviderRegistry.INSTANCE.openContainer(MRegister.STEAM_GAUGE_CONTAINER, player,
 					(packetByteBuf -> packetByteBuf.writeBlockPos(pos)));
 		}
 

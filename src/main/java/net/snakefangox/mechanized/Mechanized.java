@@ -31,7 +31,7 @@ public class Mechanized implements ModInitializer, ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		MRegister.registerClient();
+		MClientRegister.registerClient();
 	}
 
 }

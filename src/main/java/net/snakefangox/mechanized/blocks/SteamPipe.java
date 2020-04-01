@@ -3,28 +3,33 @@ package net.snakefangox.mechanized.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Waterloggable;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EntityContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.entity.SteamPipeEntity;
 import net.snakefangox.mechanized.steam.Steam;
 import net.snakefangox.mechanized.steam.SteamPipeNetworkStorage;
 
-public class SteamPipe extends Block implements BlockEntityProvider {
+public class SteamPipe extends Block implements BlockEntityProvider, Waterloggable {
 
 	protected static final BooleanProperty CONNECTED_NORTH = BooleanProperty.of("north");
 	protected static final BooleanProperty CONNECTED_SOUTH = BooleanProperty.of("south");
@@ -43,9 +48,9 @@ public class SteamPipe extends Block implements BlockEntityProvider {
 
 	public SteamPipe(Settings settings) {
 		super(settings);
-		setDefaultState(
-				getDefaultState().with(CONNECTED_NORTH, false).with(CONNECTED_SOUTH, false).with(CONNECTED_EAST, false)
-						.with(CONNECTED_WEST, false).with(CONNECTED_UP, false).with(CONNECTED_DOWN, false));
+		setDefaultState(getDefaultState().with(CONNECTED_NORTH, false).with(CONNECTED_SOUTH, false)
+				.with(CONNECTED_EAST, false).with(CONNECTED_WEST, false).with(CONNECTED_UP, false)
+				.with(CONNECTED_DOWN, false).with(Properties.WATERLOGGED, false));
 		Box box = BOX_N.getBoundingBox();
 		BOX_E = VoxelShapes.cuboid(1F - box.z1, box.y1, box.x1, 1F - box.z2, box.y2, box.x2);
 		BOX_S = VoxelShapes.cuboid(box.x1, box.y1, 1F - box.z1, box.x2, box.y2, 1F - box.z2);
@@ -74,19 +79,24 @@ public class SteamPipe extends Block implements BlockEntityProvider {
 
 	@Override
 	protected void appendProperties(Builder<Block, BlockState> builder) {
-		builder.add(CONNECTED_NORTH, CONNECTED_SOUTH, CONNECTED_EAST, CONNECTED_WEST, CONNECTED_UP, CONNECTED_DOWN);
+		builder.add(CONNECTED_NORTH, CONNECTED_SOUTH, CONNECTED_EAST, CONNECTED_WEST, CONNECTED_UP, CONNECTED_DOWN,
+				Properties.WATERLOGGED);
 	}
 
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		return getStateForPipe(ctx.getWorld(), ctx.getBlockPos());
+		FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
+		return getStateForPipe(ctx.getWorld(), ctx.getBlockPos()).with(Properties.WATERLOGGED,
+				fluidState.getFluid() == Fluids.WATER);
 	}
 
-	@Override
-	public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos neighborPos,
-			boolean moved) {
-		super.neighborUpdate(state, world, pos, block, neighborPos, moved);
-		world.setBlockState(pos, getStateForPipe(world, pos));
+	public BlockState getStateForNeighborUpdate(BlockState state, Direction facing, BlockState neighborState,
+			IWorld world, BlockPos pos, BlockPos neighborPos) {
+		boolean isWaterlogged = state.get(Properties.WATERLOGGED);
+		if (isWaterlogged) {
+			world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+		}
+		return getStateForPipe(world, pos).with(Properties.WATERLOGGED, isWaterlogged);
 	}
 
 	@Override
@@ -128,7 +138,7 @@ public class SteamPipe extends Block implements BlockEntityProvider {
 		}
 	}
 
-	private BlockState getStateForPipe(World world, BlockPos pos) {
+	private BlockState getStateForPipe(IWorld world, BlockPos pos) {
 		BlockEntity north = world.getBlockEntity(pos.offset(Direction.NORTH));
 		BlockEntity south = world.getBlockEntity(pos.offset(Direction.SOUTH));
 		BlockEntity east = world.getBlockEntity(pos.offset(Direction.EAST));
@@ -144,6 +154,10 @@ public class SteamPipe extends Block implements BlockEntityProvider {
 				.with(CONNECTED_DOWN, down instanceof Steam);
 	}
 
+	public FluidState getFluidState(BlockState state) {
+	      return (Boolean)state.get(Properties.WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+	   }
+	
 	@Override
 	public BlockEntity createBlockEntity(BlockView view) {
 		return MRegister.STEAM_PIPE_ENTITY.instantiate();

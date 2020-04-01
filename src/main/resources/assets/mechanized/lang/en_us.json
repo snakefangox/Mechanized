@@ -1,5 +1,6 @@
 {
 "itemGroup.mechanized.general": "Mechanized",
+"mechanized.pressure_gauge": "Pressure: %s / 100 PSB",
 "block.mechanized.copper_ore": "Copper Ore",
 "block.mechanized.zinc_ore": "Zinc Ore",
 "item.mechanized.copper_ingot": "Copper Ingot",
@@ -9,5 +10,8 @@
 "block.mechanized.steam_boiler": "Steam Boiler",
 "block.mechanized.steam_pipe": "Steam Pipe",
 "block.mechanized.steam_tank": "Steam Tank",
-"item.mechanized.debug_tool": "Debug Tool"
+"item.mechanized.debug_tool": "Debug Tool",
+"item.mechanized.pressure_gauge": "Pressure Gauge",
+"block.mechanized.pump": "Pump",
+"block.mechanized.breaker": "Breaker"
 }

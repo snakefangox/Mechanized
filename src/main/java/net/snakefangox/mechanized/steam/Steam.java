@@ -33,6 +33,26 @@ public interface Steam {
 	public int getMaxSteamAmount(Direction dir);
 
 	/**
+	 * Gets the pressure for the steam tank linked to the given side
+	 * 
+	 * @param dir
+	 * @return the pressure as a float from 0 to 1
+	 */
+	default public float getPressure(Direction dir) {
+		return getSteamAmount(dir) / (float) getMaxSteamAmount(dir);
+	}
+	
+	/**
+	 * Gets the pressure for the steam tank linked to the given side in PSB
+	 * 
+	 * @param dir
+	 * @return the pressure as an int from 0 to 100
+	 */
+	default public int getPressurePSB(Direction dir) {
+		return (int) (getPressure(dir) * 100.0f);
+	}
+	
+	/**
 	 * Calls add or remove as needed
 	 * 
 	 * @param dir

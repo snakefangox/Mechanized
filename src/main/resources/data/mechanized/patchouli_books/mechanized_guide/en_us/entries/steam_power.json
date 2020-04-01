@@ -1,0 +1,19 @@
+{
+	"name": "Steam Power",
+	"icon": "mechanized:steam_boiler",
+	"category": "basics",
+	"pages": [
+		{
+			"type": "text",
+			"text": "There are a few things about steam you should keep in mind. The first is that steam doesn't travel in a given direction, it will always equalize across adjacent machines and through pipes. The second is that devices that use steam have different capacities for storing steam, this should be listed in their book entry."
+		},
+		{
+			"type": "text",
+			"text": "There are two parts to steam power, the amount of steam and the pressure of that steam. The amount of steam is how much steam a device contains up to it's capacity (don't worry, nothing explodes). Pressure is the amount of steam in a device compared to that devices capacity and is measured in PSB or Piston force per Square Block. An empty device will have 0 PSB and a device full to its capacity will always have 100 PSB."
+		},
+		{
+			"type": "text",
+			"text": "The pressure for a given machine, pipe or tank can be measured with a $(l:pressure_gauge)Pressure Gauge$(). When steam attempts to equalize it will try to equalize pressure not the amount of steam. Some machines require a certain pressure to operate."
+		}
+	]
+}

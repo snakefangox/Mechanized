@@ -19,9 +19,8 @@ public class SteamUtil {
 		for (int i = 0; i < out.length; i++) {
 			if (out[i] == null)
 				continue;
-			float outFraction = out[i].getSteamAmount(Direction.values()[i].getOpposite())
-					/ (float) out[i].getMaxSteamAmount(Direction.values()[i].getOpposite());
-			float sourceFraction = source.getSteamAmount(side) / (float) source.getMaxSteamAmount(side);
+			float outFraction = out[i].getPressure(Direction.values()[i].getOpposite());
+			float sourceFraction = source.getPressure(side);
 			float totalFraction = (sourceFraction - outFraction);
 			if (totalFraction > 0) {
 				out[i].addSteam(Direction.values()[i].getOpposite(),

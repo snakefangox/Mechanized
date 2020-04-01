@@ -1,0 +1,12 @@
+{
+	"name": "Pressure Gauge",
+	"icon": "mechanized:pressure_gauge",
+	"category": "items",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:pressure_gauge",
+			"text": "Right click (or shift right click) on a block that stores steam to read out the exact pressure in PSB."
+		}
+	]
+}

@@ -10,9 +10,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.recipe.RecipeType;
 
-public class SteamTankContainer extends CottonCraftingController {
+public class SteamGaugeContainer extends CottonCraftingController {
 
-	public SteamTankContainer(int syncID, PlayerInventory playerInventory, BlockContext context) {
+	public SteamGaugeContainer(int syncID, PlayerInventory playerInventory, BlockContext context) {
 		super(RecipeType.SMELTING, syncID, playerInventory, getBlockInventory(context),
 				getBlockPropertyDelegate(context));
 		WGridPanel root = new WGridPanel();
@@ -27,8 +27,8 @@ public class SteamTankContainer extends CottonCraftingController {
 
 	}
 
-	public static class SteamTankScreen extends CottonInventoryScreen<SteamTankContainer> {
-		public SteamTankScreen(SteamTankContainer container, PlayerEntity player) {
+	public static class SteamGaugeScreen extends CottonInventoryScreen<SteamGaugeContainer> {
+		public SteamGaugeScreen(SteamGaugeContainer container, PlayerEntity player) {
 			super(container, player);
 		}
 	}
