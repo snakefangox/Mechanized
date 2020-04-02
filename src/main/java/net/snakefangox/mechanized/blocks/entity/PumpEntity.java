@@ -22,7 +22,7 @@ import net.snakefangox.mechanized.steam.SteamUtil;
 public class PumpEntity extends BlockEntity implements Steam, Tickable, PropertyDelegateHolder {
 
 	private static final int STEAM_CAPACITY = Steam.UNIT;
-	private static final int PUMP_COST = (int) (Steam.UNIT * 0.01);
+	private static final int PUMP_COST = (int) (Steam.UNIT * 0.005);
 	int steamAmount = 0;
 
 	private static final FluidAmount TANK_CAPACITY = FluidAmount.ofWhole(1);

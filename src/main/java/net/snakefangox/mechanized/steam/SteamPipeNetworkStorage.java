@@ -169,9 +169,11 @@ public class SteamPipeNetworkStorage extends PersistentState {
 	public String toString() {
 		String value = "";
 		int nonNullCount = 0;
+		int count = 0;
 		for (PipeNetwork net : pipe_networks) {
+			count++;
 			if (net != null) {
-				value += net.toString() + " \n ";
+				value += "Index:" + String.valueOf(count) + " " + net.toString() + " \n ";
 				nonNullCount++;
 			}
 		}

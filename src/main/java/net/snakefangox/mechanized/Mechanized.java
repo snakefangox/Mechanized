@@ -9,18 +9,21 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.snakefangox.mechanized.networking.ToServerHandlers;
 
 public class Mechanized implements ModInitializer, ClientModInitializer {
 
 	public static final String MODID = "mechanized";
 	public static final String MOD_NAME = "Mechanized";
-
+	
 	public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.build(new Identifier(MODID, "general"),
 			() -> new ItemStack(MRegister.ALLOY_FURNACE));
 
 	@Override
 	public void onInitialize() {
 		MRegister.registerEverything();
+		
+		ToServerHandlers.initPacketHandlers();
 		
 		Registry.BIOME.forEach(MGeneration::addOreToBiome);
 		RegistryEntryAddedCallback.event(Registry.BIOME).register((i, identifier, biome) -> MGeneration.addOreToBiome(biome));

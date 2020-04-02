@@ -1,27 +1,20 @@
 package net.snakefangox.mechanized.blocks;
 
-import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EntityContext;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
-import net.snakefangox.mechanized.blocks.entity.BreakerEntity;
 
 public class Breaker extends Block implements BlockEntityProvider {
 
@@ -43,21 +36,6 @@ public class Breaker extends Block implements BlockEntityProvider {
 		BOX_W = VoxelShapes.cuboid(box.z1, box.y1, box.x1, box.z2, box.y2, box.x2);
 		BOX_U = VoxelShapes.cuboid(box.x1, 1F - box.z1, box.y1, box.x2, 1F - box.z2, box.y2);
 		BOX_D = VoxelShapes.cuboid(box.x1, box.z1, box.y1, box.x2, box.z2, box.y2);
-	}
-
-	@Override
-	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
-			BlockHitResult hit) {
-		if (world.isClient)
-			return ActionResult.SUCCESS;
-
-		BlockEntity be = world.getBlockEntity(pos);
-		if (be != null && be instanceof BreakerEntity) {
-			ContainerProviderRegistry.INSTANCE.openContainer(MRegister.STEAM_GAUGE_CONTAINER, player,
-					(packetByteBuf -> packetByteBuf.writeBlockPos(pos)));
-		}
-
-		return ActionResult.SUCCESS;
 	}
 
 	@Override

@@ -13,5 +13,8 @@
 "item.mechanized.debug_tool": "Debug Tool",
 "item.mechanized.pressure_gauge": "Pressure Gauge",
 "block.mechanized.pump": "Pump",
-"block.mechanized.breaker": "Breaker"
+"block.mechanized.breaker": "Breaker",
+"block.mechanized.steam_piston": "Steam Piston",
+"block.mechanized.fan": "Fan",
+"item.mechanized.fan_blade": "Fan Blade"
 }

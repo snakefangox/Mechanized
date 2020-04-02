@@ -25,19 +25,22 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.snakefangox.mechanized.blocks.AlloyFurnace;
 import net.snakefangox.mechanized.blocks.Breaker;
+import net.snakefangox.mechanized.blocks.Fan;
 import net.snakefangox.mechanized.blocks.Pump;
 import net.snakefangox.mechanized.blocks.SteamBoiler;
 import net.snakefangox.mechanized.blocks.SteamPipe;
+import net.snakefangox.mechanized.blocks.SteamPiston;
 import net.snakefangox.mechanized.blocks.SteamTank;
 import net.snakefangox.mechanized.blocks.entity.AlloyFurnaceEntity;
 import net.snakefangox.mechanized.blocks.entity.BreakerEntity;
+import net.snakefangox.mechanized.blocks.entity.FanEntity;
 import net.snakefangox.mechanized.blocks.entity.PumpEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamBoilerEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamPipeEntity;
+import net.snakefangox.mechanized.blocks.entity.SteamPistonEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamTankEntity;
 import net.snakefangox.mechanized.gui.AlloyFurnaceContainer;
 import net.snakefangox.mechanized.gui.SteamBoilerContainer;
-import net.snakefangox.mechanized.gui.SteamGaugeContainer;
 import net.snakefangox.mechanized.items.PressureGauge;
 import net.snakefangox.mechanized.steam.SteamPipeNetworkStorage;
 
@@ -60,6 +63,10 @@ public class MRegister {
 			.breakByTool(FabricToolTags.PICKAXES).build());
 	public static final Block BREAKER = new Breaker(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
 			.breakByTool(FabricToolTags.PICKAXES).build());
+	public static final Block STEAM_PISTON = new SteamPiston(FabricBlockSettings.of(Material.METAL).hardness(4)
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
+	public static final Block FAN = new Fan(FabricBlockSettings.of(Material.METAL).hardness(4)
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
 
 	// BlockEntities
 	public static BlockEntityType<AlloyFurnaceEntity> ALLOY_FURNACE_ENTITY;
@@ -68,17 +75,20 @@ public class MRegister {
 	public static BlockEntityType<SteamTankEntity> STEAM_TANK_ENTITY;
 	public static BlockEntityType<PumpEntity> PUMP_ENTITY;
 	public static BlockEntityType<BreakerEntity> BREAKER_ENTITY;
+	public static BlockEntityType<SteamPistonEntity> STEAM_PISTON_ENTITY;
+	public static BlockEntityType<FanEntity> FAN_ENTITY;
 
 	// Containers
 	public static final Identifier ALLOY_FURNACE_CONTAINER = new Identifier(Mechanized.MODID, "alloy_furnace");
 	public static final Identifier STEAM_BOILER_CONTAINER = new Identifier(Mechanized.MODID, "steam_boiler");
-	public static final Identifier STEAM_GAUGE_CONTAINER = new Identifier(Mechanized.MODID, "steam_gauge");
 
 	// Items
 	public static final Item COPPER_INGOT = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
 	public static final Item ZINC_INGOT = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
 	public static final Item BRASS_INGOT = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
-	public static final Item PRESSURE_GAUGE = new PressureGauge(new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
+	public static final Item FAN_BLADE = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
+	public static final Item PRESSURE_GAUGE = new PressureGauge(
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 
 	public static final Item DEBUG_TOOL = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP)) {
 		public net.minecraft.util.ActionResult useOnBlock(net.minecraft.item.ItemUsageContext context) {
@@ -104,8 +114,13 @@ public class MRegister {
 				SteamPipeEntity::new);
 		STEAM_TANK_ENTITY = registerBlock(STEAM_TANK, new Identifier(Mechanized.MODID, "steam_tank"),
 				SteamTankEntity::new);
-		PUMP_ENTITY = registerBlock(PUMP, new Identifier(Mechanized.MODID, "pump"), PumpEntity::new, RenderLayerEnum.CUTOUT);
+		PUMP_ENTITY = registerBlock(PUMP, new Identifier(Mechanized.MODID, "pump"), PumpEntity::new,
+				RenderLayerEnum.CUTOUT);
 		BREAKER_ENTITY = registerBlock(BREAKER, new Identifier(Mechanized.MODID, "breaker"), BreakerEntity::new);
+		STEAM_PISTON_ENTITY = registerBlock(STEAM_PISTON, new Identifier(Mechanized.MODID, "steam_piston"),
+				SteamPistonEntity::new);
+		FAN_ENTITY = registerBlock(FAN, new Identifier(Mechanized.MODID, "fan"),
+				FanEntity::new);
 
 		ContainerProviderRegistry.INSTANCE.registerFactory(ALLOY_FURNACE_CONTAINER,
 				(syncId, id, player, buf) -> new AlloyFurnaceContainer(syncId, player.inventory,
@@ -113,13 +128,11 @@ public class MRegister {
 		ContainerProviderRegistry.INSTANCE.registerFactory(STEAM_BOILER_CONTAINER,
 				(syncId, id, player, buf) -> new SteamBoilerContainer(syncId, player.inventory,
 						BlockContext.create(player.world, buf.readBlockPos())));
-		ContainerProviderRegistry.INSTANCE.registerFactory(STEAM_GAUGE_CONTAINER,
-				(syncId, id, player, buf) -> new SteamGaugeContainer(syncId, player.inventory,
-						BlockContext.create(player.world, buf.readBlockPos())));
 
 		registerItem(COPPER_INGOT, new Identifier(Mechanized.MODID, "copper_ingot"));
 		registerItem(ZINC_INGOT, new Identifier(Mechanized.MODID, "zinc_ingot"));
 		registerItem(BRASS_INGOT, new Identifier(Mechanized.MODID, "brass_ingot"));
+		registerItem(FAN_BLADE, new Identifier(Mechanized.MODID, "fan_blade"));
 		registerItem(PRESSURE_GAUGE, new Identifier(Mechanized.MODID, "pressure_gauge"));
 		registerItem(DEBUG_TOOL, new Identifier(Mechanized.MODID, "debug_tool"));
 	}
@@ -148,7 +161,8 @@ public class MRegister {
 	private static <T extends BlockEntity> BlockEntityType<T> registerBlock(Block block, Identifier id,
 			Supplier<BlockEntity> be, RenderLayerEnum layer) {
 		registerBlock(block, id, layer);
-		return (BlockEntityType<T>) Registry.register(Registry.BLOCK_ENTITY_TYPE, id, BlockEntityType.Builder.create(be, block).build(null));
+		return (BlockEntityType<T>) Registry.register(Registry.BLOCK_ENTITY_TYPE, id,
+				BlockEntityType.Builder.create(be, block).build(null));
 	}
 
 	@Environment(EnvType.CLIENT)

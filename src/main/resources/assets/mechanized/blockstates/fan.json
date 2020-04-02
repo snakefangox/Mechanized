@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=north": { "model": "mechanized:block/fan" },
+    "facing=south": { "model": "mechanized:block/fan", "y": 180 },
+    "facing=west": { "model": "mechanized:block/fan", "y": 270 },
+    "facing=east": { "model": "mechanized:block/fan", "y": 90 },
+    "facing=up": { "model": "mechanized:block/fan", "x": -90 },
+    "facing=down": { "model": "mechanized:block/fan", "x": 90 }
+  }
+}
