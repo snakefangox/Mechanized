@@ -9,6 +9,7 @@ public class InventoryTools {
 
 	/**
 	 * Tries to insert an itemstack and returns true if it's possible
+	 * 
 	 * @param inv
 	 * @param slot
 	 * @param stack
@@ -17,37 +18,38 @@ public class InventoryTools {
 	 */
 	public static boolean insertItemstack(Inventory inv, int slot, ItemStack stack, boolean simulate) {
 		ItemStack inSlot = inv.getInvStack(slot);
-		if(inSlot.isEmpty()) {
-			if(!simulate) {
+		if (inSlot.isEmpty()) {
+			if (!simulate) {
 				inv.setInvStack(slot, stack);
 			}
 			return true;
-		}else if(inSlot.getItem() == stack.getItem() && stack.getCount() + inSlot.getCount() <= inSlot.getMaxCount()) {
-			if(!simulate) {
+		} else if (inSlot.getItem() == stack.getItem()
+				&& stack.getCount() + inSlot.getCount() <= inSlot.getMaxCount()) {
+			if (!simulate) {
 				inSlot.increment(stack.getCount());
 			}
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 	}
-	
+
 	public static boolean insertItemstack(Inventory inv, int slot, ItemStack stack) {
 		return insertItemstack(inv, slot, stack, false);
 	}
-	
+
 	public static void extractSetFromInv(Inventory inv, Item item, int amountIn) {
 		int amount = amountIn;
-		for(int i = 0; i < inv.getInvSize(); i++) {
+		for (int i = 0; i < inv.getInvSize(); i++) {
 			ItemStack stack = inv.getInvStack(i);
-			if(stack.getItem() == item) {
-				if(stack.getCount() > amount) {
+			if (stack.getItem() == item) {
+				if (stack.getCount() > amount) {
 					stack.decrement(amount);
 					return;
-				}else if(stack.getCount() == amount){
+				} else if (stack.getCount() == amount) {
 					inv.setInvStack(i, ItemStack.EMPTY);
 					return;
-				}else {
+				} else {
 					int count = stack.getCount();
 					inv.setInvStack(i, ItemStack.EMPTY);
 					amount -= count;
@@ -55,12 +57,34 @@ public class InventoryTools {
 			}
 		}
 	}
-	
+
+	// FIXME Also a terrible modfest hack
+	public static void extractNamedFromInv(Inventory inv, int amountIn, String... names) {
+		int amount = amountIn;
+		for (int i = 0; i < inv.getInvSize(); i++) {
+			ItemStack stack = inv.getInvStack(i);
+			if (stack.getItem().getName().toString().contains(names[0])
+					&& stack.getItem().getName().toString().contains(names[1])) {
+				if (stack.getCount() > amount) {
+					stack.decrement(amount);
+					return;
+				} else if (stack.getCount() == amount) {
+					inv.setInvStack(i, ItemStack.EMPTY);
+					return;
+				} else {
+					int count = stack.getCount();
+					inv.setInvStack(i, ItemStack.EMPTY);
+					amount -= count;
+				}
+			}
+		}
+	}
+
 	public static void decrementFuel(Inventory inv, int slot) {
 		ItemStack stack = inv.getInvStack(slot);
-		if(stack.getItem() == Items.LAVA_BUCKET) {
+		if (stack.getItem() == Items.LAVA_BUCKET) {
 			inv.setInvStack(slot, new ItemStack(Items.BUCKET));
-		}else {
+		} else {
 			stack.decrement(1);
 		}
 	}

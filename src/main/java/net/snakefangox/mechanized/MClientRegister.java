@@ -5,6 +5,8 @@ import net.minecraft.container.BlockContext;
 import net.snakefangox.mechanized.blocks.entity.FanEntityRenderer;
 import net.snakefangox.mechanized.gui.AlloyFurnaceContainer;
 import net.snakefangox.mechanized.gui.AlloyFurnaceContainer.AlloyFurnaceScreen;
+import net.snakefangox.mechanized.gui.PressureValveContainer;
+import net.snakefangox.mechanized.gui.PressureValveContainer.PressureValveScreen;
 import net.snakefangox.mechanized.gui.SteamBoilerContainer;
 import net.snakefangox.mechanized.gui.SteamBoilerContainer.SteamBoilerScreen;
 import net.snakefangox.mechanized.networking.ToClientHandlers;
@@ -22,6 +24,9 @@ public class MClientRegister {
 						player.inventory, BlockContext.create(player.world, buf.readBlockPos())), player));
 		ScreenProviderRegistry.INSTANCE.registerFactory(MRegister.STEAM_BOILER_CONTAINER,
 				(syncId, identifier, player, buf) -> new SteamBoilerScreen(new SteamBoilerContainer(syncId,
+						player.inventory, BlockContext.create(player.world, buf.readBlockPos())), player));
+		ScreenProviderRegistry.INSTANCE.registerFactory(MRegister.PRESSURE_VALVE_CONTAINER,
+				(syncId, identifier, player, buf) -> new PressureValveScreen(new PressureValveContainer(syncId,
 						player.inventory, BlockContext.create(player.world, buf.readBlockPos())), player));
 	}
 	

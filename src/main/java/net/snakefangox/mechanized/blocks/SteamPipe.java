@@ -145,19 +145,20 @@ public class SteamPipe extends Block implements BlockEntityProvider, Waterloggab
 		BlockEntity west = world.getBlockEntity(pos.offset(Direction.WEST));
 		BlockEntity up = world.getBlockEntity(pos.offset(Direction.UP));
 		BlockEntity down = world.getBlockEntity(pos.offset(Direction.DOWN));
-		// BlockEntity[] dirEntities = new BlockEntity[] { north, south, east, west, up,
-		// down };
 
-		return getDefaultState().with(CONNECTED_NORTH, north instanceof Steam)
-				.with(CONNECTED_SOUTH, south instanceof Steam).with(CONNECTED_EAST, east instanceof Steam)
-				.with(CONNECTED_WEST, west instanceof Steam).with(CONNECTED_UP, up instanceof Steam)
-				.with(CONNECTED_DOWN, down instanceof Steam);
+		return getDefaultState()
+				.with(CONNECTED_NORTH, north instanceof Steam && ((Steam) north).canPipeConnect(Direction.SOUTH))
+				.with(CONNECTED_SOUTH, south instanceof Steam && ((Steam) south).canPipeConnect(Direction.NORTH))
+				.with(CONNECTED_EAST, east instanceof Steam && ((Steam) east).canPipeConnect(Direction.WEST))
+				.with(CONNECTED_WEST, west instanceof Steam && ((Steam) west).canPipeConnect(Direction.EAST))
+				.with(CONNECTED_UP, up instanceof Steam && ((Steam) up).canPipeConnect(Direction.DOWN))
+				.with(CONNECTED_DOWN, down instanceof Steam && ((Steam) down).canPipeConnect(Direction.UP));
 	}
 
 	public FluidState getFluidState(BlockState state) {
-	      return (Boolean)state.get(Properties.WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
-	   }
-	
+		return (Boolean) state.get(Properties.WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+	}
+
 	@Override
 	public BlockEntity createBlockEntity(BlockView view) {
 		return MRegister.STEAM_PIPE_ENTITY.instantiate();

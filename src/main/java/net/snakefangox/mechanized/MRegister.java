@@ -34,12 +34,14 @@ import net.snakefangox.mechanized.blocks.SteamTank;
 import net.snakefangox.mechanized.blocks.entity.AlloyFurnaceEntity;
 import net.snakefangox.mechanized.blocks.entity.BreakerEntity;
 import net.snakefangox.mechanized.blocks.entity.FanEntity;
+import net.snakefangox.mechanized.blocks.entity.PressureValveEntity;
 import net.snakefangox.mechanized.blocks.entity.PumpEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamBoilerEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamPipeEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamPistonEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamTankEntity;
 import net.snakefangox.mechanized.gui.AlloyFurnaceContainer;
+import net.snakefangox.mechanized.gui.PressureValveContainer;
 import net.snakefangox.mechanized.gui.SteamBoilerContainer;
 import net.snakefangox.mechanized.items.PressureGauge;
 import net.snakefangox.mechanized.steam.SteamPipeNetworkStorage;
@@ -67,6 +69,8 @@ public class MRegister {
 			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
 	public static final Block FAN = new Fan(FabricBlockSettings.of(Material.METAL).hardness(4)
 			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
+	public static final Block PRESSURE_VALVE = new PressureValve(FabricBlockSettings.of(Material.METAL).hardness(4)
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
 
 	// BlockEntities
 	public static BlockEntityType<AlloyFurnaceEntity> ALLOY_FURNACE_ENTITY;
@@ -77,10 +81,12 @@ public class MRegister {
 	public static BlockEntityType<BreakerEntity> BREAKER_ENTITY;
 	public static BlockEntityType<SteamPistonEntity> STEAM_PISTON_ENTITY;
 	public static BlockEntityType<FanEntity> FAN_ENTITY;
+	public static BlockEntityType<PressureValveEntity> PRESSURE_VALVE_ENTITY;
 
 	// Containers
 	public static final Identifier ALLOY_FURNACE_CONTAINER = new Identifier(Mechanized.MODID, "alloy_furnace");
 	public static final Identifier STEAM_BOILER_CONTAINER = new Identifier(Mechanized.MODID, "steam_boiler");
+	public static final Identifier PRESSURE_VALVE_CONTAINER = new Identifier(Mechanized.MODID, "pressure_valve");
 
 	// Items
 	public static final Item COPPER_INGOT = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
@@ -121,12 +127,17 @@ public class MRegister {
 				SteamPistonEntity::new);
 		FAN_ENTITY = registerBlock(FAN, new Identifier(Mechanized.MODID, "fan"),
 				FanEntity::new);
+		PRESSURE_VALVE_ENTITY = registerBlock(PRESSURE_VALVE, new Identifier(Mechanized.MODID, "pressure_valve"),
+				PressureValveEntity::new);
 
 		ContainerProviderRegistry.INSTANCE.registerFactory(ALLOY_FURNACE_CONTAINER,
 				(syncId, id, player, buf) -> new AlloyFurnaceContainer(syncId, player.inventory,
 						BlockContext.create(player.world, buf.readBlockPos())));
 		ContainerProviderRegistry.INSTANCE.registerFactory(STEAM_BOILER_CONTAINER,
 				(syncId, id, player, buf) -> new SteamBoilerContainer(syncId, player.inventory,
+						BlockContext.create(player.world, buf.readBlockPos())));
+		ContainerProviderRegistry.INSTANCE.registerFactory(PRESSURE_VALVE_CONTAINER,
+				(syncId, id, player, buf) -> new PressureValveContainer(syncId, player.inventory,
 						BlockContext.create(player.world, buf.readBlockPos())));
 
 		registerItem(COPPER_INGOT, new Identifier(Mechanized.MODID, "copper_ingot"));

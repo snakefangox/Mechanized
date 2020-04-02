@@ -32,6 +32,19 @@ public class ToClientHandlers {
 			});
 		});
 
+		ClientSidePacketRegistry.INSTANCE.register(PacketIdentifiers.VENT_PARTICLES, (packetContext, attachedData) -> {
+			BlockPos pos = attachedData.readBlockPos();
+			int facing = attachedData.readByte();
+			Direction dir = Direction.values()[facing].getOpposite();
+			packetContext.getTaskQueue().execute(() -> {
+				MinecraftClient.getInstance().player.clientWorld.addParticle(ParticleTypes.SMOKE,
+						pos.getX() + (0.5 + ((0.5 - particle_rand.nextFloat()) * 0.5)),
+						pos.getY() + (0.5 + ((0.5 - particle_rand.nextFloat()) * 0.5)),
+						pos.getZ() + (0.5 + ((0.5 - particle_rand.nextFloat()) * 0.5)), dir.getOffsetX() * 0.5,
+						dir.getOffsetY() * 0.5, dir.getOffsetZ() * 0.5);
+			});
+		});
+
 	}
 
 }

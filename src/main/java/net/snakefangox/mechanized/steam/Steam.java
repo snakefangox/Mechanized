@@ -31,6 +31,15 @@ public interface Steam {
 	 * @return
 	 */
 	public int getMaxSteamAmount(Direction dir);
+	
+	/**
+	 * If a pipe can visually connect to a given side
+	 * @param dir
+	 * @return
+	 */
+	default public boolean canPipeConnect(Direction dir) {
+		return true;
+	}
 
 	/**
 	 * Gets the pressure for the steam tank linked to the given side
