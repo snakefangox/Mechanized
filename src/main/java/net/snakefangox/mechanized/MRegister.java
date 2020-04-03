@@ -48,6 +48,7 @@ import net.snakefangox.mechanized.gui.PressureValveContainer;
 import net.snakefangox.mechanized.gui.SteamBoilerContainer;
 import net.snakefangox.mechanized.items.PressureGauge;
 import net.snakefangox.mechanized.items.SteamCanister;
+import net.snakefangox.mechanized.items.SteamDrill;
 import net.snakefangox.mechanized.steam.SteamPipeNetworkStorage;
 
 public class MRegister {
@@ -71,8 +72,8 @@ public class MRegister {
 			.breakByTool(FabricToolTags.PICKAXES).build());
 	public static final Block STEAM_PISTON = new SteamPiston(FabricBlockSettings.of(Material.METAL).hardness(4)
 			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
-	public static final Block FAN = new Fan(FabricBlockSettings.of(Material.METAL).hardness(4)
-			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
+	public static final Block FAN = new Fan(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
+			.breakByTool(FabricToolTags.PICKAXES).build());
 	public static final Block PRESSURE_VALVE = new PressureValve(FabricBlockSettings.of(Material.METAL).hardness(4)
 			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
 	public static final Block STEAM_CHARGER = new SteamCharger(FabricBlockSettings.of(Material.METAL).hardness(4)
@@ -103,7 +104,9 @@ public class MRegister {
 	public static final Item PRESSURE_GAUGE = new PressureGauge(
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final Item STEAM_CANISTER = new SteamCanister(
-			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamCanister.STEAM_CAPACITY));
+	public static final Item STEAM_DRILL = new SteamDrill(
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamCanister.STEAM_CAPACITY));
 
 	public static final Item DEBUG_TOOL = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP)) {
 		public net.minecraft.util.ActionResult useOnBlock(net.minecraft.item.ItemUsageContext context) {
@@ -117,7 +120,7 @@ public class MRegister {
 			return ActionResult.SUCCESS;
 		};
 	};
-
+	
 	public static void registerEverything() {
 		registerBlock(COPPER_ORE, new Identifier(Mechanized.MODID, "copper_ore"), RenderLayerEnum.CUTOUT);
 		registerBlock(ZINC_ORE, new Identifier(Mechanized.MODID, "zinc_ore"), RenderLayerEnum.CUTOUT);
@@ -134,8 +137,7 @@ public class MRegister {
 		BREAKER_ENTITY = registerBlock(BREAKER, new Identifier(Mechanized.MODID, "breaker"), BreakerEntity::new);
 		STEAM_PISTON_ENTITY = registerBlock(STEAM_PISTON, new Identifier(Mechanized.MODID, "steam_piston"),
 				SteamPistonEntity::new);
-		FAN_ENTITY = registerBlock(FAN, new Identifier(Mechanized.MODID, "fan"),
-				FanEntity::new);
+		FAN_ENTITY = registerBlock(FAN, new Identifier(Mechanized.MODID, "fan"), FanEntity::new);
 		PRESSURE_VALVE_ENTITY = registerBlock(PRESSURE_VALVE, new Identifier(Mechanized.MODID, "pressure_valve"),
 				PressureValveEntity::new);
 		STEAM_CHARGER_ENTITY = registerBlock(STEAM_CHARGER, new Identifier(Mechanized.MODID, "steam_charger"),
@@ -157,6 +159,7 @@ public class MRegister {
 		registerItem(FAN_BLADE, new Identifier(Mechanized.MODID, "fan_blade"));
 		registerItem(PRESSURE_GAUGE, new Identifier(Mechanized.MODID, "pressure_gauge"));
 		registerItem(STEAM_CANISTER, new Identifier(Mechanized.MODID, "steam_canister"));
+		registerItem(STEAM_DRILL, new Identifier(Mechanized.MODID, "steam_drill"));
 		registerItem(DEBUG_TOOL, new Identifier(Mechanized.MODID, "debug_tool"));
 	}
 

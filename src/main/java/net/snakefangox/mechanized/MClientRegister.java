@@ -3,6 +3,7 @@ import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegi
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry;
 import net.minecraft.container.BlockContext;
 import net.snakefangox.mechanized.blocks.entity.FanEntityRenderer;
+import net.snakefangox.mechanized.blocks.entity.SteamChargerEntityRenderer;
 import net.snakefangox.mechanized.gui.AlloyFurnaceContainer;
 import net.snakefangox.mechanized.gui.AlloyFurnaceContainer.AlloyFurnaceScreen;
 import net.snakefangox.mechanized.gui.PressureValveContainer;
@@ -18,6 +19,7 @@ public class MClientRegister {
 		ToClientHandlers.initPacketHandlers();
 		
 		BlockEntityRendererRegistry.INSTANCE.register(MRegister.FAN_ENTITY, FanEntityRenderer::new);
+		BlockEntityRendererRegistry.INSTANCE.register(MRegister.STEAM_CHARGER_ENTITY, SteamChargerEntityRenderer::new);
 		
 		ScreenProviderRegistry.INSTANCE.registerFactory(MRegister.ALLOY_FURNACE_CONTAINER,
 				(syncId, identifier, player, buf) -> new AlloyFurnaceScreen(new AlloyFurnaceContainer(syncId,

@@ -41,15 +41,22 @@ public class PumpEntity extends BlockEntity implements Steam, Tickable, Property
 			SteamUtil.equalizeSteam(world, this, pos, null);
 		}
 		if (world.getTime() % 10 == 0) {
-			if (getPressure(null) >= 0.1
-					&& tank.attemptInsertion(FluidWorldUtil.drain(world, pos.offset(Direction.DOWN), Simulation.SIMULATE), Simulation.SIMULATE)
-							.isEmpty()) {
-				tank.attemptInsertion(FluidWorldUtil.drain(world, pos.offset(Direction.DOWN), Simulation.ACTION), Simulation.ACTION);
+			if (getPressure(null) >= 0.1 && tank
+					.attemptInsertion(FluidWorldUtil.drain(world, pos.offset(Direction.DOWN), Simulation.SIMULATE),
+							Simulation.SIMULATE)
+					.isEmpty()) {
+				tank.attemptInsertion(FluidWorldUtil.drain(world, pos.offset(Direction.DOWN), Simulation.ACTION),
+						Simulation.ACTION);
 				removeSteam(null, PUMP_COST);
 			}
 			if (!tank.getTank(0).get().isEmpty()) {
-				FluidInsertable outTank = FluidAttributes.INSERTABLE.getAllFromNeighbour(this, getCachedState().get(HorizontalFacingBlock.FACING)).getFirstOrNull();
-				tank.attemptInsertion(outTank.attemptInsertion(tank.attemptAnyExtraction(TANK_CAPACITY, Simulation.ACTION), Simulation.ACTION), Simulation.ACTION);
+				FluidInsertable outTank = FluidAttributes.INSERTABLE
+						.getAllFromNeighbour(this, getCachedState().get(HorizontalFacingBlock.FACING)).getFirstOrNull();
+				if (outTank != null)
+					tank.attemptInsertion(
+							outTank.attemptInsertion(tank.attemptAnyExtraction(TANK_CAPACITY, Simulation.ACTION),
+									Simulation.ACTION),
+							Simulation.ACTION);
 			}
 		}
 	}

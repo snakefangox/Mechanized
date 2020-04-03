@@ -20,5 +20,6 @@
 "item.mechanized.fan_blade": "Fan Blade",
 "block.mechanized.pressure_valve": "Pressure Valve",
 "block.mechanized.steam_charger": "Steam Charger",
-"item.mechanized.steam_canister": "Steam Canister"
+"item.mechanized.steam_canister": "Steam Canister",
+"item.mechanized.steam_drill": "Steam Drill"
 }

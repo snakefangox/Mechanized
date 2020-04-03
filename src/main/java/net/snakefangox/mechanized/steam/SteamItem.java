@@ -1,8 +1,6 @@
 package net.snakefangox.mechanized.steam;
 
-import net.minecraft.item.ItemPropertyGetter;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.MathHelper;
 import net.snakefangox.mechanized.Mechanized;
 
 public interface SteamItem {
@@ -16,14 +14,6 @@ public interface SteamItem {
 	 * The key to store steam amount
 	 */
 	public static final String TAG_KEY = Mechanized.MODID + "steam";
-
-	public static final ItemPropertyGetter DIS_STEAM_PROPERTY_GETTER = (stack, world, entity) -> {
-		return ((SteamItem)stack.getItem()).getPressure(stack) == 1 ? 1.0F : 0.0F;
-	};
-
-	public static final ItemPropertyGetter STEAM_PROPERTY_GETTER = (stack, world, entity) -> {
-		return MathHelper.clamp((float) ((SteamItem)stack.getItem()).getPressure(stack), 0.0F, 1.0F);
-	};
 
 	/**
 	 * Returns the amount of steam in the tank linked to the given itemstack

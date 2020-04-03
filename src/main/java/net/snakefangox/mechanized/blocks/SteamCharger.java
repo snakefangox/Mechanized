@@ -21,7 +21,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.entity.SteamChargerEntity;
-import net.snakefangox.mechanized.steam.Steam;
+import net.snakefangox.mechanized.steam.SteamItem;
 
 public class SteamCharger extends Block implements BlockEntityProvider {
 
@@ -39,14 +39,16 @@ public class SteamCharger extends Block implements BlockEntityProvider {
 		ItemStack held = player.getStackInHand(hand);
 		BlockEntity be = world.getBlockEntity(pos);
 		if (be instanceof SteamChargerEntity) {
-			if (held.getItem() instanceof Steam && !held.isEmpty() && ((SteamChargerEntity) be).getItems().get(0).isEmpty()) {
+			if (held.getItem() instanceof SteamItem && !held.isEmpty() && ((SteamChargerEntity) be).getItems().get(0).isEmpty()) {
 				ItemStack inStack = held.copy();
 				inStack.setCount(1);
 				((SteamChargerEntity) be).getItems().set(0, inStack);
 				held.decrement(1);
+				((SteamChargerEntity) be).sync();
 			}else if(held.isEmpty() && !((SteamChargerEntity) be).getItems().get(0).isEmpty()) {
 				player.setStackInHand(hand, ((SteamChargerEntity) be).getItems().get(0));
 				((SteamChargerEntity) be).setInvStack(0, ItemStack.EMPTY);
+				((SteamChargerEntity) be).sync();
 			}
 		}
 		return ActionResult.SUCCESS;
