@@ -1,4 +1,4 @@
-package net.snakefangox.mechanized;
+package net.snakefangox.mechanized.blocks;
 
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.minecraft.block.Block;
@@ -20,6 +20,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.entity.PressureValveEntity;
 
 public class PressureValve extends Block implements BlockEntityProvider {

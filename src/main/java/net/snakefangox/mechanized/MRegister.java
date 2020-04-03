@@ -26,8 +26,10 @@ import net.minecraft.util.registry.Registry;
 import net.snakefangox.mechanized.blocks.AlloyFurnace;
 import net.snakefangox.mechanized.blocks.Breaker;
 import net.snakefangox.mechanized.blocks.Fan;
+import net.snakefangox.mechanized.blocks.PressureValve;
 import net.snakefangox.mechanized.blocks.Pump;
 import net.snakefangox.mechanized.blocks.SteamBoiler;
+import net.snakefangox.mechanized.blocks.SteamCharger;
 import net.snakefangox.mechanized.blocks.SteamPipe;
 import net.snakefangox.mechanized.blocks.SteamPiston;
 import net.snakefangox.mechanized.blocks.SteamTank;
@@ -37,6 +39,7 @@ import net.snakefangox.mechanized.blocks.entity.FanEntity;
 import net.snakefangox.mechanized.blocks.entity.PressureValveEntity;
 import net.snakefangox.mechanized.blocks.entity.PumpEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamBoilerEntity;
+import net.snakefangox.mechanized.blocks.entity.SteamChargerEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamPipeEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamPistonEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamTankEntity;
@@ -44,6 +47,7 @@ import net.snakefangox.mechanized.gui.AlloyFurnaceContainer;
 import net.snakefangox.mechanized.gui.PressureValveContainer;
 import net.snakefangox.mechanized.gui.SteamBoilerContainer;
 import net.snakefangox.mechanized.items.PressureGauge;
+import net.snakefangox.mechanized.items.SteamCanister;
 import net.snakefangox.mechanized.steam.SteamPipeNetworkStorage;
 
 public class MRegister {
@@ -71,6 +75,8 @@ public class MRegister {
 			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
 	public static final Block PRESSURE_VALVE = new PressureValve(FabricBlockSettings.of(Material.METAL).hardness(4)
 			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
+	public static final Block STEAM_CHARGER = new SteamCharger(FabricBlockSettings.of(Material.METAL).hardness(4)
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
 
 	// BlockEntities
 	public static BlockEntityType<AlloyFurnaceEntity> ALLOY_FURNACE_ENTITY;
@@ -82,6 +88,7 @@ public class MRegister {
 	public static BlockEntityType<SteamPistonEntity> STEAM_PISTON_ENTITY;
 	public static BlockEntityType<FanEntity> FAN_ENTITY;
 	public static BlockEntityType<PressureValveEntity> PRESSURE_VALVE_ENTITY;
+	public static BlockEntityType<SteamChargerEntity> STEAM_CHARGER_ENTITY;
 
 	// Containers
 	public static final Identifier ALLOY_FURNACE_CONTAINER = new Identifier(Mechanized.MODID, "alloy_furnace");
@@ -94,6 +101,8 @@ public class MRegister {
 	public static final Item BRASS_INGOT = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
 	public static final Item FAN_BLADE = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
 	public static final Item PRESSURE_GAUGE = new PressureGauge(
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
+	public static final Item STEAM_CANISTER = new SteamCanister(
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 
 	public static final Item DEBUG_TOOL = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP)) {
@@ -129,6 +138,8 @@ public class MRegister {
 				FanEntity::new);
 		PRESSURE_VALVE_ENTITY = registerBlock(PRESSURE_VALVE, new Identifier(Mechanized.MODID, "pressure_valve"),
 				PressureValveEntity::new);
+		STEAM_CHARGER_ENTITY = registerBlock(STEAM_CHARGER, new Identifier(Mechanized.MODID, "steam_charger"),
+				SteamChargerEntity::new);
 
 		ContainerProviderRegistry.INSTANCE.registerFactory(ALLOY_FURNACE_CONTAINER,
 				(syncId, id, player, buf) -> new AlloyFurnaceContainer(syncId, player.inventory,
@@ -145,6 +156,7 @@ public class MRegister {
 		registerItem(BRASS_INGOT, new Identifier(Mechanized.MODID, "brass_ingot"));
 		registerItem(FAN_BLADE, new Identifier(Mechanized.MODID, "fan_blade"));
 		registerItem(PRESSURE_GAUGE, new Identifier(Mechanized.MODID, "pressure_gauge"));
+		registerItem(STEAM_CANISTER, new Identifier(Mechanized.MODID, "steam_canister"));
 		registerItem(DEBUG_TOOL, new Identifier(Mechanized.MODID, "debug_tool"));
 	}
 

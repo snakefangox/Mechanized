@@ -47,9 +47,8 @@ public class AlloyFurnaceEntity extends BlockEntity
 		if (progress == SMELT_TIME) {
 			progress = 0;
 			InventoryTools.insertItemstack(this, OUTPUT_SLOT[0], new ItemStack(MRegister.BRASS_INGOT, 3));
-			//FIXME More filthy hacks
-			InventoryTools.extractNamedFromInv(this, 2, "copper", "ingot");
-			InventoryTools.extractNamedFromInv(this, 1, "zinc", "ingot");
+			InventoryTools.extractSetFromInv(this, MRegister.COPPER_INGOT, 2);
+			InventoryTools.extractSetFromInv(this, MRegister.ZINC_INGOT, 1);
 		} else if (isRecipeValid() && fuel > 0) {
 			++progress;
 		} else {
@@ -77,18 +76,13 @@ public class AlloyFurnaceEntity extends BlockEntity
 			world.setBlockState(pos, getCachedState().with(SteamBoiler.LIT, fuel > 0));
 	}
 
-	// FIXME Filthy hack for modfest compat
 	private boolean isRecipeValid() {
 		int copperCount = 0;
 		int zincCount = 0;
 		for (int i = 0; i < INPUT_SLOTS.length; i++) {
-			if (inventory.get(i).getItem() == MRegister.COPPER_INGOT
-					|| (inventory.get(i).getItem().getName().toString().contains("copper")
-							&& inventory.get(i).getItem().getName().toString().contains("ingot")))
+			if (inventory.get(i).getItem() == MRegister.COPPER_INGOT)
 				copperCount += inventory.get(i).getCount();
-			if (inventory.get(i).getItem() == MRegister.ZINC_INGOT
-					|| (inventory.get(i).getItem().getName().toString().contains("zinc")
-							&& inventory.get(i).getItem().getName().toString().contains("ingot")))
+			if (inventory.get(i).getItem() == MRegister.ZINC_INGOT)
 				zincCount += inventory.get(i).getCount();
 		}
 		return copperCount >= 2 && zincCount >= 1

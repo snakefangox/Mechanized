@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "mechanized:block/steam_charger" },
+    "facing=south": { "model": "mechanized:block/steam_charger", "y": 180 },
+    "facing=west": { "model": "mechanized:block/steam_charger", "y": 270 },
+    "facing=east": { "model": "mechanized:block/steam_charger", "y": 90 }
+  }
+}

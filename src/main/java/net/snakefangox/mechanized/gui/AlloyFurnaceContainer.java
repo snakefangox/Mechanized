@@ -43,6 +43,7 @@ public class AlloyFurnaceContainer extends CottonCraftingController {
 
 		root.validate(this);
 
+		System.out.println(slots);
 	}
 
 	public static class AlloyFurnaceScreen extends CottonInventoryScreen<AlloyFurnaceContainer> {

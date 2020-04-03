@@ -15,7 +15,7 @@ import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.Direction;
 import net.snakefangox.mechanized.MRegister;
-import net.snakefangox.mechanized.PressureValve;
+import net.snakefangox.mechanized.blocks.PressureValve;
 import net.snakefangox.mechanized.networking.PacketIdentifiers;
 import net.snakefangox.mechanized.steam.Steam;
 import net.snakefangox.mechanized.steam.SteamUtil;

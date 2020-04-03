@@ -3,6 +3,7 @@ package net.snakefangox.mechanized.blocks.entity;
 import java.util.List;
 
 import io.github.cottonmc.cotton.gui.PropertyDelegateHolder;
+import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.container.PropertyDelegate;
@@ -63,8 +64,11 @@ public class SteamPistonEntity extends BlockEntity implements Steam, Tickable, P
 		BlockPos off = pos.offset(dir);
 		if (!world.isAir(off) && retractTimer == 0) {
 			BlockState state = world.getBlockState(off);
+			boolean isAnvil = state.getBlock() instanceof AnvilBlock;
 			FallingBlockEntity fallingBlock = new FallingBlockEntity(world, off.getX() + 0.5, off.getY() + 0.5,
 					off.getZ() + 0.5, state);
+			if(isAnvil)
+				fallingBlock.setHurtEntities(true);
 			((ServerWorld) world).spawnEntity(fallingBlock);
 		}
 		List<Entity> entities = world.getEntities(null, new Box(off));

@@ -32,9 +32,13 @@ public class SteamBoilerContainer extends CottonCraftingController {
 		root.add(createPlayerInventoryPanel(), 0, 4);
 
 		root.validate(this);
-
 	}
 
+	@Override
+	public void close(PlayerEntity player) {
+		super.close(player);
+	}
+	
 	public static class SteamBoilerScreen extends CottonInventoryScreen<SteamBoilerContainer> {
 		public SteamBoilerScreen(SteamBoilerContainer container, PlayerEntity player) {
 			super(container, player);
