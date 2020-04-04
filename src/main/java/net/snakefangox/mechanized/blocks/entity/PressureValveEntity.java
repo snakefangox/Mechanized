@@ -31,7 +31,7 @@ public class PressureValveEntity extends BlockEntity implements Steam, Tickable,
 	public PressureValveEntity() {
 		super(MRegister.PRESSURE_VALVE_ENTITY);
 	}
-	
+
 	public void setPressure(int press) {
 		ventPressure = press;
 	}
@@ -41,33 +41,34 @@ public class PressureValveEntity extends BlockEntity implements Steam, Tickable,
 		if (world.isClient)
 			return;
 		if (world.getTime() % 5 == 0) {
-			SteamUtil.equalizeSteam(world, this, pos, getCachedState().get(Properties.FACING));
-			if(getPressurePSB(null) > ventPressure && !isOpen) {
+			SteamUtil.directionalEqualizeSteam(world, this, pos, null, getCachedState().get(Properties.FACING));
+			if (getPressurePSB(null) > ventPressure && !isOpen) {
 				changeValveState(true);
 			}
-			if(getPressurePSB(null) <= ventPressure && isOpen) {
+			if (getPressurePSB(null) <= ventPressure && isOpen) {
 				changeValveState(false);
 			}
-			if(isOpen) {
+			if (isOpen) {
 				vent();
 			}
 		}
 	}
 
 	private void vent() {
-		Stream<PlayerEntity> watchingPlayers = PlayerStream.watching(world,pos);
+		Stream<PlayerEntity> watchingPlayers = PlayerStream.watching(world, pos);
 		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
 		passedData.writeBlockPos(pos);
 		passedData.writeByte(getCachedState().get(Properties.FACING).getId());
-		watchingPlayers.forEach(player -> ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, PacketIdentifiers.VENT_PARTICLES, passedData));
+		watchingPlayers.forEach(player -> ServerSidePacketRegistry.INSTANCE.sendToPlayer(player,
+				PacketIdentifiers.VENT_PARTICLES, passedData));
 		removeSteam(null, VENT_PER_QUARTER_SEC);
 	}
-	
+
 	private void changeValveState(boolean open) {
 		world.setBlockState(pos, getCachedState().with(PressureValve.OPEN, open));
 		isOpen = open;
 	}
-	
+
 	@Override
 	public int getSteamAmount(Direction dir) {
 		return steamAmount;

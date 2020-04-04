@@ -29,7 +29,7 @@ public class SteamChargerEntity extends BlockEntity implements Steam, Tickable, 
 		if (world.isClient)
 			return;
 		if (world.getTime() % 5 == 0) {
-			SteamUtil.equalizeSteam(world, this, pos, null);
+			SteamUtil.directionalEqualizeSteam(world, this, pos, null, getCachedState().get(HorizontalFacingBlock.FACING));
 		}
 		if(world.getTime() % 80 == 0) {
 			sync();

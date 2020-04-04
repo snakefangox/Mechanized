@@ -117,6 +117,11 @@ public class AlloyFurnaceEntity extends BlockEntity
 	}
 
 	@Override
+	public boolean isValidInvStack(int slot, ItemStack stack) {
+		return slot != 4;
+	}
+	
+	@Override
 	public boolean canInsertInvStack(int slot, ItemStack stack, Direction dir) {
 		return slot != 4;
 	}

@@ -15,12 +15,12 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.container.BlockContext;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.LiteralText;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.snakefangox.mechanized.blocks.AlloyFurnace;
@@ -33,6 +33,7 @@ import net.snakefangox.mechanized.blocks.SteamCharger;
 import net.snakefangox.mechanized.blocks.SteamPipe;
 import net.snakefangox.mechanized.blocks.SteamPiston;
 import net.snakefangox.mechanized.blocks.SteamTank;
+import net.snakefangox.mechanized.blocks.UpgradeTable;
 import net.snakefangox.mechanized.blocks.entity.AlloyFurnaceEntity;
 import net.snakefangox.mechanized.blocks.entity.BreakerEntity;
 import net.snakefangox.mechanized.blocks.entity.FanEntity;
@@ -43,13 +44,15 @@ import net.snakefangox.mechanized.blocks.entity.SteamChargerEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamPipeEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamPistonEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamTankEntity;
+import net.snakefangox.mechanized.effects.ExoEffect;
 import net.snakefangox.mechanized.gui.AlloyFurnaceContainer;
 import net.snakefangox.mechanized.gui.PressureValveContainer;
 import net.snakefangox.mechanized.gui.SteamBoilerContainer;
+import net.snakefangox.mechanized.gui.UpgradeTableContainer;
 import net.snakefangox.mechanized.items.PressureGauge;
 import net.snakefangox.mechanized.items.SteamCanister;
 import net.snakefangox.mechanized.items.SteamDrill;
-import net.snakefangox.mechanized.steam.SteamPipeNetworkStorage;
+import net.snakefangox.mechanized.items.SteamExoSuit;
 
 public class MRegister {
 
@@ -78,6 +81,8 @@ public class MRegister {
 			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
 	public static final Block STEAM_CHARGER = new SteamCharger(FabricBlockSettings.of(Material.METAL).hardness(4)
 			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
+	public static final Block UPGRADE_TABLE = new UpgradeTable(FabricBlockSettings.of(Material.METAL).hardness(4)
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
 
 	// BlockEntities
 	public static BlockEntityType<AlloyFurnaceEntity> ALLOY_FURNACE_ENTITY;
@@ -95,6 +100,7 @@ public class MRegister {
 	public static final Identifier ALLOY_FURNACE_CONTAINER = new Identifier(Mechanized.MODID, "alloy_furnace");
 	public static final Identifier STEAM_BOILER_CONTAINER = new Identifier(Mechanized.MODID, "steam_boiler");
 	public static final Identifier PRESSURE_VALVE_CONTAINER = new Identifier(Mechanized.MODID, "pressure_valve");
+	public static final Identifier UPGRADE_TABLE_CONTAINER = new Identifier(Mechanized.MODID, "upgrade_table");
 
 	// Items
 	public static final Item COPPER_INGOT = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
@@ -106,21 +112,22 @@ public class MRegister {
 	public static final Item STEAM_CANISTER = new SteamCanister(
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamCanister.STEAM_CAPACITY));
 	public static final Item STEAM_DRILL = new SteamDrill(
-			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamCanister.STEAM_CAPACITY));
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamDrill.STEAM_CAPACITY));
+	public static final Item STEAM_EXOSUIT_HELMET = new SteamExoSuit(EquipmentSlot.HEAD,
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamExoSuit.STEAM_CAPACITY));
+	public static final Item STEAM_EXOSUIT_CHEST = new SteamExoSuit(EquipmentSlot.CHEST,
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamExoSuit.STEAM_CAPACITY));
+	public static final Item STEAM_EXOSUIT_LEGS = new SteamExoSuit(EquipmentSlot.LEGS,
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamExoSuit.STEAM_CAPACITY));
+	public static final Item STEAM_EXOSUIT_BOOTS = new SteamExoSuit(EquipmentSlot.FEET,
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamExoSuit.STEAM_CAPACITY));
 
-	public static final Item DEBUG_TOOL = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP)) {
-		public net.minecraft.util.ActionResult useOnBlock(net.minecraft.item.ItemUsageContext context) {
-			if (context.getWorld().isClient)
-				return ActionResult.SUCCESS;
-			if (context.getWorld().getBlockEntity(context.getBlockPos()) != null)
-				context.getPlayer().addChatMessage(new LiteralText(
-						context.getWorld().getBlockEntity(context.getBlockPos()).toTag(new CompoundTag()).asString()),
-						true);
-			System.out.println(SteamPipeNetworkStorage.getInstance((ServerWorld) context.getWorld()));
-			return ActionResult.SUCCESS;
-		};
-	};
 	
+	//Status Effects
+	public static StatusEffect EXOSUIT_STRENGTH;
+	public static StatusEffect EXOSUIT_SPEED;
+	public static StatusEffect EXOSUIT_JUMP;
+
 	public static void registerEverything() {
 		registerBlock(COPPER_ORE, new Identifier(Mechanized.MODID, "copper_ore"), RenderLayerEnum.CUTOUT);
 		registerBlock(ZINC_ORE, new Identifier(Mechanized.MODID, "zinc_ore"), RenderLayerEnum.CUTOUT);
@@ -142,6 +149,7 @@ public class MRegister {
 				PressureValveEntity::new);
 		STEAM_CHARGER_ENTITY = registerBlock(STEAM_CHARGER, new Identifier(Mechanized.MODID, "steam_charger"),
 				SteamChargerEntity::new);
+		registerBlock(UPGRADE_TABLE, new Identifier(Mechanized.MODID, "upgrade_table"));
 
 		ContainerProviderRegistry.INSTANCE.registerFactory(ALLOY_FURNACE_CONTAINER,
 				(syncId, id, player, buf) -> new AlloyFurnaceContainer(syncId, player.inventory,
@@ -152,6 +160,8 @@ public class MRegister {
 		ContainerProviderRegistry.INSTANCE.registerFactory(PRESSURE_VALVE_CONTAINER,
 				(syncId, id, player, buf) -> new PressureValveContainer(syncId, player.inventory,
 						BlockContext.create(player.world, buf.readBlockPos())));
+		ContainerProviderRegistry.INSTANCE.registerFactory(UPGRADE_TABLE_CONTAINER,
+				(syncId, id, player, buf) -> new UpgradeTableContainer(syncId, player.inventory));
 
 		registerItem(COPPER_INGOT, new Identifier(Mechanized.MODID, "copper_ingot"));
 		registerItem(ZINC_INGOT, new Identifier(Mechanized.MODID, "zinc_ingot"));
@@ -160,7 +170,14 @@ public class MRegister {
 		registerItem(PRESSURE_GAUGE, new Identifier(Mechanized.MODID, "pressure_gauge"));
 		registerItem(STEAM_CANISTER, new Identifier(Mechanized.MODID, "steam_canister"));
 		registerItem(STEAM_DRILL, new Identifier(Mechanized.MODID, "steam_drill"));
-		registerItem(DEBUG_TOOL, new Identifier(Mechanized.MODID, "debug_tool"));
+		registerItem(STEAM_EXOSUIT_HELMET, new Identifier(Mechanized.MODID, "steam_exosuit_helm"));
+		registerItem(STEAM_EXOSUIT_CHEST, new Identifier(Mechanized.MODID, "steam_exosuit_chest"));
+		registerItem(STEAM_EXOSUIT_LEGS, new Identifier(Mechanized.MODID, "steam_exosuit_legs"));
+		registerItem(STEAM_EXOSUIT_BOOTS, new Identifier(Mechanized.MODID, "steam_exosuit_boots"));
+		
+		EXOSUIT_STRENGTH = Registry.register(Registry.STATUS_EFFECT, 458810, "exosuit_strength", new ExoEffect().addAttributeModifier(EntityAttributes.ATTACK_DAMAGE, "6551312b-037b-4152-8c44-e81e9065bae6", 2, EntityAttributeModifier.Operation.ADDITION));
+		EXOSUIT_SPEED = Registry.register(Registry.STATUS_EFFECT, 458811, "exosuit_speed", new ExoEffect().addAttributeModifier(EntityAttributes.MOVEMENT_SPEED, "d859def7-792c-40c2-881b-7d2703fc5760", 0.15D, EntityAttributeModifier.Operation.MULTIPLY_TOTAL));
+		EXOSUIT_JUMP = Registry.register(Registry.STATUS_EFFECT, 458812, "exosuit_jump", new ExoEffect());
 	}
 
 	private static void registerBlock(Block block, Identifier id, RenderLayerEnum layer) {

@@ -21,5 +21,10 @@
 "block.mechanized.pressure_valve": "Pressure Valve",
 "block.mechanized.steam_charger": "Steam Charger",
 "item.mechanized.steam_canister": "Steam Canister",
-"item.mechanized.steam_drill": "Steam Drill"
+"item.mechanized.steam_drill": "Steam Drill",
+"item.mechanized.steam_exosuit_helm": "Steam Exosuit Helm",
+"item.mechanized.steam_exosuit_chest": "Steam Exosuit Chest",
+"item.mechanized.steam_exosuit_legs": "Steam Exosuit Legs",
+"item.mechanized.steam_exosuit_boots": "Steam Exosuit Boots",
+"block.mechanized.upgrade_table": "Upgrade Table"
 }

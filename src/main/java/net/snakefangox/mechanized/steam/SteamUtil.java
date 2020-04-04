@@ -8,27 +8,25 @@ import net.minecraft.world.World;
 public class SteamUtil {
 
 	public static void equalizeSteam(World world, Steam source, BlockPos pos, Direction side) {
-		Steam[] out = new Steam[6];
 		for (int i = 0; i < Direction.values().length; i++) {
-			BlockEntity be = world.getBlockEntity(pos.offset(Direction.values()[i]));
-			if (be instanceof Steam) {
-				out[i] = (Steam) be;
-			}
+			directionalEqualizeSteam(world, source, pos, side, Direction.values()[i]);
 		}
-
-		for (int i = 0; i < out.length; i++) {
-			if (out[i] == null)
-				continue;
-			float outFraction = out[i].getPressure(Direction.values()[i].getOpposite());
+	}
+	
+	public static void directionalEqualizeSteam(World world, Steam source, BlockPos pos, Direction side, Direction out) {
+		BlockEntity be = world.getBlockEntity(pos.offset(out));
+		if (be instanceof Steam) {
+			float outFraction = ((Steam)be).getPressure(out.getOpposite());
 			float sourceFraction = source.getPressure(side);
 			float totalFraction = (sourceFraction - outFraction);
 			if (totalFraction > 0) {
-				out[i].addSteam(Direction.values()[i].getOpposite(),
+				((Steam)be).addSteam(out.getOpposite(),
 						source.removeSteam(side, (int) (source.getSteamAmount(side) * totalFraction)));
 			} else {
-				source.addSteam(side, out[i].removeSteam(Direction.values()[i].getOpposite(),
-						(int) (out[i].getSteamAmount(side) * -totalFraction)));
+				source.addSteam(side, ((Steam)be).removeSteam(out.getOpposite(),
+						(int) (((Steam)be).getSteamAmount(side) * -totalFraction)));
 			}
 		}
 	}
+	
 }

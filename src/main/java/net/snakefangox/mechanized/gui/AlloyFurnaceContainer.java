@@ -26,7 +26,7 @@ public class AlloyFurnaceContainer extends CottonCraftingController {
 		WItemSlot input2 = WItemSlot.of(blockInventory, 1);
 		WItemSlot input3 = WItemSlot.of(blockInventory, 2);
 		WItemSlot fuel_slot = WItemSlot.of(blockInventory, 3);
-		WOutputSlot output_tile = WOutputSlot.outputOf(blockInventory, 4);
+		WItemSlot output_tile = WItemSlot.outputOf(blockInventory, 4);
 
 		root.add(input1, 2, 0);
 		root.add(input2, 3, 0);
