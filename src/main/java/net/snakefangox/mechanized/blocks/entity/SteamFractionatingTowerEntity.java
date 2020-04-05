@@ -8,6 +8,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
@@ -20,12 +21,16 @@ import net.snakefangox.mechanized.steam.SteamUtil;
 public class SteamFractionatingTowerEntity extends BlockEntity implements Steam, Tickable {
 
 	public static final int STEAM_CAPACITY = Steam.UNIT;
-	public static final int STEAM_USE_PER_OP = Steam.UNIT / 10;
-	public static final int RESOURCES_DIAMETER = 6;
+	public static final int STEAM_USE_PER_OP = Steam.UNIT / 4;
+	public static final int RESOURCES_DIAMETER = 15;
 	public static final int RESOURCE_AMOUNT_MAX = 3;
 	public static final float RESOURCE_CHANCE = 0.1f;
 	private static final Random RAND = new Random();
-	private static final Item[] POSSIBLE_ITEMS = new Item[] { Item.fromBlock(Blocks.IRON_ORE) };
+	private static final Item[] GOOD_ITEMS = new Item[] { Item.fromBlock(Blocks.IRON_ORE),
+			Item.fromBlock(Blocks.IRON_ORE), Item.fromBlock(Blocks.GOLD_ORE), Items.REDSTONE };
+	private static final Item[] BAD_ITEMS = new Item[] { Item.fromBlock(Blocks.COBBLESTONE),
+			Item.fromBlock(Blocks.COBBLESTONE), Item.fromBlock(Blocks.GRAVEL), Item.fromBlock(Blocks.GRAVEL),
+			Item.fromBlock(Blocks.SAND), Item.fromBlock(Blocks.SAND), Items.IRON_NUGGET };
 
 	private int steamAmount = 0;
 	private int level = -1;
@@ -46,10 +51,10 @@ public class SteamFractionatingTowerEntity extends BlockEntity implements Steam,
 		}
 		if (world.getTime() % 20 == 0 && level == 0) {
 			BlockEntity be = world.getBlockEntity(pos.offset(Direction.UP, 2));
-			if (be instanceof SteamFractionatingTowerEntity && ((SteamFractionatingTowerEntity) be).getPressure(Direction.DOWN) == 1) {
-				System.out.println("Go");
+			if (be instanceof SteamFractionatingTowerEntity
+					&& ((SteamFractionatingTowerEntity) be).getPressure(Direction.UP) >= 1) {
 				if (checkIsPositionValid()) {
-					removeSteam(Direction.UP, STEAM_USE_PER_OP);
+					((SteamFractionatingTowerEntity) be).removeSteam(Direction.UP, STEAM_USE_PER_OP);
 					doGenerate();
 				}
 			}
@@ -57,14 +62,20 @@ public class SteamFractionatingTowerEntity extends BlockEntity implements Steam,
 	}
 
 	private void doGenerate() {
-		if (true/* RAND.nextFloat() > 0.9 */) {
-			System.out.println("Spawn");
-			int amount = RAND.nextInt(RESOURCE_AMOUNT_MAX);
-			for (int i = 0; i < amount; i++) {
-				ItemEntity spawn = new ItemEntity(world, pos.getX() + (RESOURCES_DIAMETER * (0.5 - RAND.nextFloat())),
-						pos.getY(), pos.getZ(), new ItemStack(POSSIBLE_ITEMS[RAND.nextInt(POSSIBLE_ITEMS.length)]));
-				world.spawnEntity(spawn);
-			}
+		if (RAND.nextFloat() < RESOURCE_CHANCE) {
+			spawnResources(GOOD_ITEMS);
+		}else {
+			spawnResources(BAD_ITEMS);
+		}
+	}
+	
+	private void spawnResources(Item[] item_list) {
+		int amount = RAND.nextInt(RESOURCE_AMOUNT_MAX) + 1;
+		for (int i = 0; i < amount; i++) {
+			ItemEntity spawn = new ItemEntity(world, pos.getX() + (RESOURCES_DIAMETER * (0.5 - RAND.nextFloat())),
+					pos.getY() - 1, pos.getZ() + (RESOURCES_DIAMETER * (0.5 - RAND.nextFloat())),
+					new ItemStack(GOOD_ITEMS[RAND.nextInt(GOOD_ITEMS.length)]));
+			world.spawnEntity(spawn);
 		}
 	}
 
@@ -74,7 +85,6 @@ public class SteamFractionatingTowerEntity extends BlockEntity implements Steam,
 		for (int i = pos.getY(); i >= 0; i--) {
 			searchPos.set(searchPos.getX(), searchPos.getY() - 1, searchPos.getZ());
 			Block atPos = world.getBlockState(searchPos).getBlock();
-			System.out.println(atPos);
 			if (atPos == Blocks.BEDROCK) {
 				foundBedrock = true;
 				break;
@@ -115,7 +125,7 @@ public class SteamFractionatingTowerEntity extends BlockEntity implements Steam,
 	@Override
 	public int getPressurePSBForReadout(Direction dir) {
 		if (level == 2) {
-			return getPressurePSBForReadout(Direction.UP);
+			return getPressurePSB(Direction.UP);
 		} else {
 			BlockEntity be = world.getBlockEntity(pos.offset(Direction.UP, 2 - level));
 			if (be instanceof SteamFractionatingTowerEntity)

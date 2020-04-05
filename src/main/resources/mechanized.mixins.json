@@ -4,7 +4,8 @@
 	"package": "net.snakefangox.mechanized.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
-		"ItemStackMixin"
+		"ItemStackMixin",
+		"LoginMixin"
 	],
 	"client": [
 	"EffectRenderMixin"
