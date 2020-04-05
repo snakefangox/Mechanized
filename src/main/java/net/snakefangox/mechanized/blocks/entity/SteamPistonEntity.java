@@ -11,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
@@ -81,6 +82,7 @@ public class SteamPistonEntity extends BlockEntity implements Steam, Tickable, P
 		removeSteam(null, COST_PER_OP);
 		extendOrRetract(true);
 		retractTimer = 15;
+		((ServerWorld)world).playSound(null, pos, MRegister.STEAM_HIT, SoundCategory.BLOCKS, 1, 0.5f);
 	}
 
 	public void extendOrRetract(boolean extend) {

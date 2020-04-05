@@ -68,6 +68,8 @@ public class AlloyFurnaceEntity extends BlockEntity
 			} else if (oldFuel != fuel) {
 				updateBlockState();
 			}
+		}else if(fuel == 0 && oldFuel != fuel) {
+			updateBlockState();
 		}
 	}
 

@@ -11,6 +11,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.container.PropertyDelegate;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.Tickable;
@@ -27,6 +29,7 @@ public class PressureValveEntity extends BlockEntity implements Steam, Tickable,
 	private static final int VENT_PER_QUARTER_SEC = 16;
 	int ventPressure = 100;
 	int steamAmount = 0;
+	int ventSoundTime = 0;
 	boolean isOpen = false;
 
 	public PressureValveEntity() {
@@ -64,6 +67,11 @@ public class PressureValveEntity extends BlockEntity implements Steam, Tickable,
 		watchingPlayers.forEach(player -> ServerSidePacketRegistry.INSTANCE.sendToPlayer(player,
 				PacketIdentifiers.VENT_PARTICLES, passedData));
 		removeSteam(dir, VENT_PER_QUARTER_SEC);
+		--ventSoundTime;
+		if (ventSoundTime <= 0) {
+			((ServerWorld) world).playSound(null, pos, MRegister.STEAM_ESCAPES, SoundCategory.BLOCKS, 0.02F, 0);
+			ventSoundTime = 15;
+		}
 	}
 
 	private void changeValveState(boolean open) {
@@ -95,7 +103,7 @@ public class PressureValveEntity extends BlockEntity implements Steam, Tickable,
 	public boolean canPipeConnect(Direction dir) {
 		return getCachedState().get(Properties.FACING) == dir;
 	}
-	
+
 	@Override
 	public int getPressurePSBForReadout(Direction dir) {
 		return getPressurePSB(getCachedState().get(HorizontalFacingBlock.FACING));

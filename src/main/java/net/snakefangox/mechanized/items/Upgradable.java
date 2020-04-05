@@ -11,5 +11,5 @@ public interface Upgradable {
 	public Item[] getItemsFromStack(ItemStack stack);
 	public Object[] getUpgradeFromStack(ItemStack stack);
 	public Ingredient validUpgrades(Item item);
-	public int upgradeSlotCount();
+	public int upgradeSlotCount(Item item);
 }

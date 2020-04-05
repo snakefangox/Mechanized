@@ -21,6 +21,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.snakefangox.mechanized.blocks.AlloyFurnace;
@@ -64,7 +65,7 @@ public class MRegister {
 	public static final Block ZINC_ORE = new Block(FabricBlockSettings.of(Material.STONE).hardness(5).resistance(3)
 			.breakByTool(FabricToolTags.PICKAXES, 1).build());
 	public static final Block ALLOY_FURNACE = new AlloyFurnace(FabricBlockSettings.of(Material.STONE).hardness(4)
-			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES).nonOpaque().build());
 	public static final Block STEAM_BOILER = new SteamBoiler(FabricBlockSettings.of(Material.METAL).hardness(4)
 			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
 	public static final Block STEAM_PIPE = new SteamPipe(FabricBlockSettings.of(Material.METAL).hardness(3)
@@ -131,6 +132,11 @@ public class MRegister {
 	public static StatusEffect EXOSUIT_STRENGTH;
 	public static StatusEffect EXOSUIT_SPEED;
 	public static StatusEffect EXOSUIT_PROTECC;
+	
+	//Sound Events
+	public static SoundEvent STEAM_INJECT;
+	public static SoundEvent STEAM_ESCAPES;
+	public static SoundEvent STEAM_HIT;
 
 	public static void registerEverything() {
 		registerBlock(COPPER_ORE, new Identifier(Mechanized.MODID, "copper_ore"), RenderLayerEnum.CUTOUT);
@@ -191,6 +197,10 @@ public class MRegister {
 		EXOSUIT_PROTECC = Registry.register(Registry.STATUS_EFFECT, 458812, "exosuit_protecc",
 				new ExoEffect().addAttributeModifier(EntityAttributes.ARMOR, "1b7e6f75-78d3-4a4d-85af-330e09d2470e", 2,
 						EntityAttributeModifier.Operation.ADDITION));
+		
+		STEAM_INJECT = registerSoundEvent(new Identifier(Mechanized.MODID, "steam_inject"));
+		STEAM_HIT = registerSoundEvent(new Identifier(Mechanized.MODID, "steam_hit"));
+		STEAM_ESCAPES = registerSoundEvent(new Identifier(Mechanized.MODID, "steam_escapes"));
 	}
 
 	private static void registerBlock(Block block, Identifier id, RenderLayerEnum layer) {
@@ -203,6 +213,10 @@ public class MRegister {
 		Registry.register(Registry.BLOCK, id, block);
 		Registry.register(Registry.ITEM, id, new BlockItem(block, new Item.Settings().group(Mechanized.ITEM_GROUP)));
 
+	}
+	
+	private static SoundEvent registerSoundEvent(Identifier id) {
+		return Registry.register(Registry.SOUND_EVENT, id, new SoundEvent(id));
 	}
 
 	@SuppressWarnings("unchecked")

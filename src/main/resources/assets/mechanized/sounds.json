@@ -1,2 +1,21 @@
 {
+	"steam_escapes": {
+		"subtitle": "Steam Escapes",
+		"sounds": [
+			"mechanized:steam_escaping"
+		]
+	},
+	"steam_hit": {
+		"subtitle": "Steam Hits",
+		"sounds": [
+			"mechanized:steam_hit_1",
+			"mechanized:steam_hit_2"
+		]
+	},
+	"steam_inject": {
+		"subtitle": "Steam Injection",
+		"sounds": [
+			"mechanized:steam_inject"
+		]
+	}
 }

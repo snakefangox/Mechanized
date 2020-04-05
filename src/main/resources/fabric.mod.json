@@ -14,7 +14,7 @@
   },
 
   "license": "MIT",
-  "icon": "assets/mechanized/icon.png",
+  "icon": "assets/mechanized/textures/item/steam_drill.png",
 
   "environment": "*",
   "entrypoints": {
@@ -38,6 +38,6 @@
   },
   "suggests": {
     "flamingo": "*",
-	"patchouli": "<=1.2-27"
+	"patchouli": "*"
   }
 }

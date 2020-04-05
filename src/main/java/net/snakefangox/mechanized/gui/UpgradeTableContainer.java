@@ -66,26 +66,28 @@ public class UpgradeTableContainer extends CottonCraftingController {
 	public void changeUpgradeItem(Upgradable up, ItemStack stack) {
 		if (up != null) {
 			Item[] upgrades = up.getItemsFromStack(stack);
-			for (int i = 0; i < up.upgradeSlotCount(); i++) {
+			for (int i = 0; i < up.upgradeSlotCount(stack.getItem()); i++) {
 				blockInventory.setInvStack(i + 1, upgrades[i] == null ? ItemStack.EMPTY : new ItemStack(upgrades[i]));
-				ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new ContainerSlotUpdateS2CPacket(syncId,
-						i + INV_OFFSET + 1, blockInventory.getInvStack(i + 1)));
+				if (!player.world.isClient)
+					ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new ContainerSlotUpdateS2CPacket(syncId,
+							i + INV_OFFSET + 1, blockInventory.getInvStack(i + 1)));
 				upgradeSlots[i].setModifiable(true);
 			}
 		} else {
 			for (int i = 1; i < blockInventory.getInvSize(); i++) {
 				blockInventory.setInvStack(i, CLOSED);
 				upgradeSlots[i - 1].setModifiable(false);
-				ServerSidePacketRegistry.INSTANCE.sendToPlayer(player,
-						new ContainerSlotUpdateS2CPacket(syncId, i + INV_OFFSET, blockInventory.getInvStack(i)));
+				if (!player.world.isClient)
+					ServerSidePacketRegistry.INSTANCE.sendToPlayer(player,
+							new ContainerSlotUpdateS2CPacket(syncId, i + INV_OFFSET, blockInventory.getInvStack(i)));
 			}
 		}
 	}
 
 	public void getAndApplyUpgrades(ItemStack stack) {
 		Upgradable up = (Upgradable) stack.getItem();
-		Item[] upgradeList = new Item[up.upgradeSlotCount()];
-		for (int i = 0; i < up.upgradeSlotCount(); i++) {
+		Item[] upgradeList = new Item[up.upgradeSlotCount(stack.getItem())];
+		for (int i = 0; i < up.upgradeSlotCount(stack.getItem()); i++) {
 			upgradeList[i] = blockInventory.getInvStack(i + 1).getItem();
 		}
 		up.getUpgradeTag(stack, upgradeList);
@@ -95,10 +97,13 @@ public class UpgradeTableContainer extends CottonCraftingController {
 	}
 
 	public void updateSlot(int slotID, ItemStack stack) {
-		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, new ContainerSlotUpdateS2CPacket(syncId, slotID, stack));
-		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
-		passedData.writeItemStack(playerInventory.getCursorStack());
-		ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, PacketIdentifiers.SYNC_CURSER_STACK, passedData);
+		if (!player.world.isClient) {
+			ServerSidePacketRegistry.INSTANCE.sendToPlayer(player,
+					new ContainerSlotUpdateS2CPacket(syncId, slotID, stack));
+			PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
+			passedData.writeItemStack(playerInventory.getCursorStack());
+			ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, PacketIdentifiers.SYNC_CURSER_STACK, passedData);
+		}
 	}
 
 	@Override
@@ -152,7 +157,7 @@ public class UpgradeTableContainer extends CottonCraftingController {
 					return false;
 				}
 			} else if (getInvStack(0).getItem() instanceof Upgradable && !getInvStack(0).isEmpty()) {
-				return ((Upgradable) getInvStack(0).getItem()).validUpgrades(stack.getItem()).test(stack);
+				return ((Upgradable) getInvStack(0).getItem()).validUpgrades(getInvStack(0).getItem()).test(stack);
 			}
 			return true;
 		}

@@ -7,7 +7,9 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
@@ -17,6 +19,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.steam.Steam;
@@ -26,7 +29,9 @@ import net.snakefangox.mechanized.tools.ExoSuitMat;
 public class SteamExoSuit extends ArmorItem implements SteamItem, Upgradable {
 
 	public static final int STEAM_CAPACITY = Steam.UNIT;
-	public static final int STEAM_USE_PER_TICK = 1;
+	public static final int STEAM_USE_PER_SEC = 1;
+	public static final double UPGRADE_JUMP_SPEED = 0.3;
+	public static final double AREA_SIGHT_RANGE = 8;
 
 	public SteamExoSuit(EquipmentSlot slot, Settings settings) {
 		super(ExoSuitMat.MAT, slot, settings);
@@ -56,13 +61,29 @@ public class SteamExoSuit extends ArmorItem implements SteamItem, Upgradable {
 					break;
 
 				case 3:
+					if (getPressure(stack) > 0) {
+						if ((Integer) getUpgradeFromStack(stack)[3] > 0)
+							player.addStatusEffect(
+									new StatusEffectInstance(StatusEffects.NIGHT_VISION, 3, 1, false, false));
+						if ((Integer) getUpgradeFromStack(stack)[4] > 0 && world.getTime() % 20 == 0) {
+							List<Entity> entities = world.getEntities(player,
+									new Box(player.getX() + AREA_SIGHT_RANGE, player.getY() + AREA_SIGHT_RANGE,
+											player.getZ() + AREA_SIGHT_RANGE, player.getX() - AREA_SIGHT_RANGE,
+											player.getY() - AREA_SIGHT_RANGE, player.getZ() - AREA_SIGHT_RANGE));
+							entities.forEach(ent -> {
+								if (ent instanceof LivingEntity)
+									((LivingEntity) ent).addStatusEffect(
+											new StatusEffectInstance(StatusEffects.GLOWING, 25, 1, false, false));
+							});
+						}
+					}
 					break;
 
 				default:
 					break;
 				}
-				if(world.getTime() % 20 == 0)
-					removeSteam(stack, STEAM_USE_PER_TICK);
+				if (world.getTime() % 20 == 0)
+					removeSteam(stack, STEAM_USE_PER_SEC);
 				int armorAmp = 0;
 				for (int i = 0; i < player.inventory.armor.size(); i++) {
 					if (player.inventory.getArmorStack(i).getItem() instanceof SteamExoSuit)
@@ -122,33 +143,69 @@ public class SteamExoSuit extends ArmorItem implements SteamItem, Upgradable {
 	@Override
 	public CompoundTag getUpgradeTag(ItemStack stack, Item... upgrades) {
 		CompoundTag tag = stack.getOrCreateTag();
-		int steamExtra = upgrades[0] == MRegister.STEAM_CANISTER ? SteamCanister.STEAM_CAPACITY : 0;
-		int proteccUpgrade = upgrades[0] == Items.DIAMOND_CHESTPLATE ? 1 : 0;
+		int steamExtra = 0;
+		int proteccUpgrade = 0;
+		int steamJump = 0;
+		int nightVision = 0;
+		int areaVision = 0;
+		for (int i = 0; i < upgrades.length; i++) {
+			steamExtra = upgrades[i] == MRegister.STEAM_CANISTER ? SteamCanister.STEAM_CAPACITY : steamExtra;
+			proteccUpgrade = upgrades[i] == Items.DIAMOND_CHESTPLATE ? 1 : proteccUpgrade;
+			steamJump = upgrades[i] == Item.fromBlock(MRegister.STEAM_PISTON) ? 1 : steamJump;
+			nightVision = upgrades[i] == Items.ENDER_EYE ? 1 : nightVision;
+			areaVision = upgrades[i] == Items.SPECTRAL_ARROW ? 1 : areaVision;
+		}
 		tag.putInt("steamExtra", steamExtra);
 		tag.putInt("protecc", proteccUpgrade);
+		tag.putInt("steamJump", steamJump);
+		tag.putInt("nightVision", nightVision);
+		tag.putInt("areaVision", areaVision);
 		return tag;
 	}
 
 	@Override
 	public Object[] getUpgradeFromStack(ItemStack stack) {
 		CompoundTag tag = stack.getOrCreateTag();
-		return new Object[] { tag.getInt("protecc"), tag.getInt("steamExtra") };
+		return new Object[] { tag.getInt("protecc"), tag.getInt("steamExtra"), tag.getInt("steamJump"),
+				tag.getInt("nightVision"), tag.getInt("areaVision") };
 	}
 
 	@Override
 	public Ingredient validUpgrades(Item item) {
-		return Ingredient.ofItems(Items.DIAMOND_CHESTPLATE, MRegister.STEAM_CANISTER);
+		Item[] items = null;
+		if (item == MRegister.STEAM_EXOSUIT_BOOTS) {
+			items = new Item[] { MRegister.STEAM_PISTON.asItem(), Items.DIAMOND_CHESTPLATE, MRegister.STEAM_CANISTER };
+		} else if (item == MRegister.STEAM_EXOSUIT_HELMET) {
+			items = new Item[] { Items.SPECTRAL_ARROW, Items.ENDER_EYE, Items.DIAMOND_CHESTPLATE,
+					MRegister.STEAM_CANISTER };
+		} else {
+			items = new Item[] { Items.DIAMOND_CHESTPLATE, MRegister.STEAM_CANISTER };
+		}
+		return Ingredient.ofItems(items);
 	}
 
 	@Override
-	public int upgradeSlotCount() {
+	public int upgradeSlotCount(Item item) {
+		if (item == MRegister.STEAM_EXOSUIT_HELMET)
+			return 2;
 		return 1;
 	}
 
 	@Override
 	public Item[] getItemsFromStack(ItemStack stack) {
 		CompoundTag tag = stack.getOrCreateTag();
-		return new Item[] { tag.getInt("protecc") == 1 ? Items.DIAMOND_CHESTPLATE
-				: tag.getInt("steamExtra") > 0 ? MRegister.STEAM_CANISTER : null };
+		Item[] items = new Item[upgradeSlotCount(stack.getItem())];
+		int i = 0;
+		if (tag.getInt("protecc") > 0)
+			items[i++] = Items.DIAMOND_CHESTPLATE;
+		if (tag.getInt("steamExtra") > 0)
+			items[i++] = MRegister.STEAM_CANISTER;
+		if (tag.getInt("steamJump") > 0)
+			items[i++] = Item.fromBlock(MRegister.STEAM_PISTON);
+		if (tag.getInt("nightVision") > 0)
+			items[i++] = Items.ENDER_EYE;
+		if (tag.getInt("areaVision") > 0)
+			items[i++] = Items.SPECTRAL_ARROW;
+		return items;
 	}
 }

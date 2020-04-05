@@ -10,6 +10,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -62,6 +64,7 @@ public class SteamFractionatingTowerEntity extends BlockEntity implements Steam,
 	}
 
 	private void doGenerate() {
+		((ServerWorld)world).playSound(null, pos, MRegister.STEAM_INJECT, SoundCategory.BLOCKS, 4, 1);
 		if (RAND.nextFloat() < RESOURCE_CHANCE) {
 			spawnResources(GOOD_ITEMS);
 		}else {
@@ -74,7 +77,7 @@ public class SteamFractionatingTowerEntity extends BlockEntity implements Steam,
 		for (int i = 0; i < amount; i++) {
 			ItemEntity spawn = new ItemEntity(world, pos.getX() + (RESOURCES_DIAMETER * (0.5 - RAND.nextFloat())),
 					pos.getY() - 1, pos.getZ() + (RESOURCES_DIAMETER * (0.5 - RAND.nextFloat())),
-					new ItemStack(GOOD_ITEMS[RAND.nextInt(GOOD_ITEMS.length)]));
+					new ItemStack(item_list[RAND.nextInt(item_list.length)]));
 			world.spawnEntity(spawn);
 		}
 	}
