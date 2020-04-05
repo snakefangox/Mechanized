@@ -44,6 +44,7 @@ public class SteamFractionatingTower extends Block implements BlockEntityProvide
 	@Override
 	public void onBlockRemoved(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
 		super.onBlockRemoved(state, world, pos, newState, moved);
+		
 		int level = state.get(LEVEL);
 		world.setBlockEntity(pos, null);
 		if (level != 0) {

@@ -27,3 +27,5 @@ bin/
 # fabric
 
 run/
+
+src/main/java/net/snakefangox/mechanized/mixin/LoginMixin.java
