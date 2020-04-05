@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "igb",
+        "igb",
+        "igb"
+    ],
+    "key": {
+        "i": {
+            "item": "mechanized:brass_ingot"
+        },
+         "g": {
+            "item": "minecraft:piston"
+        },
+         "b": {
+            "item": "minecraft:iron_ingot"
+        }
+    },
+    "result": {
+        "item": "mechanized:steam_piston",
+        "count": 1
+    }
+}

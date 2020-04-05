@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "  p",
+        "##B"
+    ],
+    "key": {
+        "#": {
+            "item": "minecraft:smooth_stone_slab"
+        },
+        "B": {
+            "item": "mechanized:brass_ingot"
+        },
+        "p": {
+            "item": "mechanized:steam_pipe"
+        }
+    },
+    "result": {
+        "item": "mechanized:steam_charger",
+        "count": 1
+    }
+}

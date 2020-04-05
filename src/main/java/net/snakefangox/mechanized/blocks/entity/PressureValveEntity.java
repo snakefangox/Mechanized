@@ -70,7 +70,7 @@ public class PressureValveEntity extends BlockEntity implements Steam, Tickable,
 		--ventSoundTime;
 		if (ventSoundTime <= 0) {
 			((ServerWorld) world).playSound(null, pos, MRegister.STEAM_ESCAPES, SoundCategory.BLOCKS, 0.02F, 0);
-			ventSoundTime = 15;
+			ventSoundTime = 5;
 		}
 	}
 

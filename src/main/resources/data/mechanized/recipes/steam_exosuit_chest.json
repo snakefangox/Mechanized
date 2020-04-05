@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+    	"i i",
+        "bgb",
+        "iii"
+    ],
+    "key": {
+        "i": {
+            "item": "mechanized:brass_ingot"
+        },
+         "b": {
+            "item": "mechanized:steam_canister"
+        },
+         "g": {
+            "item": "minecraft:leather_chestplate"
+        }
+    },
+    "result": {
+        "item": "mechanized:steam_exosuit_chest",
+        "count": 1
+    }
+}

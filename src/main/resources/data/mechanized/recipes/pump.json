@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "iii",
+        "igi",
+        "ibi"
+    ],
+    "key": {
+        "i": {
+            "item": "mechanized:brass_ingot"
+        },
+         "g": {
+            "item": "minecraft:glass"
+        },
+         "b": {
+            "item": "minecraft:bucket"
+        }
+    },
+    "result": {
+        "item": "mechanized:pump",
+        "count": 1
+    }
+}

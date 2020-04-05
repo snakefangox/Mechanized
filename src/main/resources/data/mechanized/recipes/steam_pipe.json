@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "iii",
+        " G ",
+        "iii"
+    ],
+    "key": {
+        "i": {
+            "item": "mechanized:brass_ingot"
+        },
+        "G": {
+            "item": "minecraft:glass"
+        }
+    },
+    "result": {
+        "item": "mechanized:steam_pipe",
+        "count": 6
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "iii",
+        "gbg",
+        "iii"
+    ],
+    "key": {
+        "i": {
+            "item": "mechanized:brass_ingot"
+        },
+         "g": {
+            "item": "minecraft:iron_bars"
+        },
+         "b": {
+            "item": "mechanized:fan_blade"
+        }
+    },
+    "result": {
+        "item": "mechanized:fan",
+        "count": 1
+    }
+}

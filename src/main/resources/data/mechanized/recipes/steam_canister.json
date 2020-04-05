@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " b ",
+        "i i",
+        "iii"
+    ],
+    "key": {
+        "i": {
+            "item": "mechanized:brass_ingot"
+        },
+         "b": {
+            "item": "mechanized:pressure_valve"
+        }
+    },
+    "result": {
+        "item": "mechanized:steam_canister",
+        "count": 1
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "iii",
+        "igb",
+        "iii"
+    ],
+    "key": {
+        "i": {
+            "item": "mechanized:brass_ingot"
+        },
+         "g": {
+            "item": "minecraft:piston"
+        },
+         "b": {
+            "item": "minecraft:dispenser"
+        }
+    },
+    "result": {
+        "item": "mechanized:placer",
+        "count": 1
+    }
+}

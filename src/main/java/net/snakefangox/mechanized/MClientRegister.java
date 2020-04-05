@@ -6,6 +6,8 @@ import net.minecraft.container.BlockContext;
 import net.snakefangox.mechanized.blocks.entity.FanEntityRenderer;
 import net.snakefangox.mechanized.blocks.entity.SteamChargerEntityRenderer;
 import net.snakefangox.mechanized.gui.AlloyFurnaceContainer;
+import net.snakefangox.mechanized.gui.PlacerContainer;
+import net.snakefangox.mechanized.gui.PlacerContainer.PlacerScreen;
 import net.snakefangox.mechanized.gui.AlloyFurnaceContainer.AlloyFurnaceScreen;
 import net.snakefangox.mechanized.gui.PressureValveContainer;
 import net.snakefangox.mechanized.gui.PressureValveContainer.PressureValveScreen;
@@ -35,6 +37,9 @@ public class MClientRegister {
 						player.inventory, BlockContext.create(player.world, buf.readBlockPos())), player));
 		ScreenProviderRegistry.INSTANCE.registerFactory(MRegister.UPGRADE_TABLE_CONTAINER, (syncId, identifier, player,
 				buf) -> new UpgradeTableScreen(new UpgradeTableContainer(syncId, player.inventory), player));
+		ScreenProviderRegistry.INSTANCE.registerFactory(MRegister.PLACER_CONTAINER,
+				(syncId, identifier, player, buf) -> new PlacerScreen(new PlacerContainer(syncId, player.inventory,
+						BlockContext.create(player.world, buf.readBlockPos())), player));
 	}
 
 }

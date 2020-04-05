@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " b ",
+        "igi",
+        " i "
+    ],
+    "key": {
+        "i": {
+            "item": "mechanized:brass_ingot"
+        },
+         "g": {
+            "item": "minecraft:compass"
+        },
+         "b": {
+            "item": "mechanized:steam_pipe"
+        }
+    },
+    "result": {
+        "item": "mechanized:pressure_gauge",
+        "count": 1
+    }
+}

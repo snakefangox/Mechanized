@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "iBi",
+        "iGi",
+        "iGi"
+    ],
+    "key": {
+        "i": {
+            "item": "mechanized:steam_tank"
+        },
+        "G": {
+            "item": "mechanized:steam_pipe"
+        },
+        "B": {
+            "item": "mechanized:pressure_valve"
+        }
+    },
+    "result": {
+        "item": "mechanized:steam_fractionating_tower",
+        "count": 1
+    }
+}

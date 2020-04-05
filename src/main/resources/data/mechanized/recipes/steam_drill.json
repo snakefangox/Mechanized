@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "igg",
+        "ibg",
+        "iii"
+    ],
+    "key": {
+        "i": {
+            "item": "mechanized:brass_ingot"
+        },
+         "b": {
+            "item": "mechanized:steam_canister"
+        },
+         "g": {
+            "item": "minecraft:iron_ingot"
+        }
+    },
+    "result": {
+        "item": "mechanized:steam_drill",
+        "count": 1
+    }
+}

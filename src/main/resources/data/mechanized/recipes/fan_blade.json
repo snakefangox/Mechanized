@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " i ",
+        "iii",
+        " i "
+    ],
+    "key": {
+        "i": {
+            "item": "minecraft:iron_ingot"
+        }
+    },
+    "result": {
+        "item": "mechanized:fan_blade",
+        "count": 1
+    }
+}

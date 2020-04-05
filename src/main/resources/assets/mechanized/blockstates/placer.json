@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "facing=north,extended=true": { "model": "mechanized:block/placer_place" },
+    "facing=south,extended=true": { "model": "mechanized:block/placer_place", "y": 180 },
+    "facing=west,extended=true": { "model": "mechanized:block/placer_place", "y": 270 },
+    "facing=east,extended=true": { "model": "mechanized:block/placer_place", "y": 90 },
+    "facing=up,extended=true": { "model": "mechanized:block/placer_place", "x": -90 },
+    "facing=down,extended=true": { "model": "mechanized:block/placer_place", "x": 90 },
+	"facing=north,extended=false": { "model": "mechanized:block/placer_rest" },
+    "facing=south,extended=false": { "model": "mechanized:block/placer_rest", "y": 180 },
+    "facing=west,extended=false": { "model": "mechanized:block/placer_rest", "y": 270 },
+    "facing=east,extended=false": { "model": "mechanized:block/placer_rest", "y": 90 },
+    "facing=up,extended=false": { "model": "mechanized:block/placer_rest", "x": -90 },
+    "facing=down,extended=false": { "model": "mechanized:block/placer_rest", "x": 90 }
+  }
+}
