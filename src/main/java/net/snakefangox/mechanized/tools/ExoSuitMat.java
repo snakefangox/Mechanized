@@ -20,13 +20,13 @@ public enum ExoSuitMat implements ArmorMaterial {
 	public int getProtectionAmount(EquipmentSlot slot) {
 		switch(slot) {
 		case CHEST:
-			return 6;
+			return 4;
 		case FEET:
 			return 2;
 		case HEAD:
-			return 2;
+			return 1;
 		case LEGS:
-			return 5;
+			return 3;
 		default:
 			return 0;
 		}

@@ -29,7 +29,9 @@ public class PressureValveContainer extends CottonCraftingController {
 	public PressureValveContainer(int syncID, PlayerInventory playerInventory, BlockContext context) {
 		super(RecipeType.SMELTING, syncID, playerInventory, getBlockInventory(context),
 				getBlockPropertyDelegate(context));
-		ventPos = context.run((world, pos) -> {return pos;}).orElse(null);
+		ventPos = context.run((world, pos) -> {
+			return pos;
+		}).orElse(null);
 		WGridPanel root = new WGridPanel();
 		setRootPanel(root);
 
@@ -42,11 +44,9 @@ public class PressureValveContainer extends CottonCraftingController {
 			public void onCharTyped(char ch) {
 				if (numbers.contains(String.valueOf(ch))) {
 					super.onCharTyped(ch);
-					this.onChanged.accept(this.getText());
 				}
 			}
 		};
-		pressure.setChangedListener(this::onChanged);
 
 		root.add(ventText, 0, 0, 3, 1);
 		root.add(pressure, 0, 1, 3, 1);
@@ -56,9 +56,11 @@ public class PressureValveContainer extends CottonCraftingController {
 
 	}
 
-	private void onChanged(String text) {
+	@Override
+	public void close(PlayerEntity player) {
+		super.close(player);
 		try {
-			int value = Integer.valueOf(text);
+			int value = Integer.valueOf(pressure.getText());
 			if (value >= 0 && value <= 100 && ventPos != null) {
 				PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
 				passedData.writeBlockPos(ventPos);

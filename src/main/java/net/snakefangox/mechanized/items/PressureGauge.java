@@ -22,7 +22,7 @@ public class PressureGauge extends Item {
 		BlockEntity be = context.getWorld().getBlockEntity(context.getBlockPos());
 		if (be instanceof Steam) {
 			context.getPlayer().addChatMessage(
-					new TranslatableText(PRESSURE_KEY, ((Steam) be).getPressurePSB(context.getSide())), true);
+					new TranslatableText(PRESSURE_KEY, ((Steam) be).getPressurePSBForReadout(context.getSide())), true);
 			return ActionResult.SUCCESS;
 		} else {
 			return super.useOnBlock(context);

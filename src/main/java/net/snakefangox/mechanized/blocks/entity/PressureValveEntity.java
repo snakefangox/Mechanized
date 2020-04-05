@@ -6,6 +6,7 @@ import io.github.cottonmc.cotton.gui.PropertyDelegateHolder;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.server.PlayerStream;
+import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.container.PropertyDelegate;
 import net.minecraft.entity.player.PlayerEntity;
@@ -41,27 +42,28 @@ public class PressureValveEntity extends BlockEntity implements Steam, Tickable,
 		if (world.isClient)
 			return;
 		if (world.getTime() % 5 == 0) {
-			SteamUtil.directionalEqualizeSteam(world, this, pos, null, getCachedState().get(Properties.FACING));
-			if (getPressurePSB(null) > ventPressure && !isOpen) {
+			Direction dir = getCachedState().get(Properties.FACING);
+			SteamUtil.directionalEqualizeSteam(world, this, pos, dir, dir);
+			if (getPressurePSB(dir) > ventPressure && !isOpen) {
 				changeValveState(true);
 			}
-			if (getPressurePSB(null) <= ventPressure && isOpen) {
+			if (getPressurePSB(dir) <= ventPressure && isOpen) {
 				changeValveState(false);
 			}
 			if (isOpen) {
-				vent();
+				vent(dir);
 			}
 		}
 	}
 
-	private void vent() {
+	private void vent(Direction dir) {
 		Stream<PlayerEntity> watchingPlayers = PlayerStream.watching(world, pos);
 		PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
 		passedData.writeBlockPos(pos);
 		passedData.writeByte(getCachedState().get(Properties.FACING).getId());
 		watchingPlayers.forEach(player -> ServerSidePacketRegistry.INSTANCE.sendToPlayer(player,
 				PacketIdentifiers.VENT_PARTICLES, passedData));
-		removeSteam(null, VENT_PER_QUARTER_SEC);
+		removeSteam(dir, VENT_PER_QUARTER_SEC);
 	}
 
 	private void changeValveState(boolean open) {
@@ -71,22 +73,32 @@ public class PressureValveEntity extends BlockEntity implements Steam, Tickable,
 
 	@Override
 	public int getSteamAmount(Direction dir) {
-		return steamAmount;
+		if (dir == getCachedState().get(Properties.FACING))
+			return steamAmount;
+		return 0;
 	}
 
 	@Override
 	public int getMaxSteamAmount(Direction dir) {
-		return STEAM_TANK_CAPACITY;
+		if (dir == getCachedState().get(Properties.FACING))
+			return STEAM_TANK_CAPACITY;
+		return 0;
 	}
 
 	@Override
 	public void setSteamAmount(Direction dir, int amount) {
-		steamAmount = amount;
+		if (dir == getCachedState().get(Properties.FACING))
+			steamAmount = amount;
 	}
 
 	@Override
 	public boolean canPipeConnect(Direction dir) {
 		return getCachedState().get(Properties.FACING) == dir;
+	}
+	
+	@Override
+	public int getPressurePSBForReadout(Direction dir) {
+		return getPressurePSB(getCachedState().get(HorizontalFacingBlock.FACING));
 	}
 
 	@Override

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "level=0": { "model": "mechanized:block/steam_fractionating_tower_1" },
+    "level=1": { "model": "mechanized:block/steam_fractionating_tower_2" },
+    "level=2": { "model": "mechanized:block/steam_fractionating_tower_3" }
+  }
+}

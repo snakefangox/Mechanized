@@ -38,14 +38,10 @@ public interface SteamItem {
 	 */
 	public int getMaxSteamAmount(ItemStack stack);
 
-	/**
-	 * If a pipe can visually connect to a given side
-	 * 
-	 * @param stack
-	 * @return
-	 */
-	default public boolean canPipeConnect(ItemStack stack) {
-		return true;
+	default public void validateSteam(ItemStack stack) {
+		int steam = getSteamAmount(stack);
+		setSteamAmount(stack, 0);
+		addSteam(stack, steam);
 	}
 
 	/**

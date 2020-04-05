@@ -4,14 +4,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.EntityContext;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
@@ -19,7 +16,6 @@ import net.snakefangox.mechanized.blocks.entity.SteamPistonEntity;
 
 public class SteamPiston extends Block implements BlockEntityProvider {
 
-	private VoxelShape BOX = VoxelShapes.cuboid(0, 0.001, 0, 1, 1, 1);
 	public static final BooleanProperty EXTENDED = BooleanProperty.of("extended");
 
 	public SteamPiston(Settings settings) {
@@ -35,12 +31,6 @@ public class SteamPiston extends Block implements BlockEntityProvider {
 		if (be instanceof SteamPistonEntity) {
 			((SteamPistonEntity) be).updateSignal(world.getReceivedStrongRedstonePower(pos));
 		}
-	}
-
-	//Ugly hack, I know
-	@Override
-	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, EntityContext context) {
-		return BOX;
 	}
 	
 	@Override

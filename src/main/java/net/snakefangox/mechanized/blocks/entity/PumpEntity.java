@@ -38,16 +38,18 @@ public class PumpEntity extends BlockEntity implements Steam, Tickable, Property
 		if (world.isClient)
 			return;
 		if (world.getTime() % 5 == 0) {
-			SteamUtil.equalizeSteam(world, this, pos, null);
+			Direction dir = getCachedState().get(HorizontalFacingBlock.FACING);
+			SteamUtil.directionalEqualizeSteam(world, this, pos, dir, dir);
+			SteamUtil.directionalEqualizeSteam(world, this, pos, Direction.UP, Direction.UP);
 		}
 		if (world.getTime() % 10 == 0) {
-			if (getPressure(null) >= 0.1 && tank
+			if (getPressure(Direction.UP) >= 0.1 && tank
 					.attemptInsertion(FluidWorldUtil.drain(world, pos.offset(Direction.DOWN), Simulation.SIMULATE),
 							Simulation.SIMULATE)
 					.isEmpty()) {
 				tank.attemptInsertion(FluidWorldUtil.drain(world, pos.offset(Direction.DOWN), Simulation.ACTION),
 						Simulation.ACTION);
-				removeSteam(null, PUMP_COST);
+				removeSteam(Direction.UP, PUMP_COST);
 			}
 			if (!tank.getTank(0).get().isEmpty()) {
 				FluidInsertable outTank = FluidAttributes.INSERTABLE
@@ -61,23 +63,38 @@ public class PumpEntity extends BlockEntity implements Steam, Tickable, Property
 		}
 	}
 
+	@Override
+	public boolean canPipeConnect(Direction dir) {
+		return dir == Direction.UP || dir == getCachedState().get(HorizontalFacingBlock.FACING);
+	}
+
 	public <T> T getWorldAttribute(CombinableAttribute<T> attr, Direction dir) {
 		return attr.get(getWorld(), getPos().offset(dir), SearchOptions.inDirection(dir));
 	}
 
 	@Override
 	public int getSteamAmount(Direction dir) {
-		return steamAmount;
+		if (dir == Direction.UP || dir == getCachedState().get(HorizontalFacingBlock.FACING))
+			return steamAmount;
+		return 0;
 	}
 
 	@Override
 	public int getMaxSteamAmount(Direction dir) {
-		return STEAM_CAPACITY;
+		if (dir == Direction.UP || dir == getCachedState().get(HorizontalFacingBlock.FACING))
+			return STEAM_CAPACITY;
+		return 0;
 	}
 
 	@Override
 	public void setSteamAmount(Direction dir, int amount) {
-		steamAmount = amount;
+		if (dir == Direction.UP || dir == getCachedState().get(HorizontalFacingBlock.FACING))
+			steamAmount = amount;
+	}
+	
+	@Override
+	public int getPressurePSBForReadout(Direction dir) {
+		return getPressurePSB(Direction.UP);
 	}
 
 	@Override

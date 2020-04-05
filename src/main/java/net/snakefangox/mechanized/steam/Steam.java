@@ -31,9 +31,10 @@ public interface Steam {
 	 * @return
 	 */
 	public int getMaxSteamAmount(Direction dir);
-	
+
 	/**
 	 * If a pipe can visually connect to a given side
+	 * 
 	 * @param dir
 	 * @return
 	 */
@@ -50,7 +51,7 @@ public interface Steam {
 	default public float getPressure(Direction dir) {
 		return getSteamAmount(dir) / (float) getMaxSteamAmount(dir);
 	}
-	
+
 	/**
 	 * Gets the pressure for the steam tank linked to the given side in PSB
 	 * 
@@ -60,7 +61,18 @@ public interface Steam {
 	default public int getPressurePSB(Direction dir) {
 		return (int) (getPressure(dir) * 100.0f);
 	}
-	
+
+	/**
+	 * Only used by things that display steam to the player. Override for special
+	 * handling for those things
+	 * 
+	 * @param dir
+	 * @return
+	 */
+	default public int getPressurePSBForReadout(Direction dir) {
+		return getPressurePSB(dir);
+	}
+
 	/**
 	 * Calls add or remove as needed
 	 * 
@@ -69,13 +81,13 @@ public interface Steam {
 	 * @return the amount of steam that was accepted or removed
 	 */
 	default public int addOrRemoveSteam(Direction dir, int amount) {
-		if(amount > 0) {
+		if (amount > 0) {
 			return addSteam(dir, amount);
-		}else {
+		} else {
 			return removeSteam(dir, amount * -1) * -1;
 		}
 	}
-	
+
 	/**
 	 * Adds steam to the tank linked to the given facing
 	 * 

@@ -58,7 +58,7 @@ public class InventoryTools {
 		}
 	}
 
-	// FIXME Also a terrible modfest hack
+	// FIXME A terrible modfest hack
 	public static void extractNamedFromInv(Inventory inv, int amountIn, String... names) {
 		int amount = amountIn;
 		for (int i = 0; i < inv.getInvSize(); i++) {

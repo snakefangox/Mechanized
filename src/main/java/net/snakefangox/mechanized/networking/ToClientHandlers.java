@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -42,6 +43,13 @@ public class ToClientHandlers {
 						pos.getY() + (0.5 + ((0.5 - particle_rand.nextFloat()) * 0.5)),
 						pos.getZ() + (0.5 + ((0.5 - particle_rand.nextFloat()) * 0.5)), dir.getOffsetX() * 0.5,
 						dir.getOffsetY() * 0.5, dir.getOffsetZ() * 0.5);
+			});
+		});
+		
+		ClientSidePacketRegistry.INSTANCE.register(PacketIdentifiers.SYNC_CURSER_STACK, (packetContext, attachedData) -> {
+			ItemStack item = attachedData.readItemStack();
+			packetContext.getTaskQueue().execute(() -> {
+				MinecraftClient.getInstance().player.inventory.setCursorStack(item);
 			});
 		});
 

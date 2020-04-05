@@ -1,9 +1,14 @@
 package net.snakefangox.mechanized.items;
 
+import java.util.List;
+
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.Material;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,8 +16,11 @@ import net.minecraft.item.Items;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.steam.SteamItem;
 import net.snakefangox.mechanized.tools.SteamToolMaterial;
 
@@ -49,7 +57,7 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable {
 
 	public boolean isEffectiveOn(BlockState state, ItemStack stack) {
 		Block block = state.getBlock();
-		int i = this.getMaterial().getMiningLevel() + (int) getUpgradeFromTag(stack.getOrCreateTag())[0];
+		int i = this.getMaterial().getMiningLevel() + (int) getUpgradeFromStack(stack)[0];
 		if (block == Blocks.OBSIDIAN) {
 			return i == 3;
 		} else if (block != Blocks.DIAMOND_BLOCK && block != Blocks.DIAMOND_ORE && block != Blocks.EMERALD_ORE
@@ -82,12 +90,12 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable {
 	public void setSteamAmount(ItemStack stack, int amount) {
 		CompoundTag tag = stack.getOrCreateTag();
 		tag.putInt(TAG_KEY, amount);
-		stack.setDamage(STEAM_CAPACITY - amount);
+		stack.setDamage((int) (stack.getMaxDamage() - (stack.getMaxDamage() * (float)((float)amount / (float) getMaxSteamAmount(stack)))));
 	}
 
 	@Override
 	public int getMaxSteamAmount(ItemStack stack) {
-		return STEAM_CAPACITY;
+		return STEAM_CAPACITY + (Integer) getUpgradeFromStack(stack)[1];
 	}
 
 	@Override
@@ -96,20 +104,40 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable {
 	}
 
 	@Override
-	public CompoundTag getUpgradeTag(CompoundTag tag, Item... upgrades) {
+	@Environment(EnvType.CLIENT)
+	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext context) {
+		Item[] upgrades = getItemsFromStack(stack);
+		if (upgrades.length > 0) {
+			tooltip.add(1, new LiteralText("Upgrades:"));
+			for (int i = 0; i < upgrades.length; i++) {
+				if (upgrades[i] != null) {
+					tooltip.add(2 + i, new net.minecraft.text.TranslatableText(upgrades[i].getTranslationKey(stack)));
+				} else {
+					tooltip.add(2 + i, new LiteralText("Empty"));
+				}
+			}
+		}
+	}
+
+	@Override
+	public CompoundTag getUpgradeTag(ItemStack stack, Item... upgrades) {
+		CompoundTag tag = stack.getOrCreateTag();
 		int miningUpgrade = upgrades[0] == Items.DIAMOND ? 1 : 0;
+		int steamExtra = upgrades[0] == MRegister.STEAM_CANISTER ? SteamCanister.STEAM_CAPACITY : 0;
 		tag.putInt("miningUpgrade", miningUpgrade);
+		tag.putInt("steamExtra", steamExtra);
 		return tag;
 	}
 
 	@Override
-	public Object[] getUpgradeFromTag(CompoundTag tag) {
-		return new Object[] { tag.getInt("miningUpgrade") };
+	public Object[] getUpgradeFromStack(ItemStack stack) {
+		CompoundTag tag = stack.getOrCreateTag();
+		return new Object[] { tag.getInt("miningUpgrade"), tag.getInt("steamExtra") };
 	}
 
 	@Override
-	public Ingredient validUpgrades() {
-		return Ingredient.ofItems(Items.DIAMOND);
+	public Ingredient validUpgrades(Item item) {
+		return Ingredient.ofItems(Items.DIAMOND, MRegister.STEAM_CANISTER);
 	}
 
 	@Override
@@ -118,7 +146,14 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable {
 	}
 
 	@Override
-	public Item[] getItemsFromTag(CompoundTag tag) {
-		return new Item[] { tag.getInt("miningUpgrade") == 1 ? Items.DIAMOND : null };
+	public Item[] getItemsFromStack(ItemStack stack) {
+		CompoundTag tag = stack.getOrCreateTag();
+		if (tag.getInt("miningUpgrade") == 1) {
+			return new Item[] { Items.DIAMOND };
+		} else if (tag.getInt("steamExtra") > 0) {
+			return new Item[] { MRegister.STEAM_CANISTER };
+		} else {
+			return new Item[] { null };
+		}
 	}
 }
