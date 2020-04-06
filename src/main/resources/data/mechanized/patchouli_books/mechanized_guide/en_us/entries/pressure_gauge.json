@@ -1,7 +1,7 @@
 {
 	"name": "Pressure Gauge",
 	"icon": "mechanized:pressure_gauge",
-	"category": "items",
+	"category": "gear",
 	"pages": [
 		{
 			"type": "spotlight",

@@ -1,0 +1,12 @@
+{
+	"name": "Steam Pipe",
+	"icon": "mechanized:steam_pipe",
+	"category": "basics",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_pipe",
+			"text": "The 100% safe way to transport steam. A system of pipes can hold 1 unit of steam. Breaking a pipe will release all the stored steam in the pipe system but none from connected machines. As a result the most you can lose this way is one unit of steam."
+		}
+	]
+}

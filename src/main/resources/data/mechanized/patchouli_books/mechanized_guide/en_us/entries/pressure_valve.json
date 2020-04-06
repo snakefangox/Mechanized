@@ -1,0 +1,12 @@
+{
+	"name": "Pressure Valve",
+	"icon": "mechanized:pressure_valve",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:pressure_valve",
+			"text": "This valve can be set to a given pressure, when the pressure rises above the set value it will vent steam until the pressure falls below it again. It's internal tank can hold one unit of steam."
+		}
+	]
+}

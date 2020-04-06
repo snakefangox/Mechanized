@@ -1,0 +1,12 @@
+{
+	"name": "Steam Fractionating Tower",
+	"icon": "mechanized:steam_fractionating_tower",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_fractionating_tower",
+			"text": "This 3 block high machine will pressurize a large amount of steam and inject it into the earth. This flushes out rocks and sand but also ores and dusts. The material it washes out will bubble up around it's base in a wide radius. It's internal tank can hold one unit of steam."
+		}
+	]
+}

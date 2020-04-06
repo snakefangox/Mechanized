@@ -46,7 +46,7 @@ public class SteamExoSuit extends ArmorItem implements SteamItem, Upgradable {
 	public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
 		if (entity instanceof PlayerEntity) {
 			PlayerEntity player = (PlayerEntity) entity;
-			if (slot < 4 && player.inventory.getArmorStack(slot) == stack) {
+			if (slot < 4 && player.inventory.armor.get(slot) == stack) {
 				switch (slot) {
 				case 0:
 					break;
@@ -86,9 +86,9 @@ public class SteamExoSuit extends ArmorItem implements SteamItem, Upgradable {
 					removeSteam(stack, STEAM_USE_PER_SEC);
 				int armorAmp = 0;
 				for (int i = 0; i < player.inventory.armor.size(); i++) {
-					if (player.inventory.getArmorStack(i).getItem() instanceof SteamExoSuit)
+					if (player.inventory.armor.get(slot).getItem() instanceof SteamExoSuit)
 						armorAmp += (Integer) ((Upgradable) MRegister.STEAM_EXOSUIT_CHEST)
-								.getUpgradeFromStack(player.inventory.getArmorStack(i))[0];
+								.getUpgradeFromStack(player.inventory.armor.get(i))[0];
 				}
 				player.addStatusEffect(new StatusEffectInstance(MRegister.EXOSUIT_PROTECC, 3, armorAmp, false, false));
 			}

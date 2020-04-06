@@ -1,0 +1,12 @@
+{
+	"name": "Upgrade Table",
+	"icon": "mechanized:upgrade_table",
+	"category": "gear",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:upgrade_table",
+			"text": "Allows you to tinker with items that accept upgrades."
+		}
+	]
+}

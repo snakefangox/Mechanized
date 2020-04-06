@@ -1,0 +1,12 @@
+{
+	"name": "Steam Piston",
+	"icon": "mechanized:steam_piston",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_piston",
+			"text": "This machine operates a little like a vanilla piston but with a lot more kick. When provided with a redstone signal and steam it will launch anything touching its face in the direction it's facing. The more pressure the further it launches. It's internal tank can hold one unit of steam."
+		}
+	]
+}

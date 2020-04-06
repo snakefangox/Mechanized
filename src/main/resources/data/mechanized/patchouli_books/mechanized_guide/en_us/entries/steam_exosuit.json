@@ -1,0 +1,60 @@
+{
+	"name": "Steam Exosuit",
+	"icon": "mechanized:steam_exosuit_chest",
+	"category": "gear",
+	"pages": [
+		{
+			"type": "text",
+			"text": "The steam exosuit differs from normal armour in thatit has an internal steam tank and no durability. When worn it provides passive benefits but drains steam at a constant rate. When the armour runs out of steam it stops providing benefits."
+		},
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_exosuit_boots",
+			"text": "The exosuit boots can redirect the energy from a fall into a higher jump. While they have steam you take less fall damage. Additionally if you jump at the moment of impact you'll go much higher then normal."
+		},
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_exosuit_legs",
+			"text": "The exosuit legs amplify your own muscle movements. While they have steam you move slightly faster."
+		},
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_exosuit_chest",
+			"text": "The exosuit chest provides additional striking power to your arms. While it has steam you deal one more heart of damage per hit in melee combat."
+		},
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_exosuit_helm",
+			"text": "The exosuit helm doesn't have any passive benefits but can take 2 upgrades instead of the usual 1."
+		},
+		{
+			"type": "text",
+			"text": "These items are upgradable, possible upgrades are listed on the following pages."
+		},
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_canister",
+			"text": "Adding a steam canister doubles the armor's steam tank capacity."
+		},
+		{
+			"type": "spotlight",
+			"item": "minecraft:diamond_chestplate",
+			"text": "Adding a diamond chestplate provides 2 points of extra armor to the exo suit peice."
+		},
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_piston",
+			"text": "Only boots can accept this upgrade. Adding a steam piston boosts your base jump height to 3 blocks. This height increase stacks with the boots passive. Each jump with this upgrade consumes 2 seconds worth of steam from the boots tank."
+		},
+		{
+			"type": "spotlight",
+			"item": "minecraft:ender_eye",
+			"text": "Only the helm can accept this upgrade. Adding an ender eye grants night vision while the helm has steam."
+		},
+		{
+			"type": "spotlight",
+			"item": "minecraft:spectral_arrow",
+			"text": "Only the helm can accept this upgrade. Adding a spectral arrow grants the ability to see creatures through walls while the helm has steam."
+		}
+	]
+}

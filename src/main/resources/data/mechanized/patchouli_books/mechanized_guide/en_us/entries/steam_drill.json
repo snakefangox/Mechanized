@@ -1,0 +1,33 @@
+{
+	"name": "Steam Drill",
+	"icon": "mechanized:steam_drill",
+	"category": "gear",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_drill",
+			"text": "This drill is equally effective on soft materials like dirt and hard ones like stone. Its dig speed is depended on how much pressure the internal steam tank has, more pressure, faster digging."
+		},
+		
+		{
+			"type": "text",
+			"text": "This item is upgradable, possible upgrades are listed on the following pages."
+		},
+		
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_canister",
+			"text": "Adding a steam canister doubles the drill steam tank capacity."
+		},
+		{
+			"type": "spotlight",
+			"item": "minecraft:diamond",
+			"text": "Adding a diamond allows the drill to harvest blocks that require a diamond tool, such as obsidian."
+		},
+		{
+			"type": "spotlight",
+			"item": "minecraft:bucket",
+			"text": "Adding a bucket allows the drill to vaccum up and dissipate lava and water. Water is evaporated using some of the drills steam. Lava is used as a fuel source to repressurise the drills tank."
+		}
+	]
+}

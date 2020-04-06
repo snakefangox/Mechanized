@@ -1,0 +1,12 @@
+{
+	"name": "Breaker",
+	"icon": "mechanized:breaker",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:breaker",
+			"text": "This machine breaks the block it's drill is pointing at when provided with PSB equal to or higher than the blocks hardness. It's internal tank can hold one unit of steam. Can be diabled with a redstone signal."
+		}
+	]
+}

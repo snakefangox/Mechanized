@@ -40,7 +40,7 @@ public class FanEntity extends BlockEntity implements PropertyDelegateHolder, St
 			return;
 		if (world.getTime() % 5 == 0) {
 			SteamUtil.equalizeSteam(world, this, pos, null);
-			if(getSteamAmount(null) > 0) {
+			if(getSteamAmount(null) > 0 && world.getReceivedRedstonePower(pos) == 0) {
 				Stream<PlayerEntity> watchingPlayers = PlayerStream.watching(world,pos);
 				PacketByteBuf passedData = new PacketByteBuf(Unpooled.buffer());
 				passedData.writeBlockPos(pos);
@@ -50,7 +50,7 @@ public class FanEntity extends BlockEntity implements PropertyDelegateHolder, St
 			}
 		}
 		Direction facing = getCachedState().get(Properties.FACING);
-		if (getSteamAmount(null) > 0) {
+		if (getSteamAmount(null) > 0 && world.getReceivedRedstonePower(pos) == 0) {
 			int pushDistance = (int) ((int) Math.max(1, getPressurePSB(null) * 0.3) * 0.5);
 			List<Entity> entities = world.getEntities(null, new Box(pos.offset(facing, pushDistance).add(1, 1, 1),
 					pos.offset(facing.getOpposite(), pushDistance)));

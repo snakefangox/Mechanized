@@ -1,0 +1,12 @@
+{
+	"name": "Pump",
+	"icon": "mechanized:pump",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:pump",
+			"text": "This machine picks up water from below it and tries to place it in a machine or pipe at it's output nozzle. It requires steam to do this which it can only accept from the top or nozzle side. It's internal tank can hold one unit of steam."
+		}
+	]
+}

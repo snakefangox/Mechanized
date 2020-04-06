@@ -3,5 +3,6 @@
 	"landing_text": "Your guide to the wonderful world of gears and steam.",
 	"version": 1,
 	"creative_tab": "mechanized.general",
-	"model": "mechanized:guide_book"
+	"model": "mechanized:guide_book",
+	"show_progress": false
 }

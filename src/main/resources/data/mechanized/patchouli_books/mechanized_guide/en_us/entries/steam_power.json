@@ -13,7 +13,7 @@
 		},
 		{
 			"type": "text",
-			"text": "The pressure for a given machine, pipe or tank can be measured with a $(l:pressure_gauge)Pressure Gauge$(). When steam attempts to equalize it will try to equalize pressure not the amount of steam. Some machines require a certain pressure to operate."
+			"text": "The pressure for a given machine, pipe or tank can be measured with a $(l:pressure_gauge)Pressure Gauge$(). When steam attempts to equalize it will try to equalize pressure not the amount of steam. Some machines require a certain pressure to operate. Other operate with more force at higher pressures."
 		}
 	]
 }

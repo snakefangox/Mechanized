@@ -1,0 +1,12 @@
+{
+	"name": "Steam Canister",
+	"icon": "mechanized:steam_canister",
+	"category": "gear",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_canister",
+			"text": "Holds one unit of steam in item form."
+		}
+	]
+}

@@ -4,13 +4,14 @@
   "version": "${version}",
 
   "name": "Mechanized",
-  "description": "Steam, gears and brass",
+  "description": "Steam, gears and brass. Harness the power of steam and shape your world. Or just use it to make a really cool trampoline.",
   "authors": [
-    "Me!"
+    "Snakefangox",
+    "Art by Zane O'Shannassy"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  	"discord":"snakefangox#8137",
+  	"sources":"https://github.com/Snakefangox/Mechanized"
   },
 
   "license": "MIT",

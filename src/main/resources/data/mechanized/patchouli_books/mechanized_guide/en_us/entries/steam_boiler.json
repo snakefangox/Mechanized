@@ -1,0 +1,12 @@
+{
+	"name": "Steam Boiler",
+	"icon": "mechanized:steam_boiler",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_boiler",
+			"text": "This machine uses a fuel source to heat water into steam. Water can be input with a bucket, a $(l:pump)pump$() or with other pipes. It can hold 3 units of steam and produces 1 unit of steam per 8 units of fuel."
+		}
+	]
+}

@@ -1,0 +1,12 @@
+{
+	"name": "Fan",
+	"icon": "mechanized:fan",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:fan",
+			"text": "This machine produces an air current in front and behind it that can move entities. The current in front pushes while the one at the back sucks. This current gets stronger and extends further the more pressure the fan is given. It's internal tank can hold one unit of steam. Can be diabled with a redstone signal."
+		}
+	]
+}

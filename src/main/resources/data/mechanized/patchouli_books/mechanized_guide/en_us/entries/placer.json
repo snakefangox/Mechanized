@@ -1,0 +1,12 @@
+{
+	"name": "Placer",
+	"icon": "mechanized:placer",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:placer",
+			"text": "This machine places the block in its inventory in the direction it's facing when given steam. It's internal tank can hold one unit of steam. Can be diabled with a redstone signal."
+		}
+	]
+}

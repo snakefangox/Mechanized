@@ -1,0 +1,12 @@
+{
+	"name": "Alloy Furnace",
+	"icon": "mechanized:alloy_furnace",
+	"category": "basics",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:alloy_furnace",
+			"text": "When given fuel and Copper and Zinc ingots at a ratio of 2 copper, 1 zinc the alloy furnace will smelt them down and produce brass. Brass is needed for pretty much all the machines and gear in mechanized."
+		}
+	]
+}

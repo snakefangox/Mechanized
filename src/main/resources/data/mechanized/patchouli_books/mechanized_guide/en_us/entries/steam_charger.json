@@ -1,0 +1,12 @@
+{
+	"name": "Steam Charger",
+	"icon": "mechanized:steam_charger",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_charger",
+			"text": "Normally this device can't accept steam. However when an item with an internal steam tank is placed on it it will use the items steam tank as its own. Despite the name it may not charge the item. Steam will equilize according to pressure here too so a nearly full item placed in a charger connected to a low pressure system will be discharged."
+		}
+	]
+}

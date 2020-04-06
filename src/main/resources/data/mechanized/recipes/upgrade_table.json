@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "iii",
+        "ggg"
+    ],
+    "key": {
+        "i": {
+            "item": "mechanized:brass_ingot"
+        },
+         "g": {
+            "item": "minecraft:smooth_stone"
+        }
+    },
+    "result": {
+        "item": "mechanized:upgrade_table",
+        "count": 1
+    }
+}

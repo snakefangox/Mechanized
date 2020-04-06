@@ -1,0 +1,12 @@
+{
+	"name": "Steam Tank",
+	"icon": "mechanized:steam_tank",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_tank",
+			"text": "This simple tank stores 16 units of steam. Note that this much capacity will massively drop the pressure of a steam system."
+		}
+	]
+}
