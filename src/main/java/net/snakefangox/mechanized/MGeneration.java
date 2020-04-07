@@ -17,7 +17,7 @@ public class MGeneration {
 									Decorator.COUNT_RANGE.configure(new RangeDecoratorConfig(20, 0, 12, 64))));
 			biome.addFeature(GenerationStep.Feature.UNDERGROUND_ORES,
 					Feature.ORE.configure(new OreFeatureConfig(OreFeatureConfig.Target.NATURAL_STONE,
-							MRegister.COPPER_ORE.getDefaultState(), 14)).createDecoratedFeature(
+							MRegister.ZINC_ORE.getDefaultState(), 14)).createDecoratedFeature(
 									Decorator.COUNT_RANGE.configure(new RangeDecoratorConfig(20, 0, 12, 64))));
 		}
 	}
