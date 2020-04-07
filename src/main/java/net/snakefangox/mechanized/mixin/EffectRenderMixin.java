@@ -26,7 +26,8 @@ public abstract class EffectRenderMixin implements Inventory, Nameable {
 	@SuppressWarnings("rawtypes")
 	@Inject(at = @At(value = "HEAD"), method = "applyStatusEffectOffset", cancellable = true)
 	public void checkStatusOffset(CallbackInfo info) {
-		Collection effects = MinecraftClient.getInstance().player.getStatusEffects();
+		MinecraftClient client = MinecraftClient.getInstance();
+		Collection effects = client.player.getStatusEffects();
 		if (!effects.isEmpty()) {
 			Iterator iterater = effects.iterator();
 			boolean onlyHidden = true;

@@ -59,6 +59,7 @@ import net.snakefangox.mechanized.items.PressureGauge;
 import net.snakefangox.mechanized.items.SteamCanister;
 import net.snakefangox.mechanized.items.SteamDrill;
 import net.snakefangox.mechanized.items.SteamExoSuit;
+import net.snakefangox.mechanized.recipes.AlloyRecipe;
 
 public class MRegister {
 
@@ -198,20 +199,24 @@ public class MRegister {
 		registerItem(STEAM_EXOSUIT_LEGS, new Identifier(Mechanized.MODID, "steam_exosuit_legs"));
 		registerItem(STEAM_EXOSUIT_BOOTS, new Identifier(Mechanized.MODID, "steam_exosuit_boots"));
 
-		EXOSUIT_STRENGTH = Registry.register(Registry.STATUS_EFFECT, 458810, "exosuit_strength",
+		EXOSUIT_STRENGTH = Registry.register(Registry.STATUS_EFFECT,
+				new Identifier(Mechanized.MODID, "exosuit_strength"),
 				new ExoEffect().addAttributeModifier(EntityAttributes.ATTACK_DAMAGE,
 						"6551312b-037b-4152-8c44-e81e9065bae6", 2, EntityAttributeModifier.Operation.ADDITION));
-		EXOSUIT_SPEED = Registry.register(Registry.STATUS_EFFECT, 458811, "exosuit_speed",
+		EXOSUIT_SPEED = Registry.register(Registry.STATUS_EFFECT, new Identifier(Mechanized.MODID, "exosuit_speed"),
 				new ExoEffect().addAttributeModifier(EntityAttributes.MOVEMENT_SPEED,
 						"d859def7-792c-40c2-881b-7d2703fc5760", 0.15D,
 						EntityAttributeModifier.Operation.MULTIPLY_TOTAL));
-		EXOSUIT_PROTECC = Registry.register(Registry.STATUS_EFFECT, 458812, "exosuit_protecc",
+		EXOSUIT_PROTECC = Registry.register(Registry.STATUS_EFFECT, new Identifier(Mechanized.MODID, "exosuit_protecc"),
 				new ExoEffect().addAttributeModifier(EntityAttributes.ARMOR, "1b7e6f75-78d3-4a4d-85af-330e09d2470e", 2,
 						EntityAttributeModifier.Operation.ADDITION));
 
 		STEAM_INJECT = registerSoundEvent(new Identifier(Mechanized.MODID, "steam_inject"));
 		STEAM_HIT = registerSoundEvent(new Identifier(Mechanized.MODID, "steam_hit"));
 		STEAM_ESCAPES = registerSoundEvent(new Identifier(Mechanized.MODID, "steam_escapes"));
+		
+		Registry.register(Registry.RECIPE_SERIALIZER, AlloyRecipe.ID, AlloyRecipe.AlloyRecipeSerializer.INSTANCE);
+		Registry.register(Registry.RECIPE_TYPE, AlloyRecipe.ID, AlloyRecipe.AlloyRecipeType.INSTANCE);
 	}
 
 	private static void registerBlock(Block block, Identifier id, RenderLayerEnum layer) {

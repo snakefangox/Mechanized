@@ -9,7 +9,7 @@
             "item": "minecraft:smooth_stone_slab"
         },
         "B": {
-            "item": "mechanized:brass_ingot"
+            "tag": "c:brass_ingot"
         },
         "p": {
             "item": "mechanized:steam_pipe"

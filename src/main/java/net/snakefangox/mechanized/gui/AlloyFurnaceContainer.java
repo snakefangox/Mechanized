@@ -24,13 +24,13 @@ public class AlloyFurnaceContainer extends CottonCraftingController {
 
 		WItemSlot input1 = WItemSlot.of(blockInventory, 0);
 		WItemSlot input2 = WItemSlot.of(blockInventory, 1);
-		WItemSlot input3 = WItemSlot.of(blockInventory, 2);
-		WItemSlot fuel_slot = WItemSlot.of(blockInventory, 3);
-		WItemSlot output_tile = WItemSlot.outputOf(blockInventory, 4);
-
+		WItemSlot fuel_slot = WItemSlot.of(blockInventory, 2);
+		WItemSlot output_tile = WItemSlot.outputOf(blockInventory, 3);
+		
 		root.add(input1, 2, 0);
+		input1.setLocation(input1.getX() + 9, input1.getY());
 		root.add(input2, 3, 0);
-		root.add(input3, 4, 0);
+		input2.setLocation(input2.getX() + 9, input2.getY());
 		root.add(fuel_slot, 3, 2);
 		root.add(output_tile, 7, 1);
 

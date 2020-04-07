@@ -1,5 +1,7 @@
 package net.snakefangox.mechanized.blocks.entity;
 
+import java.util.Optional;
+
 import io.github.cottonmc.cotton.gui.PropertyDelegateHolder;
 import net.fabricmc.fabric.impl.content.registry.FuelRegistryImpl;
 import net.minecraft.block.BlockState;
@@ -19,15 +21,16 @@ import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.AlloyFurnace;
 import net.snakefangox.mechanized.blocks.SteamBoiler;
 import net.snakefangox.mechanized.parts.StandardInventory;
+import net.snakefangox.mechanized.recipes.AlloyRecipe;
 import net.snakefangox.mechanized.tools.InventoryTools;
 
 public class AlloyFurnaceEntity extends BlockEntity
 		implements StandardInventory, SidedInventory, InventoryProvider, PropertyDelegateHolder, Tickable {
 
-	DefaultedList<ItemStack> inventory = DefaultedList.ofSize(5, ItemStack.EMPTY);
-	static final int[] INPUT_SLOTS = new int[] { 0, 1, 2 };
-	static final int[] FUEL_SLOT = new int[] { 3 };
-	static final int[] OUTPUT_SLOT = new int[] { 4 };
+	DefaultedList<ItemStack> inventory = DefaultedList.ofSize(4, ItemStack.EMPTY);
+	static final int[] INPUT_SLOTS = new int[] { 0, 1 };
+	static final int[] FUEL_SLOT = new int[] { 2 };
+	static final int[] OUTPUT_SLOT = new int[] { 3 };
 
 	static final int CRAFT_AMOUNT = 3;
 	static final int SMELT_TIME = 400;
@@ -46,9 +49,7 @@ public class AlloyFurnaceEntity extends BlockEntity
 			return;
 		if (progress == SMELT_TIME) {
 			progress = 0;
-			InventoryTools.insertItemstack(this, OUTPUT_SLOT[0], new ItemStack(MRegister.BRASS_INGOT, 3));
-			InventoryTools.extractSetFromInv(this, MRegister.COPPER_INGOT, 2);
-			InventoryTools.extractSetFromInv(this, MRegister.ZINC_INGOT, 1);
+			smelt();
 		} else if (isRecipeValid() && fuel > 0) {
 			++progress;
 		} else {
@@ -68,7 +69,7 @@ public class AlloyFurnaceEntity extends BlockEntity
 			} else if (oldFuel != fuel) {
 				updateBlockState();
 			}
-		}else if(fuel == 0 && oldFuel != fuel) {
+		} else if (fuel == 0 && oldFuel != fuel) {
 			updateBlockState();
 		}
 	}
@@ -78,17 +79,19 @@ public class AlloyFurnaceEntity extends BlockEntity
 			world.setBlockState(pos, getCachedState().with(SteamBoiler.LIT, fuel > 0));
 	}
 
-	private boolean isRecipeValid() {
-		int copperCount = 0;
-		int zincCount = 0;
-		for (int i = 0; i < INPUT_SLOTS.length; i++) {
-			if (inventory.get(i).getItem() == MRegister.COPPER_INGOT)
-				copperCount += inventory.get(i).getCount();
-			if (inventory.get(i).getItem() == MRegister.ZINC_INGOT)
-				zincCount += inventory.get(i).getCount();
+	private void smelt() {
+		Optional<AlloyRecipe> match = world.getRecipeManager().getFirstMatch(AlloyRecipe.AlloyRecipeType.INSTANCE, this,
+				world);
+		if (match.isPresent()) {
+			AlloyRecipe recipe = match.get();
+			InventoryTools.insertItemstack(this, OUTPUT_SLOT[0], recipe.craft(this));
 		}
-		return copperCount >= 2 && zincCount >= 1
-				&& InventoryTools.insertItemstack(this, OUTPUT_SLOT[0], new ItemStack(MRegister.BRASS_INGOT, 3), true);
+	}
+
+	private boolean isRecipeValid() {
+		Optional<AlloyRecipe> match = world.getRecipeManager().getFirstMatch(AlloyRecipe.AlloyRecipeType.INSTANCE, this,
+				world);
+		return match.isPresent() && InventoryTools.insertItemstack(this, OUTPUT_SLOT[0], match.get().getOutput(), true);
 	}
 
 	@Override
@@ -120,17 +123,25 @@ public class AlloyFurnaceEntity extends BlockEntity
 
 	@Override
 	public boolean isValidInvStack(int slot, ItemStack stack) {
-		return slot != 4;
+		if (slot == OUTPUT_SLOT[0])
+			return false;
+		if(slot == FUEL_SLOT[0])
+			return FuelRegistryImpl.INSTANCE.get(stack.getItem()) != null;
+		return true;
 	}
-	
+
 	@Override
 	public boolean canInsertInvStack(int slot, ItemStack stack, Direction dir) {
-		return slot != 4;
+		if (slot == OUTPUT_SLOT[0])
+			return false;
+		if(slot == FUEL_SLOT[0])
+			return FuelRegistryImpl.INSTANCE.get(stack.getItem()) > 0;
+		return true;
 	}
 
 	@Override
 	public boolean canExtractInvStack(int slot, ItemStack stack, Direction dir) {
-		return slot == 4;
+		return slot == OUTPUT_SLOT[0];
 	}
 
 	@Override

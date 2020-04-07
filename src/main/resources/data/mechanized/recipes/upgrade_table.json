@@ -6,7 +6,7 @@
     ],
     "key": {
         "i": {
-            "item": "mechanized:brass_ingot"
+            "tag": "c:brass_ingot"
         },
          "g": {
             "item": "minecraft:smooth_stone"

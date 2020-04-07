@@ -7,13 +7,13 @@
     ],
     "key": {
         "i": {
-            "item": "mechanized:brass_ingot"
+            "tag": "c:brass_ingot"
         },
         "G": {
             "item": "minecraft:glass"
         },
         "B": {
-            "item": "minecraft:blast_furnace"
+            "item": "minecraft:furnace"
         }
     },
     "result": {
