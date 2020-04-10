@@ -1,14 +1,16 @@
 package net.snakefangox.mechanized;
 
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry;
+import net.minecraft.client.render.entity.FallingBlockEntityRenderer;
 import net.minecraft.container.BlockContext;
 import net.snakefangox.mechanized.blocks.entity.FanEntityRenderer;
 import net.snakefangox.mechanized.blocks.entity.SteamChargerEntityRenderer;
 import net.snakefangox.mechanized.gui.AlloyFurnaceContainer;
+import net.snakefangox.mechanized.gui.AlloyFurnaceContainer.AlloyFurnaceScreen;
 import net.snakefangox.mechanized.gui.PlacerContainer;
 import net.snakefangox.mechanized.gui.PlacerContainer.PlacerScreen;
-import net.snakefangox.mechanized.gui.AlloyFurnaceContainer.AlloyFurnaceScreen;
 import net.snakefangox.mechanized.gui.PressureValveContainer;
 import net.snakefangox.mechanized.gui.PressureValveContainer.PressureValveScreen;
 import net.snakefangox.mechanized.gui.SteamBoilerContainer;
@@ -40,6 +42,8 @@ public class MClientRegister {
 		ScreenProviderRegistry.INSTANCE.registerFactory(MRegister.PLACER_CONTAINER,
 				(syncId, identifier, player, buf) -> new PlacerScreen(new PlacerContainer(syncId, player.inventory,
 						BlockContext.create(player.world, buf.readBlockPos())), player));
+		
+		EntityRendererRegistry.INSTANCE.register(MRegister.FLYING_BLOCK, (entityRenderDispatcher, context) -> new FallingBlockEntityRenderer(entityRenderDispatcher));
 	}
 
 }

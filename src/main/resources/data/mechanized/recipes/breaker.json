@@ -7,7 +7,7 @@
     ],
     "key": {
         "i": {
-            "tag": "c:brass_ingot"
+            "tag": "c:brass_ingots"
         },
          "g": {
             "item": "minecraft:iron_ingot"

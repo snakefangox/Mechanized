@@ -24,6 +24,9 @@
     ],
 	"client": [
       "net.snakefangox.mechanized.Mechanized"
+    ],
+    "rei_plugins_v0": [
+      "net.snakefangox.mechanized.reiplugin.REIEntryPoint"
     ]
   },
   "mixins": [
@@ -39,6 +42,7 @@
   },
   "suggests": {
     "flamingo": "*",
-	"patchouli": "*"
+	"patchouli": "*",
+	"roughlyenoughitems": "*"
   }
 }

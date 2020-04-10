@@ -1,0 +1,14 @@
+{
+	"type": "mechanized:alloy_furnace_recipe",
+	"input1": {
+		"tag": "c:copper_ingots"
+	},
+	"amount1": 1,
+	"input2": {
+		"item": "minecraft:book"
+	},
+	"amount2": 1,
+	"outputItem": "patchouli:guide_book",
+	"outputAmount": "1",
+	"guideBookNBT": true
+}

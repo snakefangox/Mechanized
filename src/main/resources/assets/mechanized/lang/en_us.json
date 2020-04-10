@@ -2,6 +2,7 @@
 "itemGroup.mechanized.general": "Mechanized",
 "mechanized.pressure_gauge": "Pressure: %s / 100 PSB",
 "mechanized.pressure_valve_text": "Vent steam above:",
+"mechanized.reiplugin.alloy_furnace": "Alloy Furnace Recipe",
 "block.mechanized.copper_ore": "Copper Ore",
 "block.mechanized.zinc_ore": "Zinc Ore",
 "item.mechanized.copper_ingot": "Copper Ingot",

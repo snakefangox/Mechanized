@@ -7,6 +7,9 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
@@ -21,12 +24,12 @@ public class AlloyRecipe implements Recipe<Inventory> {
 
 	public static final Identifier ID = new Identifier(Mechanized.MODID, "alloy_furnace_recipe");
 
-	final Identifier id;
-	final Ingredient input1;
-	final Ingredient input2;
-	final int amount1;
-	final int amount2;
-	final ItemStack outStack;
+	public final Identifier id;
+	public final Ingredient input1;
+	public final Ingredient input2;
+	public final int amount1;
+	public final int amount2;
+	public final ItemStack outStack;
 
 	public AlloyRecipe(Identifier idIn, Ingredient input1In, Ingredient input2In, int amount1In, int amount2In,
 			ItemStack outStackIn) {
@@ -90,7 +93,7 @@ public class AlloyRecipe implements Recipe<Inventory> {
 		@Override
 		public AlloyRecipe read(Identifier id, JsonObject json) {
 			AlloyRecipeJsonFormat recipeJson = new Gson().fromJson(json, AlloyRecipeJsonFormat.class);
-			if (recipeJson.input1 == null || recipeJson.input2 == null || recipeJson.outputItem == null) {
+			if ((recipeJson.input1 == null || recipeJson.input2 == null || recipeJson.outputItem == null)) {
 				throw new JsonSyntaxException("Alloy furnace recipe is missing a required attribute");
 			}
 			if (recipeJson.amount1 <= 0)
@@ -102,10 +105,26 @@ public class AlloyRecipe implements Recipe<Inventory> {
 			Ingredient in1 = Ingredient.fromJson(recipeJson.input1);
 			Ingredient in2 = Ingredient.fromJson(recipeJson.input2);
 
-			Item outItem = Registry.ITEM.getOrEmpty(new Identifier(recipeJson.outputItem))
-					.orElseThrow(() -> new JsonSyntaxException(
-							"Alloy furnace recipe uses " + recipeJson.outputItem + " which does not exist"));
-			ItemStack out = new ItemStack(outItem, recipeJson.outputAmount);
+			ItemStack out;
+			if (recipeJson.guideBookNBT) {
+				Item outItem = Registry.ITEM.getOrEmpty(new Identifier(recipeJson.outputItem)).orElse(null);
+				if (outItem != null) {
+					out = new ItemStack(outItem, recipeJson.outputAmount);
+					out.getOrCreateTag().putString("patchouli:book", "mechanized:mechanized_guide");
+				} else {
+					out = new ItemStack(Items.WRITTEN_BOOK);
+					out.getOrCreateTag().putString("title", "Book - Burned");
+					out.getOrCreateTag().putString("author", "You");
+					ListTag tag = new ListTag();
+					tag.add(StringTag.of("Patchouli_Stand-in"));
+					out.getOrCreateTag().put("pages", tag);
+				}
+			} else {
+				Item outItem = Registry.ITEM.getOrEmpty(new Identifier(recipeJson.outputItem))
+						.orElseThrow(() -> new JsonSyntaxException(
+								"Alloy furnace recipe uses " + recipeJson.outputItem + " which does not exist"));
+				out = new ItemStack(outItem, recipeJson.outputAmount);
+			}
 			return new AlloyRecipe(id, in1, in2, recipeJson.amount1, recipeJson.amount2, out);
 		}
 
@@ -137,6 +156,7 @@ public class AlloyRecipe implements Recipe<Inventory> {
 		int amount2;
 		String outputItem;
 		int outputAmount;
+		boolean guideBookNBT;
 	}
 
 	public static class AlloyRecipeType implements RecipeType<AlloyRecipe> {

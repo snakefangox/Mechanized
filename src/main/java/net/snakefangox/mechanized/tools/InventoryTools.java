@@ -4,6 +4,9 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.util.DefaultedList;
 
 public class InventoryTools {
 
@@ -87,5 +90,23 @@ public class InventoryTools {
 		} else {
 			stack.decrement(1);
 		}
+	}
+	
+	public static CompoundTag toTagIncEmpty(CompoundTag tag, DefaultedList<ItemStack> stacks, boolean setIfEmpty) {
+		ListTag listTag = new ListTag();
+
+		for (int i = 0; i < stacks.size(); ++i) {
+			ItemStack itemStack = (ItemStack) stacks.get(i);
+			CompoundTag compoundTag = new CompoundTag();
+			compoundTag.putByte("Slot", (byte) i);
+			itemStack.toTag(compoundTag);
+			listTag.add(compoundTag);
+		}
+
+		if (!listTag.isEmpty() || setIfEmpty) {
+			tag.put("Items", listTag);
+		}
+
+		return tag;
 	}
 }

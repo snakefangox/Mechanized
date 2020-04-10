@@ -33,7 +33,7 @@ public class AlloyFurnaceEntity extends BlockEntity
 	static final int[] OUTPUT_SLOT = new int[] { 3 };
 
 	static final int CRAFT_AMOUNT = 3;
-	static final int SMELT_TIME = 400;
+	public static final int SMELT_TIME = 400;
 
 	int progress = 0;
 	int fuel = 0;

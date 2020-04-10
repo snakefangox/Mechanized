@@ -1,11 +1,11 @@
 {
 	"type": "mechanized:alloy_furnace_recipe",
 	"input1": {
-		"tag": "c:copper_ingot"
+		"tag": "c:copper_ingots"
 	},
 	"amount1": 2,
 	"input2": {
-		"tag": "c:zinc_ingot"
+		"tag": "c:zinc_ingots"
 	},
 	"amount2": 1,
 	"outputItem": "mechanized:brass_ingot",

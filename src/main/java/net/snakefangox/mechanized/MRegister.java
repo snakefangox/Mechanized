@@ -7,6 +7,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
+import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.tools.FabricToolTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
@@ -15,6 +16,9 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.container.BlockContext;
+import net.minecraft.entity.EntityCategory;
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -50,6 +54,7 @@ import net.snakefangox.mechanized.blocks.entity.SteamPipeEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamPistonEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamTankEntity;
 import net.snakefangox.mechanized.effects.ExoEffect;
+import net.snakefangox.mechanized.entities.FlyingBlockEntity;
 import net.snakefangox.mechanized.gui.AlloyFurnaceContainer;
 import net.snakefangox.mechanized.gui.PlacerContainer;
 import net.snakefangox.mechanized.gui.PressureValveContainer;
@@ -146,6 +151,13 @@ public class MRegister {
 	public static SoundEvent STEAM_ESCAPES;
 	public static SoundEvent STEAM_HIT;
 
+	// Entities
+	public static final EntityType<FlyingBlockEntity> FLYING_BLOCK = Registry.register(Registry.ENTITY_TYPE,
+			new Identifier(Mechanized.MODID, "flying_block"),
+			FabricEntityTypeBuilder
+					.create(EntityCategory.MISC, (EntityType.EntityFactory<FlyingBlockEntity>) FlyingBlockEntity::new)
+					.size(EntityDimensions.fixed(1, 1)).build());
+
 	public static void registerEverything() {
 		registerBlock(COPPER_ORE, new Identifier(Mechanized.MODID, "copper_ore"), RenderLayerEnum.CUTOUT);
 		registerBlock(ZINC_ORE, new Identifier(Mechanized.MODID, "zinc_ore"), RenderLayerEnum.CUTOUT);
@@ -214,9 +226,10 @@ public class MRegister {
 		STEAM_INJECT = registerSoundEvent(new Identifier(Mechanized.MODID, "steam_inject"));
 		STEAM_HIT = registerSoundEvent(new Identifier(Mechanized.MODID, "steam_hit"));
 		STEAM_ESCAPES = registerSoundEvent(new Identifier(Mechanized.MODID, "steam_escapes"));
-		
+
 		Registry.register(Registry.RECIPE_SERIALIZER, AlloyRecipe.ID, AlloyRecipe.AlloyRecipeSerializer.INSTANCE);
 		Registry.register(Registry.RECIPE_TYPE, AlloyRecipe.ID, AlloyRecipe.AlloyRecipeType.INSTANCE);
+
 	}
 
 	private static void registerBlock(Block block, Identifier id, RenderLayerEnum layer) {

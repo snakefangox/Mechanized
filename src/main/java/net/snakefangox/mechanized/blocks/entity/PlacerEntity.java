@@ -1,5 +1,6 @@
 package net.snakefangox.mechanized.blocks.entity;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.AutomaticItemPlacementContext;
@@ -42,8 +43,12 @@ public class PlacerEntity extends BlockEntity implements Steam, Tickable, Standa
 			BlockPos placepos = pos.offset(getCachedState().get(Properties.FACING));
 			ItemStack stack = block.get(0);
 			if (world.isAir(placepos) && !stack.isEmpty() && stack.getItem() instanceof BlockItem) {
-				((BlockItem) stack.getItem()).place(new AutomaticItemPlacementContext(world, placepos,
-						getCachedState().get(Properties.FACING), stack, getCachedState().get(Properties.FACING).getOpposite()));
+				Block bl = ((BlockItem) stack.getItem()).getBlock();
+				if (bl.getHardness(bl.getDefaultState(), world, placepos) < 0)
+					return;
+				((BlockItem) stack.getItem()).place(
+						new AutomaticItemPlacementContext(world, placepos, getCachedState().get(Properties.FACING),
+								stack, getCachedState().get(Properties.FACING).getOpposite()));
 				extendOrRetract(true);
 				removeSteam(null, COST_PER_OP);
 			}
@@ -56,7 +61,7 @@ public class PlacerEntity extends BlockEntity implements Steam, Tickable, Standa
 			extended = extend;
 		}
 	}
-	
+
 	@Override
 	public int getSteamAmount(Direction dir) {
 		return steamAmount;

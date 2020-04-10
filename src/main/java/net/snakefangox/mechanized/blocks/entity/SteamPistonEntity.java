@@ -8,19 +8,23 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.container.PropertyDelegate;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.FallingBlockEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.DefaultedList;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.Breaker;
+import net.snakefangox.mechanized.entities.FlyingBlockEntity;
 import net.snakefangox.mechanized.steam.Steam;
 import net.snakefangox.mechanized.steam.SteamUtil;
+import net.snakefangox.mechanized.tools.InventoryTools;
 
 public class SteamPistonEntity extends BlockEntity implements Steam, Tickable, PropertyDelegateHolder {
 
@@ -61,14 +65,27 @@ public class SteamPistonEntity extends BlockEntity implements Steam, Tickable, P
 	}
 
 	public void onSignal() {
+		if (retractTimer > 0)
+			return;
 		Direction dir = world.getBlockState(pos).get(Properties.FACING);
 		BlockPos off = pos.offset(dir);
-		if (!world.isAir(off) && retractTimer == 0) {
+		if (!world.isAir(off)) {
 			BlockState state = world.getBlockState(off);
 			boolean isAnvil = state.getBlock() instanceof AnvilBlock;
-			FallingBlockEntity fallingBlock = new FallingBlockEntity(world, off.getX() + 0.5, off.getY() + 0.5,
+			BlockEntity be = world.getBlockEntity(off);
+			FlyingBlockEntity fallingBlock = new FlyingBlockEntity(world, off.getX() + 0.5, off.getY() + 0.5,
 					off.getZ() + 0.5, state);
-			if(isAnvil)
+
+			if (be != null) {
+				CompoundTag tag = new CompoundTag();
+				be.toTag(tag);
+				fallingBlock.blockEntityData = tag.copy();
+				if (tag.contains("Items") && tag.get("Items") instanceof ListTag)
+					InventoryTools.toTagIncEmpty(tag,
+							DefaultedList.ofSize(tag.getList("Items", 10).size(), ItemStack.EMPTY), true);
+				be.fromTag(tag);
+			}
+			if (isAnvil)
 				fallingBlock.setHurtEntities(true);
 			((ServerWorld) world).spawnEntity(fallingBlock);
 		}
@@ -82,7 +99,7 @@ public class SteamPistonEntity extends BlockEntity implements Steam, Tickable, P
 		removeSteam(null, COST_PER_OP);
 		extendOrRetract(true);
 		retractTimer = 15;
-		((ServerWorld)world).playSound(null, pos, MRegister.STEAM_HIT, SoundCategory.BLOCKS, 1, 0.5f);
+		((ServerWorld) world).playSound(null, pos, MRegister.STEAM_HIT, SoundCategory.BLOCKS, 1, 0.5f);
 	}
 
 	public void extendOrRetract(boolean extend) {

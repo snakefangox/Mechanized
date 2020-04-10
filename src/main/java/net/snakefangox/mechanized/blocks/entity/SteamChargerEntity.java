@@ -15,6 +15,7 @@ import net.snakefangox.mechanized.parts.StandardInventory;
 import net.snakefangox.mechanized.steam.Steam;
 import net.snakefangox.mechanized.steam.SteamItem;
 import net.snakefangox.mechanized.steam.SteamUtil;
+import net.snakefangox.mechanized.tools.InventoryTools;
 
 public class SteamChargerEntity extends BlockEntity implements Steam, Tickable, StandardInventory, BlockEntityClientSerializable {
 
@@ -98,7 +99,7 @@ public class SteamChargerEntity extends BlockEntity implements Steam, Tickable, 
 
 	@Override
 	public CompoundTag toClientTag(CompoundTag tag) {
-		StandardInventory.toTagIncEmpty(tag, inv, true);
+		InventoryTools.toTagIncEmpty(tag, inv, true);
 		return tag;
 	}
 }
