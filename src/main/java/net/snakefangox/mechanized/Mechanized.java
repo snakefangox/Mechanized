@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -27,8 +28,8 @@ public class Mechanized implements ModInitializer, ClientModInitializer {
 		Registry.BIOME.forEach(MGeneration::addOreToBiome);
 		RegistryEntryAddedCallback.event(Registry.BIOME).register((i, identifier, biome) -> MGeneration.addOreToBiome(biome));
 		
-		//if (FabricLoader.getInstance().isDevelopmentEnvironment())
-		//	AutoGenJson.autoGenerateJson(MODID, "D:\\Code\\Fabric_mods\\modfest2022");
+		if (FabricLoader.getInstance().isDevelopmentEnvironment())
+			AutoGenJson.autoGenerateJson(MODID, "D:\\Code\\Fabric_mods\\Mechanized");
 	}
 
 	@Override

@@ -5,7 +5,7 @@
 	"pages": [
 		{
 			"type": "text",
-			"text": "The steam exosuit differs from normal armour in thatit has an internal steam tank and no durability. When worn it provides passive benefits but drains steam at a constant rate. When the armour runs out of steam it stops providing benefits."
+			"text": "The steam exosuit differs from normal armour in that it has an internal steam tank and no durability. When worn it provides passive benefits but drains steam at a constant rate. When the armour runs out of steam it stops providing benefits."
 		},
 		{
 			"type": "spotlight",

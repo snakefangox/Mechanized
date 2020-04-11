@@ -39,6 +39,7 @@ import net.snakefangox.mechanized.blocks.SteamCharger;
 import net.snakefangox.mechanized.blocks.SteamFractionatingTower;
 import net.snakefangox.mechanized.blocks.SteamPipe;
 import net.snakefangox.mechanized.blocks.SteamPiston;
+import net.snakefangox.mechanized.blocks.SteamSource;
 import net.snakefangox.mechanized.blocks.SteamTank;
 import net.snakefangox.mechanized.blocks.UpgradeTable;
 import net.snakefangox.mechanized.blocks.entity.AlloyFurnaceEntity;
@@ -52,6 +53,7 @@ import net.snakefangox.mechanized.blocks.entity.SteamChargerEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamFractionatingTowerEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamPipeEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamPistonEntity;
+import net.snakefangox.mechanized.blocks.entity.SteamSourceEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamTankEntity;
 import net.snakefangox.mechanized.effects.ExoEffect;
 import net.snakefangox.mechanized.entities.FlyingBlockEntity;
@@ -99,6 +101,10 @@ public class MRegister {
 			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
 	public static final Block STEAM_FRACTIONATING_TOWER = new SteamFractionatingTower(FabricBlockSettings
 			.of(Material.METAL).hardness(4).resistance(3).breakByTool(FabricToolTags.PICKAXES).nonOpaque().build());
+	public static final Block BRASS_FRAME = new Block(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
+			.breakByTool(FabricToolTags.PICKAXES).nonOpaque().build());
+	public static final Block STEAM_SOURCE = new SteamSource(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
+			.breakByTool(FabricToolTags.PICKAXES).build());
 
 	// BlockEntities
 	public static BlockEntityType<AlloyFurnaceEntity> ALLOY_FURNACE_ENTITY;
@@ -113,6 +119,7 @@ public class MRegister {
 	public static BlockEntityType<PressureValveEntity> PRESSURE_VALVE_ENTITY;
 	public static BlockEntityType<SteamChargerEntity> STEAM_CHARGER_ENTITY;
 	public static BlockEntityType<SteamFractionatingTowerEntity> STEAM_FRACTIONATING_TOWER_ENTITY;
+	public static BlockEntityType<SteamSourceEntity> STEAM_SOURCE_ENTITY;
 
 	// Containers
 	public static final Identifier ALLOY_FURNACE_CONTAINER = new Identifier(Mechanized.MODID, "alloy_furnace");
@@ -183,6 +190,9 @@ public class MRegister {
 		registerBlock(UPGRADE_TABLE, new Identifier(Mechanized.MODID, "upgrade_table"));
 		STEAM_FRACTIONATING_TOWER_ENTITY = registerBlock(STEAM_FRACTIONATING_TOWER,
 				new Identifier(Mechanized.MODID, "steam_fractionating_tower"), SteamFractionatingTowerEntity::new);
+		registerBlock(BRASS_FRAME, new Identifier(Mechanized.MODID, "brass_frame"));
+		STEAM_SOURCE_ENTITY = registerBlock(STEAM_SOURCE, new Identifier(Mechanized.MODID, "steam_source"),
+				SteamSourceEntity::new);
 
 		ContainerProviderRegistry.INSTANCE.registerFactory(ALLOY_FURNACE_CONTAINER,
 				(syncId, id, player, buf) -> new AlloyFurnaceContainer(syncId, player.inventory,

@@ -18,23 +18,24 @@ public class FlyingBlockEntity extends FallingBlockEntity {
 	public FlyingBlockEntity(World world, double d, double e, double f, BlockState state) {
 		super(world, d, e, f, state);
 	}
-	
+
 	@Override
 	public void tick() {
 		super.tick();
-		if(timeFalling > 10)
+		if (timeFalling > 10)
 			timeFalling = 10;
-		if(world instanceof ServerWorld && isSpawnChunk(world, getBlockPos(), getServer())) {
-			remove();
+		if (world instanceof ServerWorld) {
+			if (isSpawnChunk(world, getBlockPos(), getServer()))
+				remove();
 		}
 	}
-	
+
 	public static boolean isSpawnChunk(World world, BlockPos pos, MinecraftServer server) {
 		BlockPos blockPos2 = world.getSpawnPos();
-        int i = MathHelper.abs(pos.getX() - blockPos2.getX());
-        int j = MathHelper.abs(pos.getZ() - blockPos2.getZ());
-        int k = Math.max(i, j);
-        return k <= server.getSpawnProtectionRadius();
+		int i = MathHelper.abs(pos.getX() - blockPos2.getX());
+		int j = MathHelper.abs(pos.getZ() - blockPos2.getZ());
+		int k = Math.max(i, j);
+		return k <= server.getSpawnProtectionRadius();
 	}
 
 }

@@ -29,5 +29,7 @@
 "item.mechanized.steam_exosuit_boots": "Steam Exosuit Boots",
 "block.mechanized.upgrade_table": "Upgrade Table",
 "block.mechanized.steam_fractionating_tower": "Steam Fractionating Tower",
-"block.mechanized.placer": "Placer"
+"block.mechanized.placer": "Placer",
+"block.mechanized.brass_frame": "Brass Frame",
+"block.mechanized.steam_source": "Creative Steam Source"
 }

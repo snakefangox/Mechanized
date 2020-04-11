@@ -39,7 +39,7 @@ public class PlacerEntity extends BlockEntity implements Steam, Tickable, Standa
 			SteamUtil.equalizeSteam(world, this, pos, null);
 			extendOrRetract(false);
 		}
-		if (world.getTime() % 20 == 0 && world.getReceivedRedstonePower(pos) == 0) {
+		if (world.getTime() % 20 == 0 && world.getReceivedRedstonePower(pos) == 0 && getPressure(null) > 0.1) {
 			BlockPos placepos = pos.offset(getCachedState().get(Properties.FACING));
 			ItemStack stack = block.get(0);
 			if (world.isAir(placepos) && !stack.isEmpty() && stack.getItem() instanceof BlockItem) {
