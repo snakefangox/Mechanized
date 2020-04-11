@@ -25,13 +25,14 @@ public class FlyingBlockEntity extends FallingBlockEntity {
 		if (timeFalling > 10)
 			timeFalling = 10;
 		if (world instanceof ServerWorld) {
-			if (isSpawnChunk(world, getBlockPos(), getServer()))
+			if (isSpawnChunk((ServerWorld) world, getBlockPos(), getServer()))
 				remove();
 		}
 	}
 
-	public static boolean isSpawnChunk(World world, BlockPos pos, MinecraftServer server) {
-		BlockPos blockPos2 = world.getSpawnPos();
+	public static boolean isSpawnChunk(ServerWorld world, BlockPos pos, MinecraftServer server) {
+		BlockPos blockPos2 = new BlockPos(world.getLevelProperties().getSpawnX(),
+				world.getLevelProperties().getSpawnY(), world.getLevelProperties().getSpawnZ());
 		int i = MathHelper.abs(pos.getX() - blockPos2.getX());
 		int j = MathHelper.abs(pos.getZ() - blockPos2.getZ());
 		int k = Math.max(i, j);
