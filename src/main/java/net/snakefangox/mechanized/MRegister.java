@@ -43,12 +43,13 @@ import net.snakefangox.mechanized.blocks.SteamSource;
 import net.snakefangox.mechanized.blocks.SteamTank;
 import net.snakefangox.mechanized.blocks.UpgradeTable;
 import net.snakefangox.mechanized.blocks.entity.AlloyFurnaceEntity;
+import net.snakefangox.mechanized.blocks.entity.BasicBoilerEntity;
+import net.snakefangox.mechanized.blocks.entity.BlastBoilerEntity;
 import net.snakefangox.mechanized.blocks.entity.BreakerEntity;
 import net.snakefangox.mechanized.blocks.entity.FanEntity;
 import net.snakefangox.mechanized.blocks.entity.PlacerEntity;
 import net.snakefangox.mechanized.blocks.entity.PressureValveEntity;
 import net.snakefangox.mechanized.blocks.entity.PumpEntity;
-import net.snakefangox.mechanized.blocks.entity.SteamBoilerEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamChargerEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamFractionatingTowerEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamPipeEntity;
@@ -77,8 +78,10 @@ public class MRegister {
 			.breakByTool(FabricToolTags.PICKAXES, 1).build());
 	public static final Block ALLOY_FURNACE = new AlloyFurnace(FabricBlockSettings.of(Material.STONE).hardness(4)
 			.resistance(3).breakByTool(FabricToolTags.PICKAXES).nonOpaque().build());
-	public static final Block STEAM_BOILER = new SteamBoiler(FabricBlockSettings.of(Material.METAL).hardness(4)
-			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
+	public static final Block BASIC_BOILER = new SteamBoiler(FabricBlockSettings.of(Material.METAL).hardness(4)
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build(), BasicBoilerEntity::new);
+	public static final Block BLAST_BOILER = new SteamBoiler(FabricBlockSettings.of(Material.METAL).hardness(4)
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build(), BlastBoilerEntity::new);
 	public static final Block STEAM_PIPE = new SteamPipe(FabricBlockSettings.of(Material.METAL).hardness(3)
 			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
 	public static final Block STEAM_TANK = new SteamTank(FabricBlockSettings.of(Material.METAL).hardness(4)
@@ -108,7 +111,8 @@ public class MRegister {
 
 	// BlockEntities
 	public static BlockEntityType<AlloyFurnaceEntity> ALLOY_FURNACE_ENTITY;
-	public static BlockEntityType<SteamBoilerEntity> STEAM_BOILER_ENTITY;
+	public static BlockEntityType<BasicBoilerEntity> BASIC_BOILER_ENTITY;
+	public static BlockEntityType<BlastBoilerEntity> BLAST_BOILER_ENTITY;
 	public static BlockEntityType<SteamPipeEntity> STEAM_PIPE_ENTITY;
 	public static BlockEntityType<SteamTankEntity> STEAM_TANK_ENTITY;
 	public static BlockEntityType<PumpEntity> PUMP_ENTITY;
@@ -170,8 +174,10 @@ public class MRegister {
 		registerBlock(ZINC_ORE, new Identifier(Mechanized.MODID, "zinc_ore"), RenderLayerEnum.CUTOUT);
 		ALLOY_FURNACE_ENTITY = registerBlock(ALLOY_FURNACE, new Identifier(Mechanized.MODID, "alloy_furnace"),
 				AlloyFurnaceEntity::new);
-		STEAM_BOILER_ENTITY = registerBlock(STEAM_BOILER, new Identifier(Mechanized.MODID, "steam_boiler"),
-				SteamBoilerEntity::new);
+		BASIC_BOILER_ENTITY = registerBlock(BASIC_BOILER, new Identifier(Mechanized.MODID, "steam_boiler"),
+				BasicBoilerEntity::new);
+		BLAST_BOILER_ENTITY = registerBlock(BLAST_BOILER, new Identifier(Mechanized.MODID, "blast_boiler"),
+				BlastBoilerEntity::new);
 		STEAM_PIPE_ENTITY = registerBlock(STEAM_PIPE, new Identifier(Mechanized.MODID, "steam_pipe"),
 				SteamPipeEntity::new);
 		STEAM_TANK_ENTITY = registerBlock(STEAM_TANK, new Identifier(Mechanized.MODID, "steam_tank"),

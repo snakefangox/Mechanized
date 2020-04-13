@@ -1,0 +1,12 @@
+{
+	"name": "Blast Boiler",
+	"icon": "mechanized:blast_boiler",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:blast_boiler",
+			"text": "This machine operates much like the $(l:basic_boiler)Basic Boiler$() but it burns much hotter. As a result it produces four times the steam per second and uses twice the water and fuel to produce the same amount of steam."
+		}
+	]
+}

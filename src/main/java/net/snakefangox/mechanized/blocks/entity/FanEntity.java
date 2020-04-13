@@ -3,18 +3,13 @@ package net.snakefangox.mechanized.blocks.entity;
 import java.util.List;
 import java.util.stream.Stream;
 
-import io.github.cottonmc.cotton.gui.PropertyDelegateHolder;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.server.PlayerStream;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.container.PropertyDelegate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.PacketByteBuf;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.snakefangox.mechanized.MRegister;
@@ -22,13 +17,11 @@ import net.snakefangox.mechanized.networking.PacketIdentifiers;
 import net.snakefangox.mechanized.steam.Steam;
 import net.snakefangox.mechanized.steam.SteamUtil;
 
-public class FanEntity extends BlockEntity implements PropertyDelegateHolder, Steam, Tickable {
+public class FanEntity extends AbstractSteamEntity {
 
 	private static final int COST_PER_TICK = 1;
 	private static final double VEL_MODIFIER = 0.1;
 	private static final int STEAM_CAPACITY = Steam.UNIT;
-
-	int steamAmount = 0;
 
 	public FanEntity() {
 		super(MRegister.FAN_ENTITY);
@@ -66,62 +59,7 @@ public class FanEntity extends BlockEntity implements PropertyDelegateHolder, St
 	}
 
 	@Override
-	public int getSteamAmount(Direction dir) {
-		return steamAmount;
-	}
-
-	@Override
 	public int getMaxSteamAmount(Direction dir) {
 		return STEAM_CAPACITY;
-	}
-
-	@Override
-	public void setSteamAmount(Direction dir, int amount) {
-		steamAmount = amount;
-	}
-
-	@Override
-	public void fromTag(CompoundTag tag) {
-		super.fromTag(tag);
-		steamAmount = tag.getInt("steamAmount");
-	}
-
-	@Override
-	public CompoundTag toTag(CompoundTag tag) {
-		tag.putInt("steamAmount", steamAmount);
-		return super.toTag(tag);
-	}
-
-	PropertyDelegate propdel = new PropertyDelegate() {
-
-		@Override
-		public int size() {
-			return 2;
-		}
-
-		@Override
-		public void set(int index, int value) {
-			switch (index) {
-			case 0:
-				steamAmount = value;
-				break;
-			}
-		}
-
-		@Override
-		public int get(int index) {
-			switch (index) {
-			case 0:
-				return steamAmount;
-			case 1:
-				return STEAM_CAPACITY;
-			}
-			return 0;
-		}
-	};
-
-	@Override
-	public PropertyDelegate getPropertyDelegate() {
-		return propdel;
 	}
 }

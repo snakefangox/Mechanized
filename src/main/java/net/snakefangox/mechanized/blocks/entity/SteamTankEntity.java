@@ -1,59 +1,22 @@
 package net.snakefangox.mechanized.blocks.entity;
 
 import io.github.cottonmc.cotton.gui.PropertyDelegateHolder;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.container.PropertyDelegate;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.math.Direction;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.steam.Steam;
-import net.snakefangox.mechanized.steam.SteamUtil;
 
-public class SteamTankEntity extends BlockEntity implements Steam, Tickable, PropertyDelegateHolder {
+public class SteamTankEntity extends AbstractSteamEntity implements PropertyDelegateHolder {
 
 	private static final int STEAM_CAPACITY = Steam.UNIT * 16;
-
-	int steamAmount = 0;
 
 	public SteamTankEntity() {
 		super(MRegister.STEAM_TANK_ENTITY);
 	}
-
-	@Override
-	public void tick() {
-		if (world.isClient)
-			return;
-		if (world.getTime() % 5 == 0) {
-			SteamUtil.equalizeSteam(world, this, pos, null);
-		}
-	}
-
-	@Override
-	public int getSteamAmount(Direction dir) {
-		return steamAmount;
-	}
-
+	
 	@Override
 	public int getMaxSteamAmount(Direction dir) {
 		return STEAM_CAPACITY;
-	}
-
-	@Override
-	public void setSteamAmount(Direction dir, int amount) {
-		steamAmount = amount;
-	}
-
-	@Override
-	public void fromTag(CompoundTag tag) {
-		super.fromTag(tag);
-		steamAmount = tag.getInt("steamAmount");
-	}
-
-	@Override
-	public CompoundTag toTag(CompoundTag tag) {
-		tag.putInt("steamAmount", steamAmount);
-		return super.toTag(tag);
 	}
 
 	PropertyDelegate propdel = new PropertyDelegate() {

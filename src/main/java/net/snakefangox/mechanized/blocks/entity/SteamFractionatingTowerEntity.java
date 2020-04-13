@@ -12,7 +12,6 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.snakefangox.mechanized.MRegister;
@@ -20,7 +19,7 @@ import net.snakefangox.mechanized.blocks.SteamFractionatingTower;
 import net.snakefangox.mechanized.steam.Steam;
 import net.snakefangox.mechanized.steam.SteamUtil;
 
-public class SteamFractionatingTowerEntity extends BlockEntity implements Steam, Tickable {
+public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 
 	public static final int STEAM_CAPACITY = Steam.UNIT;
 	public static final int STEAM_USE_PER_OP = Steam.UNIT / 4;
@@ -34,7 +33,6 @@ public class SteamFractionatingTowerEntity extends BlockEntity implements Steam,
 			Item.fromBlock(Blocks.COBBLESTONE), Item.fromBlock(Blocks.GRAVEL), Item.fromBlock(Blocks.GRAVEL),
 			Item.fromBlock(Blocks.SAND), Item.fromBlock(Blocks.SAND), Items.IRON_NUGGET };
 
-	private int steamAmount = 0;
 	private int level = -1;
 
 	public SteamFractionatingTowerEntity() {
@@ -140,13 +138,11 @@ public class SteamFractionatingTowerEntity extends BlockEntity implements Steam,
 	@Override
 	public void fromTag(CompoundTag tag) {
 		super.fromTag(tag);
-		steamAmount = tag.getInt("steamAmount");
 		level = tag.getInt("level");
 	}
 
 	@Override
 	public CompoundTag toTag(CompoundTag tag) {
-		tag.putInt("steamAmount", steamAmount);
 		tag.putInt("level", level);
 		return super.toTag(tag);
 	}

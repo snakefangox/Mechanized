@@ -1,7 +1,6 @@
 package net.snakefangox.mechanized.blocks.entity;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.AutomaticItemPlacementContext;
 import net.minecraft.item.BlockItem;
@@ -9,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.DefaultedList;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.snakefangox.mechanized.MRegister;
@@ -18,12 +16,11 @@ import net.snakefangox.mechanized.parts.StandardInventory;
 import net.snakefangox.mechanized.steam.Steam;
 import net.snakefangox.mechanized.steam.SteamUtil;
 
-public class PlacerEntity extends BlockEntity implements Steam, Tickable, StandardInventory {
+public class PlacerEntity extends AbstractSteamEntity implements StandardInventory {
 
 	private static final int STEAM_CAPACITY = Steam.UNIT;
 	private static final int COST_PER_OP = (int) (Steam.UNIT * 0.05);
 
-	int steamAmount = 0;
 	boolean extended = false;
 	DefaultedList<ItemStack> block = DefaultedList.ofSize(1, ItemStack.EMPTY);
 
@@ -63,31 +60,19 @@ public class PlacerEntity extends BlockEntity implements Steam, Tickable, Standa
 	}
 
 	@Override
-	public int getSteamAmount(Direction dir) {
-		return steamAmount;
-	}
-
-	@Override
 	public int getMaxSteamAmount(Direction dir) {
 		return STEAM_CAPACITY;
 	}
 
 	@Override
-	public void setSteamAmount(Direction dir, int amount) {
-		steamAmount = amount;
-	}
-
-	@Override
 	public void fromTag(CompoundTag tag) {
 		super.fromTag(tag);
-		steamAmount = tag.getInt("steamAmount");
 		Inventories.toTag(tag, getItems());
 		extended = tag.getBoolean("extended");
 	}
 
 	@Override
 	public CompoundTag toTag(CompoundTag tag) {
-		tag.putInt("steamAmount", steamAmount);
 		Inventories.fromTag(tag, getItems());
 		tag.putBoolean("extended", extended);
 		return super.toTag(tag);

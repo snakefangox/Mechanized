@@ -8,35 +8,31 @@ import alexiil.mc.lib.attributes.fluid.volume.FluidKeys;
 import alexiil.mc.lib.attributes.fluid.volume.FluidVolume;
 import io.github.cottonmc.cotton.gui.PropertyDelegateHolder;
 import net.fabricmc.fabric.impl.content.registry.FuelRegistryImpl;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.container.PropertyDelegate;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.DefaultedList;
-import net.minecraft.util.Tickable;
 import net.minecraft.util.math.Direction;
-import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.SteamBoiler;
 import net.snakefangox.mechanized.parts.StandardInventory;
 import net.snakefangox.mechanized.steam.Steam;
 import net.snakefangox.mechanized.steam.SteamUtil;
 import net.snakefangox.mechanized.tools.InventoryTools;
 
-public class SteamBoilerEntity extends BlockEntity
-		implements StandardInventory, Tickable, PropertyDelegateHolder, Steam {
+public abstract class AbstractSteamBoilerEntity extends AbstractSteamEntity implements StandardInventory, PropertyDelegateHolder {
 
 	private static final FluidAmount TANK_CAPACITY = FluidAmount.ofWhole(3);
 	private static final int STEAM_TANK_CAPACITY = 3 * Steam.UNIT;
 	public final SimpleFixedFluidInv waterTank;
-	public int steamAmount = 0;
 
 	DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
 	int fuel = 0;
 	int maxFuel = 0;
 
-	public SteamBoilerEntity() {
-		super(MRegister.STEAM_BOILER_ENTITY);
+	public AbstractSteamBoilerEntity(BlockEntityType<?> type) {
+		super(type);
 		waterTank = new SimpleFixedFluidInv(1, TANK_CAPACITY) {
 			@Override
 			public boolean isFluidValidForTank(int tank, FluidKey fluid) {
@@ -44,14 +40,19 @@ public class SteamBoilerEntity extends BlockEntity
 			}
 		};
 	}
+	
+	protected abstract FluidAmount fluidPerOp();
+	protected abstract int steamPerOp();
+	protected abstract void extractTick();
 
 	@Override
 	public void tick() {
 		if (world.isClient)
 			return;
-		if (!waterTank.getTank(0).get().isEmpty() && fuel > 0) {
-			waterTank.getTank(0).attemptAnyExtraction(FluidAmount.of1620(1), Simulation.ACTION);
-			steamAmount = Math.min(STEAM_TANK_CAPACITY, steamAmount + 1);
+		if (waterTank.getTank(0).get().getAmount_F().isGreaterThanOrEqual(fluidPerOp()) && fuel > 0) {
+			waterTank.getTank(0).attemptAnyExtraction(fluidPerOp(), Simulation.ACTION);
+			steamAmount = Math.min(STEAM_TANK_CAPACITY, steamAmount + steamPerOp());
+			extractTick();
 		}
 		int oldFuel = fuel;
 		if (fuel > 0) {
@@ -67,10 +68,10 @@ public class SteamBoilerEntity extends BlockEntity
 			} else if (oldFuel != fuel) {
 				updateBlockState();
 			}
-		}else if(oldFuel != fuel && fuel == 0){
+		} else if (oldFuel != fuel && fuel == 0) {
 			updateBlockState();
 		}
-		if(world.getTime() % 5 == 0) {
+		if (world.getTime() % 5 == 0) {
 			SteamUtil.equalizeSteam(world, this, pos, null);
 		}
 	}
@@ -85,7 +86,6 @@ public class SteamBoilerEntity extends BlockEntity
 		Inventories.toTag(tag, inventory);
 		tag.putInt("fuel", fuel);
 		tag.putInt("maxFuel", maxFuel);
-		tag.putInt("steamAmount", steamAmount);
 		tag.put("tank", waterTank.toTag());
 		return super.toTag(tag);
 	}
@@ -96,7 +96,6 @@ public class SteamBoilerEntity extends BlockEntity
 		Inventories.fromTag(tag, inventory);
 		fuel = tag.getInt("fuel");
 		maxFuel = tag.getInt("maxFuel");
-		steamAmount = tag.getInt("steamAmount");
 		waterTank.fromTag(tag.getCompound("tank"));
 	}
 

@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "mechanized:block/brass_plate",
+    "down": "mechanized:block/brass_plate",
+    "up": "mechanized:block/brass_plate",
+    "east": "mechanized:block/brass_plate",
+    "west": "mechanized:block/brass_plate",
+    "north": "mechanized:block/blast_boiler_on",
+    "south": "mechanized:block/brass_plate"
+  }
+}

@@ -91,7 +91,7 @@ public class PumpEntity extends BlockEntity implements Steam, Tickable, Property
 		if (dir == Direction.UP || dir == getCachedState().get(HorizontalFacingBlock.FACING))
 			steamAmount = amount;
 	}
-	
+
 	@Override
 	public int getPressurePSBForReadout(Direction dir) {
 		return getPressurePSB(Direction.UP);

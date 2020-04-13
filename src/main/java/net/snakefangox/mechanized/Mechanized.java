@@ -17,7 +17,7 @@ public class Mechanized implements ModInitializer, ClientModInitializer {
 	public static final String MOD_NAME = "Mechanized";
 	
 	public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.build(new Identifier(MODID, "general"),
-			() -> new ItemStack(MRegister.STEAM_BOILER));
+			() -> new ItemStack(MRegister.BASIC_BOILER));
 
 	@Override
 	public void onInitialize() {

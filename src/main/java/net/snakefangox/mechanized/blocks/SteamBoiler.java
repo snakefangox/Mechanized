@@ -1,6 +1,7 @@
 package net.snakefangox.mechanized.blocks;
 
 import java.util.Random;
+import java.util.function.Supplier;
 
 import alexiil.mc.lib.attributes.AttributeList;
 import alexiil.mc.lib.attributes.AttributeProvider;
@@ -28,14 +29,17 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
-import net.snakefangox.mechanized.blocks.entity.SteamBoilerEntity;
+import net.snakefangox.mechanized.blocks.entity.AbstractSteamBoilerEntity;
+import net.snakefangox.mechanized.blocks.entity.BasicBoilerEntity;
 
 public class SteamBoiler extends Block implements BlockEntityProvider, AttributeProvider {
 
 	public static final BooleanProperty LIT = BooleanProperty.of("lit");
+	public final Supplier<? extends AbstractSteamBoilerEntity> beSupplier;
 
-	public SteamBoiler(Settings settings) {
+	public SteamBoiler(Settings settings, Supplier<? extends AbstractSteamBoilerEntity> supp) {
 		super(settings);
+		this.beSupplier = supp;
 		setDefaultState(getDefaultState().with(LIT, false));
 	}
 
@@ -47,8 +51,8 @@ public class SteamBoiler extends Block implements BlockEntityProvider, Attribute
 
 		BlockEntity be = world.getBlockEntity(pos);
 		ItemStack heldItem = player.getStackInHand(hand);
-		if (be != null && be instanceof SteamBoilerEntity) {
-			SteamBoilerEntity sb = (SteamBoilerEntity) be;
+		if (be != null && be instanceof AbstractSteamBoilerEntity) {
+			AbstractSteamBoilerEntity sb = (AbstractSteamBoilerEntity) be;
 			if (heldItem.getItem() == Items.WATER_BUCKET) {
 				FluidVolume fluid = new FluidVolume(FluidKeys.WATER, FluidAmount.BUCKET) {
 				};
@@ -80,8 +84,8 @@ public class SteamBoiler extends Block implements BlockEntityProvider, Attribute
 	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		super.onBreak(world, pos, state, player);
 		BlockEntity be = world.getBlockEntity(pos);
-		if (be instanceof SteamBoilerEntity) {
-			((SteamBoilerEntity) be).dropEverything(world, pos);
+		if (be instanceof BasicBoilerEntity) {
+			((BasicBoilerEntity) be).dropEverything(world, pos);
 		}
 	}
 
@@ -98,14 +102,14 @@ public class SteamBoiler extends Block implements BlockEntityProvider, Attribute
 
 	@Override
 	public BlockEntity createBlockEntity(BlockView view) {
-		return MRegister.STEAM_BOILER_ENTITY.instantiate();
+		return beSupplier.get();
 	}
 
 	@Override
 	public void addAllAttributes(World world, BlockPos pos, BlockState state, AttributeList<?> to) {
 		BlockEntity be = world.getBlockEntity(pos);
-		if (be instanceof SteamBoilerEntity) {
-			SteamBoilerEntity tank = (SteamBoilerEntity) be;
+		if (be instanceof BasicBoilerEntity) {
+			BasicBoilerEntity tank = (BasicBoilerEntity) be;
 			to.offer(tank.waterTank);
 		}
 	}
