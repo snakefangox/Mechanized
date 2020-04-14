@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "iii",
+        "iGi",
+        "iBi"
+    ],
+    "key": {
+        "i": {
+            "tag": "c:brass_ingots"
+        },
+        "G": {
+            "item": "minecraft:glass"
+        },
+        "B": {
+            "item": "minecraft:blast_furnace"
+        }
+    },
+    "result": {
+        "item": "mechanized:blast_boiler",
+        "count": 1
+    }
+}
