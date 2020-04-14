@@ -1,18 +1,20 @@
 package net.snakefangox.mechanized.blocks.entity;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.SteamFractionatingTower;
@@ -23,17 +25,13 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 
 	public static final int STEAM_CAPACITY = Steam.UNIT;
 	public static final int STEAM_USE_PER_OP = Steam.UNIT / 4;
-	public static final int RESOURCES_DIAMETER = 15;
-	public static final int RESOURCE_AMOUNT_MAX = 3;
-	public static final float RESOURCE_CHANCE = 0.1f;
+	public static final int MINE_DIAMETER = 16;
+	public static final int MINE_AMOUNT_MAX = 18;
+	public static final float BREAK_CHANCE = 0.1F;
 	private static final Random RAND = new Random();
-	private static final Item[] GOOD_ITEMS = new Item[] { Item.fromBlock(Blocks.IRON_ORE),
-			Item.fromBlock(Blocks.IRON_ORE), Item.fromBlock(Blocks.GOLD_ORE), Items.REDSTONE };
-	private static final Item[] BAD_ITEMS = new Item[] { Item.fromBlock(Blocks.COBBLESTONE),
-			Item.fromBlock(Blocks.COBBLESTONE), Item.fromBlock(Blocks.GRAVEL), Item.fromBlock(Blocks.GRAVEL),
-			Item.fromBlock(Blocks.SAND), Item.fromBlock(Blocks.SAND), Items.IRON_NUGGET };
 
 	private int level = -1;
+	private int stoneLevel = 0;
 
 	public SteamFractionatingTowerEntity() {
 		super(MRegister.STEAM_FRACTIONATING_TOWER_ENTITY);
@@ -55,28 +53,36 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 					&& ((SteamFractionatingTowerEntity) be).getPressure(Direction.UP) >= 1) {
 				if (checkIsPositionValid()) {
 					((SteamFractionatingTowerEntity) be).removeSteam(Direction.UP, STEAM_USE_PER_OP);
-					doGenerate();
+					((ServerWorld) world).playSound(null, pos, MRegister.STEAM_INJECT, SoundCategory.BLOCKS, 4, 1);
+					for (int i = 0; i < MINE_AMOUNT_MAX; i++) {
+						if (RAND.nextBoolean()) {
+							doMine();
+						}
+					}
 				}
 			}
 		}
 	}
 
-	private void doGenerate() {
-		((ServerWorld)world).playSound(null, pos, MRegister.STEAM_INJECT, SoundCategory.BLOCKS, 4, 1);
-		if (RAND.nextFloat() < RESOURCE_CHANCE) {
-			spawnResources(GOOD_ITEMS);
-		}else {
-			spawnResources(BAD_ITEMS);
-		}
-	}
-	
-	private void spawnResources(Item[] item_list) {
-		int amount = RAND.nextInt(RESOURCE_AMOUNT_MAX) + 1;
-		for (int i = 0; i < amount; i++) {
-			ItemEntity spawn = new ItemEntity(world, pos.getX() + (RESOURCES_DIAMETER * (0.5 - RAND.nextFloat())),
-					pos.getY() - 1, pos.getZ() + (RESOURCES_DIAMETER * (0.5 - RAND.nextFloat())),
-					new ItemStack(item_list[RAND.nextInt(item_list.length)]));
-			world.spawnEntity(spawn);
+	private void doMine() {
+		BlockPos minePos = new BlockPos(pos.getX() + ((MINE_DIAMETER / 2) - RAND.nextInt(MINE_DIAMETER)),
+				pos.getY() - (RAND.nextInt(pos.getY()) + stoneLevel),
+				pos.getZ() + ((MINE_DIAMETER / 2) - RAND.nextInt(MINE_DIAMETER)));
+		BlockState blockState = world.getBlockState(minePos);
+		if (!world.isAir(minePos)
+				&& (blockState.getMaterial() == Material.STONE || blockState.getMaterial() == Material.SAND)) {
+			BlockEntity blockEntity = blockState.getBlock().hasBlockEntity() ? world.getBlockEntity(minePos) : null;
+			Block.dropStacks(blockState, world, minePos, blockEntity, null, ItemStack.EMPTY);
+			if (RAND.nextFloat() > BREAK_CHANCE && pos.getX() != minePos.getX() && pos.getZ() != minePos.getZ())
+				world.breakBlock(minePos, false);
+			List<ItemEntity> items = world.getEntities(ItemEntity.class, new Box(minePos), null);
+			items.forEach(ie -> {
+				double x = ie.getX();
+				double z = ie.getZ();
+				ie.refreshPositionAndAngles(x, pos.getY(), z, ie.yaw, ie.pitch);
+				ie.addVelocity(0, 0.2, 0);
+				ie.velocityModified = true;
+			});
 		}
 	}
 
@@ -85,7 +91,10 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 		BlockPos.Mutable searchPos = new BlockPos.Mutable(pos);
 		for (int i = pos.getY(); i >= 0; i--) {
 			searchPos.set(searchPos.getX(), searchPos.getY() - 1, searchPos.getZ());
-			Block atPos = world.getBlockState(searchPos).getBlock();
+			BlockState state = world.getBlockState(searchPos);
+			Block atPos = state.getBlock();
+			if (atPos.getMaterial(state) == Material.STONE)
+				stoneLevel = i;
 			if (atPos == Blocks.BEDROCK) {
 				foundBedrock = true;
 				break;
