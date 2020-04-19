@@ -15,19 +15,24 @@ public class Mechanized implements ModInitializer, ClientModInitializer {
 
 	public static final String MODID = "mechanized";
 	public static final String MOD_NAME = "Mechanized";
-	
+
 	public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.build(new Identifier(MODID, "general"),
 			() -> new ItemStack(MRegister.BASIC_BOILER));
+
+	public static final String COTTON_R_MODID = "cotton-resources";
 
 	@Override
 	public void onInitialize() {
 		MRegister.registerEverything();
-		
+
 		ToServerHandlers.initPacketHandlers();
-		
-		Registry.BIOME.forEach(MGeneration::addOreToBiome);
-		RegistryEntryAddedCallback.event(Registry.BIOME).register((i, identifier, biome) -> MGeneration.addOreToBiome(biome));
-		
+
+		if (!FabricLoader.getInstance().isModLoaded(COTTON_R_MODID)) {
+			Registry.BIOME.forEach(MGeneration::addOreToBiome);
+			RegistryEntryAddedCallback.event(Registry.BIOME)
+					.register((i, identifier, biome) -> MGeneration.addOreToBiome(biome));
+		}
+
 		if (FabricLoader.getInstance().isDevelopmentEnvironment())
 			AutoGenJson.autoGenerateJson(MODID, "D:\\Code\\Fabric_mods\\Mechanized");
 	}
