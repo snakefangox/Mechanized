@@ -26,7 +26,7 @@ public class Mechanized implements ModInitializer, ClientModInitializer {
 		MRegister.registerEverything();
 
 		ToServerHandlers.initPacketHandlers();
-
+		
 		if (!FabricLoader.getInstance().isModLoaded(COTTON_R_MODID)) {
 			Registry.BIOME.forEach(MGeneration::addOreToBiome);
 			RegistryEntryAddedCallback.event(Registry.BIOME)

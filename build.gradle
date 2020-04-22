@@ -35,6 +35,8 @@ dependencies {
 	modCompile "alexiil.mc.lib:libblockattributes-all:${project.libblockattributes_version}"
 	include "alexiil.mc.lib:libblockattributes-all:${project.libblockattributes_version}"
 	modCompile "me.shedaniel:RoughlyEnoughItems:3.6.4"
+	modCompile "io.github.cottonmc:LibCD:${project.libcd_version}"
+	include "io.github.cottonmc:LibCD:${project.libcd_version}"
 }
 
 processResources {

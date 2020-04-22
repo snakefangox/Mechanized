@@ -30,7 +30,6 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.entity.AbstractSteamBoilerEntity;
-import net.snakefangox.mechanized.blocks.entity.BasicBoilerEntity;
 
 public class SteamBoiler extends Block implements BlockEntityProvider, AttributeProvider {
 
@@ -84,8 +83,8 @@ public class SteamBoiler extends Block implements BlockEntityProvider, Attribute
 	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		super.onBreak(world, pos, state, player);
 		BlockEntity be = world.getBlockEntity(pos);
-		if (be instanceof BasicBoilerEntity) {
-			((BasicBoilerEntity) be).dropEverything(world, pos);
+		if (be instanceof AbstractSteamBoilerEntity) {
+			((AbstractSteamBoilerEntity) be).dropEverything(world, pos);
 		}
 	}
 
@@ -108,8 +107,8 @@ public class SteamBoiler extends Block implements BlockEntityProvider, Attribute
 	@Override
 	public void addAllAttributes(World world, BlockPos pos, BlockState state, AttributeList<?> to) {
 		BlockEntity be = world.getBlockEntity(pos);
-		if (be instanceof BasicBoilerEntity) {
-			BasicBoilerEntity tank = (BasicBoilerEntity) be;
+		if (be instanceof AbstractSteamBoilerEntity) {
+			AbstractSteamBoilerEntity tank = (AbstractSteamBoilerEntity) be;
 			to.offer(tank.waterTank);
 		}
 	}
