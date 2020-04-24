@@ -5,8 +5,11 @@ import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.tool.attribute.v1.DynamicAttributeTool;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidDrainable;
+import net.minecraft.block.Material;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -61,11 +64,11 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, Dy
 		return true;
 	}
 
-	/*public boolean isEffectiveOn(BlockState state, ItemStack stack) {
+	public boolean isEffectiveOn(BlockState state, ItemStack stack) {
 		Block block = state.getBlock();
 		int i = this.getMaterial().getMiningLevel() + (int) getUpgradeFromStack(stack)[0];
 		if (block == Blocks.OBSIDIAN) {
-			return i == 3;
+			return i >= 3;
 		} else if (block != Blocks.DIAMOND_BLOCK && block != Blocks.DIAMOND_ORE && block != Blocks.EMERALD_ORE
 				&& block != Blocks.EMERALD_BLOCK && block != Blocks.GOLD_BLOCK && block != Blocks.GOLD_ORE
 				&& block != Blocks.REDSTONE_ORE) {
@@ -79,7 +82,7 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, Dy
 		} else {
 			return i >= 2;
 		}
-	}*/
+	}
 
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
