@@ -1,0 +1,12 @@
+{
+	"name": "Brass Frame",
+	"icon": "mechanized:brass_frame",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:brass_frame",
+			"text": "The brass frame connects blocks together much like the slime and honey blocks."
+		}
+	]
+}

@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "ggg",
+        "b i",
+        "iii"
+    ],
+    "key": {
+        "i": {
+            "tag": "c:brass_ingots"
+        },
+         "g": {
+            "item": "minecraft:gold_ingot"
+        },
+         "b": {
+            "item": "mechanized:steam_pipe"
+        }
+    },
+    "result": {
+        "item": "mechanized:steam_condenser",
+        "count": 1
+    }
+}

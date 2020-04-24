@@ -31,7 +31,7 @@ public abstract class ItemStackMixin {
 	@Inject(at = @At("HEAD"), method = "isEffectiveOn", cancellable = true)
 	public void canMineWithUpgrade(BlockState state, CallbackInfoReturnable<Boolean> info) {
 		if(getItem() instanceof SteamDrill) {
-			info.setReturnValue(((SteamDrill)MRegister.STEAM_DRILL).isEffectiveOn(state, (ItemStack) (Object)this));
+			//info.setReturnValue(((SteamDrill)MRegister.STEAM_DRILL).isEffectiveOn(state, (ItemStack) (Object)this));
 			info.cancel();
 		}
 	}

@@ -4,11 +4,9 @@ import java.util.List;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.Block;
+import net.fabricmc.fabric.api.tool.attribute.v1.DynamicAttributeTool;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidDrainable;
-import net.minecraft.block.Material;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,7 +30,7 @@ import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.steam.SteamItem;
 import net.snakefangox.mechanized.tools.SteamToolMaterial;
 
-public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable {
+public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, DynamicAttributeTool {
 
 	public static final int STEAM_CAPACITY = SteamItem.UNIT;
 	public static final int STEAM_PER_BLOCK = 1;
@@ -63,7 +61,7 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable {
 		return true;
 	}
 
-	public boolean isEffectiveOn(BlockState state, ItemStack stack) {
+	/*public boolean isEffectiveOn(BlockState state, ItemStack stack) {
 		Block block = state.getBlock();
 		int i = this.getMaterial().getMiningLevel() + (int) getUpgradeFromStack(stack)[0];
 		if (block == Blocks.OBSIDIAN) {
@@ -81,7 +79,7 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable {
 		} else {
 			return i >= 2;
 		}
-	}
+	}*/
 
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
@@ -194,5 +192,15 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable {
 		if (tag.getInt("bucketUpgrade") > 0)
 			items[i++] = Items.BUCKET;
 		return items;
+	}
+
+	@Override
+	public int getMiningLevel(ItemStack stack, LivingEntity user) {
+		return getMaterial().getMiningLevel() + (Integer) getUpgradeFromStack(stack)[0];
+	}
+
+	@Override
+	public float getMiningSpeedMultiplier(ItemStack stack, LivingEntity user) {
+		return getPressure(stack) * getMaterial().getMiningSpeed();
 	}
 }

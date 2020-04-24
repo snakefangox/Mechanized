@@ -8,7 +8,7 @@ import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder;
-import net.fabricmc.fabric.api.tools.FabricToolTags;
+import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
@@ -36,6 +36,7 @@ import net.snakefangox.mechanized.blocks.PressureValve;
 import net.snakefangox.mechanized.blocks.Pump;
 import net.snakefangox.mechanized.blocks.SteamBoiler;
 import net.snakefangox.mechanized.blocks.SteamCharger;
+import net.snakefangox.mechanized.blocks.SteamCondenser;
 import net.snakefangox.mechanized.blocks.SteamFractionatingTower;
 import net.snakefangox.mechanized.blocks.SteamPipe;
 import net.snakefangox.mechanized.blocks.SteamPiston;
@@ -51,6 +52,7 @@ import net.snakefangox.mechanized.blocks.entity.PlacerEntity;
 import net.snakefangox.mechanized.blocks.entity.PressureValveEntity;
 import net.snakefangox.mechanized.blocks.entity.PumpEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamChargerEntity;
+import net.snakefangox.mechanized.blocks.entity.SteamCondenserEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamFractionatingTowerEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamPipeEntity;
 import net.snakefangox.mechanized.blocks.entity.SteamPistonEntity;
@@ -72,10 +74,11 @@ import net.snakefangox.mechanized.recipes.AlloyRecipe;
 public class MRegister {
 
 	// Blocks
+	//TODO Set mining level back up when fapi fixed
 	public static final Block COPPER_ORE = new Block(FabricBlockSettings.of(Material.STONE).hardness(5).resistance(3)
-			.breakByTool(FabricToolTags.PICKAXES, 1).build());
+			.breakByTool(FabricToolTags.PICKAXES, 0).build());
 	public static final Block ZINC_ORE = new Block(FabricBlockSettings.of(Material.STONE).hardness(5).resistance(3)
-			.breakByTool(FabricToolTags.PICKAXES, 1).build());
+			.breakByTool(FabricToolTags.PICKAXES, 0).build());
 	public static final Block ALLOY_FURNACE = new AlloyFurnace(FabricBlockSettings.of(Material.STONE).hardness(4)
 			.resistance(3).breakByTool(FabricToolTags.PICKAXES).nonOpaque().build());
 	public static final Block BASIC_BOILER = new SteamBoiler(FabricBlockSettings.of(Material.METAL).hardness(4)
@@ -106,6 +109,8 @@ public class MRegister {
 			.of(Material.METAL).hardness(4).resistance(3).breakByTool(FabricToolTags.PICKAXES).nonOpaque().build());
 	public static final Block BRASS_FRAME = new Block(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
 			.breakByTool(FabricToolTags.PICKAXES).nonOpaque().build());
+	public static final Block STEAM_CONDENSER = new SteamCondenser(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
+			.breakByTool(FabricToolTags.PICKAXES).nonOpaque().build());
 	public static final Block STEAM_SOURCE = new SteamSource(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
 			.breakByTool(FabricToolTags.PICKAXES).build());
 
@@ -124,6 +129,7 @@ public class MRegister {
 	public static BlockEntityType<SteamChargerEntity> STEAM_CHARGER_ENTITY;
 	public static BlockEntityType<SteamFractionatingTowerEntity> STEAM_FRACTIONATING_TOWER_ENTITY;
 	public static BlockEntityType<SteamSourceEntity> STEAM_SOURCE_ENTITY;
+	public static BlockEntityType<SteamCondenserEntity> STEAM_CONDENSER_ENTITY;
 
 	// Containers
 	public static final Identifier ALLOY_FURNACE_CONTAINER = new Identifier(Mechanized.MODID, "alloy_furnace");
@@ -199,6 +205,8 @@ public class MRegister {
 		registerBlock(BRASS_FRAME, new Identifier(Mechanized.MODID, "brass_frame"));
 		STEAM_SOURCE_ENTITY = registerBlock(STEAM_SOURCE, new Identifier(Mechanized.MODID, "steam_source"),
 				SteamSourceEntity::new);
+		STEAM_CONDENSER_ENTITY = registerBlock(STEAM_CONDENSER, new Identifier(Mechanized.MODID, "steam_condenser"),
+				SteamCondenserEntity::new);
 
 		ContainerProviderRegistry.INSTANCE.registerFactory(ALLOY_FURNACE_CONTAINER,
 				(syncId, id, player, buf) -> new AlloyFurnaceContainer(syncId, player.inventory,

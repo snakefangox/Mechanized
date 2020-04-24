@@ -33,5 +33,6 @@
 "block.mechanized.brass_frame": "Brass Frame",
 "block.mechanized.steam_source": "Creative Steam Source",
 "block.mechanized.blast_boiler": "Blast Boiler",
-"item.mechanized.blast_boiler": "Blast Boiler"
+"item.mechanized.blast_boiler": "Blast Boiler",
+"block.mechanized.steam_condenser": "Steam Condenser"
 }

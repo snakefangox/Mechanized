@@ -101,11 +101,13 @@ public class PumpEntity extends BlockEntity implements Steam, Tickable, Property
 	public void fromTag(CompoundTag tag) {
 		super.fromTag(tag);
 		steamAmount = tag.getInt("steamAmount");
+		tank.fromTag(tag.getCompound("tank"));
 	}
 
 	@Override
 	public CompoundTag toTag(CompoundTag tag) {
 		tag.putInt("steamAmount", steamAmount);
+		tag.put("tank", tank.toTag());
 		return super.toTag(tag);
 	}
 
