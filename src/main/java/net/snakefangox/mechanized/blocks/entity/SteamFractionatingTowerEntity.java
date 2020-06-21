@@ -69,8 +69,10 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 				pos.getY() - (RAND.nextInt(pos.getY()) + stoneLevel),
 				pos.getZ() + ((MINE_DIAMETER / 2) - RAND.nextInt(MINE_DIAMETER)));
 		BlockState blockState = world.getBlockState(minePos);
+		float hardness = blockState.getHardness(getWorld(), minePos);
 		if (!world.isAir(minePos)
-				&& (blockState.getMaterial() == Material.STONE || blockState.getMaterial() == Material.SAND)) {
+				&& (blockState.getMaterial() == Material.STONE || blockState.getMaterial() == Material.SAND)
+				&& hardness < 100 && hardness >= 0) {
 			BlockEntity blockEntity = blockState.getBlock().hasBlockEntity() ? world.getBlockEntity(minePos) : null;
 			Block.dropStacks(blockState, world, minePos, blockEntity, null, ItemStack.EMPTY);
 			if (RAND.nextFloat() > BREAK_CHANCE && pos.getX() != minePos.getX() && pos.getZ() != minePos.getZ())
@@ -129,7 +131,7 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 
 	@Override
 	public boolean canPipeConnect(Direction dir) {
-		return level == 2 && dir == Direction.UP;
+		return world.getBlockState(getPos()).get(SteamFractionatingTower.LEVEL) == 2 && dir == Direction.UP;
 	}
 
 	@Override

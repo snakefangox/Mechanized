@@ -1,5 +1,7 @@
 package net.snakefangox.mechanized.blocks;
 
+import alexiil.mc.lib.attributes.AttributeList;
+import alexiil.mc.lib.attributes.AttributeProvider;
 import alexiil.mc.lib.attributes.Simulation;
 import alexiil.mc.lib.attributes.fluid.amount.FluidAmount;
 import net.minecraft.block.Block;
@@ -16,10 +18,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.entity.SteamCondenserEntity;
 
-public class SteamCondenser extends Block implements BlockEntityProvider, FluidDrainable {
+public class SteamCondenser extends Block implements BlockEntityProvider, FluidDrainable, AttributeProvider {
 
 	public SteamCondenser(Settings settings) {
 		super(settings);
@@ -53,6 +56,15 @@ public class SteamCondenser extends Block implements BlockEntityProvider, FluidD
 			}
 		}
 		return Fluids.EMPTY;
+	}
+
+	@Override
+	public void addAllAttributes(World world, BlockPos pos, BlockState state, AttributeList<?> to) {
+		BlockEntity be = world.getBlockEntity(pos);
+		if (be instanceof SteamCondenserEntity) {
+			SteamCondenserEntity tank = (SteamCondenserEntity) be;
+			to.offer(tank.tank);
+		}
 	}
 
 }

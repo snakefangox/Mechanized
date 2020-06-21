@@ -5,11 +5,8 @@ import java.util.List;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.tool.attribute.v1.DynamicAttributeTool;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidDrainable;
-import net.minecraft.block.Material;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -62,26 +59,6 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, Dy
 	@Override
 	public boolean isDamageable() {
 		return true;
-	}
-
-	public boolean isEffectiveOn(BlockState state, ItemStack stack) {
-		Block block = state.getBlock();
-		int i = this.getMaterial().getMiningLevel() + (int) getUpgradeFromStack(stack)[0];
-		if (block == Blocks.OBSIDIAN) {
-			return i >= 3;
-		} else if (block != Blocks.DIAMOND_BLOCK && block != Blocks.DIAMOND_ORE && block != Blocks.EMERALD_ORE
-				&& block != Blocks.EMERALD_BLOCK && block != Blocks.GOLD_BLOCK && block != Blocks.GOLD_ORE
-				&& block != Blocks.REDSTONE_ORE) {
-			if (block != Blocks.IRON_BLOCK && block != Blocks.IRON_ORE && block != Blocks.LAPIS_BLOCK
-					&& block != Blocks.LAPIS_ORE) {
-				Material material = state.getMaterial();
-				return material == Material.STONE || material == Material.METAL || material == Material.ANVIL;
-			} else {
-				return i >= 1;
-			}
-		} else {
-			return i >= 2;
-		}
 	}
 
 	@Override

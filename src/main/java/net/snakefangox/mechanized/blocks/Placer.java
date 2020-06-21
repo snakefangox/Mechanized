@@ -22,6 +22,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.entity.PlacerEntity;
+import net.snakefangox.mechanized.parts.StandardInventory;
 
 public class Placer extends Block implements BlockEntityProvider {
 
@@ -100,6 +101,15 @@ public class Placer extends Block implements BlockEntityProvider {
 	@Override
 	public BlockEntity createBlockEntity(BlockView view) {
 		return MRegister.PLACER_ENTITY.instantiate();
+	}
+	
+	@Override
+	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+		super.onBreak(world, pos, state, player);
+		BlockEntity be = world.getBlockEntity(pos);
+		if (be instanceof StandardInventory) {
+			((StandardInventory) be).dropEverything(world, pos);
+		}
 	}
 
 }
