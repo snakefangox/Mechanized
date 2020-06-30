@@ -1,8 +1,14 @@
 package net.snakefangox.mechanized.mixin;
 
-import java.util.Collection;
-import java.util.Iterator;
-
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.util.Nameable;
+import net.snakefangox.mechanized.effects.HiddenEffect;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,14 +16,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.util.Nameable;
-import net.snakefangox.mechanized.effects.HiddenEffect;
+import java.util.Collection;
+import java.util.Iterator;
 
 @Environment(EnvType.CLIENT)
 @Mixin(AbstractInventoryScreen.class)
@@ -46,7 +46,7 @@ public abstract class EffectRenderMixin implements Inventory, Nameable {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Inject(at = @At(value = "JUMP", opcode = Opcodes.IRETURN, ordinal = 0), method = "drawStatusEffects", cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
-	public void drawEffects(CallbackInfo info, int i, Collection collection) {
+	public void drawEffects(MatrixStack matrixStack, CallbackInfo info, int i, Collection collection) {
 		collection.removeIf(eff -> (((StatusEffectInstance)eff).getEffectType() instanceof HiddenEffect));
 	}
 

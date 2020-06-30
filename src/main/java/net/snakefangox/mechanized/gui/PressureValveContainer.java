@@ -1,33 +1,35 @@
 package net.snakefangox.mechanized.gui;
 
-import io.github.cottonmc.cotton.gui.CottonCraftingController;
+import io.github.cottonmc.cotton.gui.SyncedGuiDescription;
 import io.github.cottonmc.cotton.gui.client.CottonInventoryScreen;
 import io.github.cottonmc.cotton.gui.widget.WGridPanel;
 import io.github.cottonmc.cotton.gui.widget.WLabel;
 import io.github.cottonmc.cotton.gui.widget.WTextField;
-import io.github.cottonmc.cotton.gui.widget.data.Alignment;
+import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment;
 import io.netty.buffer.Unpooled;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
-import net.minecraft.container.BlockContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.recipe.RecipeType;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
+import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.Mechanized;
 import net.snakefangox.mechanized.networking.PacketIdentifiers;
 
-public class PressureValveContainer extends CottonCraftingController {
+public class PressureValveContainer extends SyncedGuiDescription {
 
 	public static final String numbers = "0123456789";
 	WTextField pressure;
 	BlockPos ventPos;
 
-	public PressureValveContainer(int syncID, PlayerInventory playerInventory, BlockContext context) {
-		super(RecipeType.SMELTING, syncID, playerInventory, getBlockInventory(context),
+	public PressureValveContainer(int syncID, PlayerInventory playerInventory, ScreenHandlerContext context) {
+		super(MRegister.PRESSURE_VALVE_CONTAINER, syncID, playerInventory, getBlockInventory(context),
 				getBlockPropertyDelegate(context));
 		ventPos = context.run((world, pos) -> {
 			return pos;
@@ -37,10 +39,11 @@ public class PressureValveContainer extends CottonCraftingController {
 
 		WLabel ventText = new WLabel(new TranslatableText(Mechanized.MODID + ".pressure_valve_text"));
 		WLabel psbText = new WLabel(new LiteralText("PSB"));
-		psbText.setAlignment(Alignment.CENTER);
+		psbText.setHorizontalAlignment(HorizontalAlignment.CENTER);
 		Text text = new LiteralText(String.valueOf(getPropertyDelegate().get(0)));
 		pressure = new WTextField(text) {
 			@Override
+			@Environment(EnvType.CLIENT)
 			public void onCharTyped(char ch) {
 				if (numbers.contains(String.valueOf(ch))) {
 					super.onCharTyped(ch);
@@ -73,8 +76,8 @@ public class PressureValveContainer extends CottonCraftingController {
 	}
 
 	public static class PressureValveScreen extends CottonInventoryScreen<PressureValveContainer> {
-		public PressureValveScreen(PressureValveContainer container, PlayerEntity player) {
-			super(container, player);
+		public PressureValveScreen(PressureValveContainer container, PlayerInventory player, Text text) {
+			super(container, player.player);
 		}
 	}
 }

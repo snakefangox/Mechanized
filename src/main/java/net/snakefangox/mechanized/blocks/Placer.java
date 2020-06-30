@@ -1,16 +1,27 @@
 package net.snakefangox.mechanized.blocks;
 
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.EntityContext;
+import net.minecraft.block.entity.EnchantingTableBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -22,6 +33,8 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.entity.PlacerEntity;
+import net.snakefangox.mechanized.gui.AlloyFurnaceContainer;
+import net.snakefangox.mechanized.gui.PlacerContainer;
 import net.snakefangox.mechanized.parts.StandardInventory;
 
 public class Placer extends Block implements BlockEntityProvider {
@@ -39,11 +52,11 @@ public class Placer extends Block implements BlockEntityProvider {
 		super(settings);
 		setDefaultState(getDefaultState().with(EXTENDED, false));
 		Box box = BOX_N.getBoundingBox();
-		BOX_E = VoxelShapes.cuboid(1F - box.z1, box.y1, box.x1, 1F - box.z2, box.y2, box.x2);
-		BOX_S = VoxelShapes.cuboid(box.x1, box.y1, 1F - box.z1, box.x2, box.y2, 1F - box.z2);
-		BOX_W = VoxelShapes.cuboid(box.z1, box.y1, box.x1, box.z2, box.y2, box.x2);
-		BOX_U = VoxelShapes.cuboid(box.x1, 1F - box.z1, box.y1, box.x2, 1F - box.z2, box.y2);
-		BOX_D = VoxelShapes.cuboid(box.x1, box.z1, box.y1, box.x2, box.z2, box.y2);
+		BOX_E = VoxelShapes.cuboid(1F - box.minZ, box.minY, box.minX, 1F - box.maxZ, box.maxY, box.maxX);
+		BOX_S = VoxelShapes.cuboid(box.minX, box.minY, 1F - box.minZ, box.maxX, box.maxY, 1F - box.maxZ);
+		BOX_W = VoxelShapes.cuboid(box.minZ, box.minY, box.minX, box.maxZ, box.maxY, box.maxX);
+		BOX_U = VoxelShapes.cuboid(box.minX, 1F - box.minZ, box.minY, box.maxX, 1F - box.maxZ, box.maxY);
+		BOX_D = VoxelShapes.cuboid(box.minX, box.minZ, box.minY, box.maxX, box.maxZ, box.maxY);
 	}
 
 	@Override
@@ -54,15 +67,14 @@ public class Placer extends Block implements BlockEntityProvider {
 
 		BlockEntity be = world.getBlockEntity(pos);
 		if (be != null && be instanceof PlacerEntity) {
-			ContainerProviderRegistry.INSTANCE.openContainer(MRegister.PLACER_CONTAINER, player,
-					(packetByteBuf -> packetByteBuf.writeBlockPos(pos)));
+			player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
 		}
 
 		return ActionResult.SUCCESS;
 	}
 	
 	@Override
-	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, EntityContext context) {
+	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
 		switch (state.get(Properties.FACING)) {
 		case EAST:
 			return BOX_E;
@@ -112,4 +124,28 @@ public class Placer extends Block implements BlockEntityProvider {
 		}
 	}
 
+	@Override
+	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+		BlockEntity blockEntity = world.getBlockEntity(pos);
+		if (blockEntity instanceof PlacerEntity) {
+			return new ExtendedScreenHandlerFactory() {
+				@Override
+				public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
+					return new PlacerContainer(syncId, inv, ScreenHandlerContext.create(world, pos));
+				}
+
+				@Override
+				public Text getDisplayName() {
+					return LiteralText.EMPTY;
+				}
+
+				@Override
+				public void writeScreenOpeningData(ServerPlayerEntity serverPlayerEntity, PacketByteBuf packetByteBuf) {
+					packetByteBuf.writeBlockPos(pos);
+				}
+			};
+		} else {
+			return null;
+		}
+	}
 }

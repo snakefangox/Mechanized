@@ -1,8 +1,5 @@
 package net.snakefangox.mechanized.blocks;
 
-import java.util.Random;
-import java.util.function.Supplier;
-
 import alexiil.mc.lib.attributes.AttributeList;
 import alexiil.mc.lib.attributes.AttributeProvider;
 import alexiil.mc.lib.attributes.Simulation;
@@ -10,17 +7,29 @@ import alexiil.mc.lib.attributes.fluid.amount.FluidAmount;
 import alexiil.mc.lib.attributes.fluid.volume.FluidKeys;
 import alexiil.mc.lib.attributes.fluid.volume.FluidVolume;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.EnchantingTableBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.Properties;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -30,10 +39,15 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.entity.AbstractSteamBoilerEntity;
+import net.snakefangox.mechanized.gui.AlloyFurnaceContainer;
+import net.snakefangox.mechanized.gui.SteamBoilerContainer;
+
+import java.util.Random;
+import java.util.function.Supplier;
 
 public class SteamBoiler extends Block implements BlockEntityProvider, AttributeProvider {
 
-	public static final BooleanProperty LIT = BooleanProperty.of("lit");
+	public static final BooleanProperty LIT = Properties.LIT;
 	public final Supplier<? extends AbstractSteamBoilerEntity> beSupplier;
 
 	public SteamBoiler(Settings settings, Supplier<? extends AbstractSteamBoilerEntity> supp) {
@@ -61,8 +75,7 @@ public class SteamBoiler extends Block implements BlockEntityProvider, Attribute
 						player.setStackInHand(hand, new ItemStack(Items.BUCKET));
 				}
 			} else {
-				ContainerProviderRegistry.INSTANCE.openContainer(MRegister.STEAM_BOILER_CONTAINER, player,
-						(packetByteBuf -> packetByteBuf.writeBlockPos(pos)));
+				player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
 			}
 		}
 
@@ -72,11 +85,6 @@ public class SteamBoiler extends Block implements BlockEntityProvider, Attribute
 	@Override
 	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
 
-	}
-
-	@Override
-	public int getLuminance(BlockState state) {
-		return state.get(LIT) ? 10 : 0;
 	}
 
 	@Override
@@ -110,6 +118,31 @@ public class SteamBoiler extends Block implements BlockEntityProvider, Attribute
 		if (be instanceof AbstractSteamBoilerEntity) {
 			AbstractSteamBoilerEntity tank = (AbstractSteamBoilerEntity) be;
 			to.offer(tank.waterTank);
+		}
+	}
+
+	@Override
+	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+		BlockEntity blockEntity = world.getBlockEntity(pos);
+		if (blockEntity instanceof AbstractSteamBoilerEntity) {
+			return new ExtendedScreenHandlerFactory() {
+				@Override
+				public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
+					return new SteamBoilerContainer(syncId, inv, ScreenHandlerContext.create(world, pos));
+				}
+
+				@Override
+				public Text getDisplayName() {
+					return LiteralText.EMPTY;
+				}
+
+				@Override
+				public void writeScreenOpeningData(ServerPlayerEntity serverPlayerEntity, PacketByteBuf packetByteBuf) {
+					packetByteBuf.writeBlockPos(pos);
+				}
+			};
+		} else {
+			return null;
 		}
 	}
 }

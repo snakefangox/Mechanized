@@ -3,19 +3,18 @@ package net.snakefangox.mechanized.recipes;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.snakefangox.mechanized.Mechanized;
@@ -43,18 +42,18 @@ public class AlloyRecipe implements Recipe<Inventory> {
 
 	@Override
 	public boolean matches(Inventory inv, World world) {
-		if (inv.getInvSize() < 3)
+		if (inv.size() < 3)
 			return false;
-		return (input1.test(inv.getInvStack(0)) && inv.getInvStack(0).getCount() >= amount1
-				&& input2.test(inv.getInvStack(1)) && inv.getInvStack(1).getCount() >= amount2)
-				|| (input1.test(inv.getInvStack(1)) && inv.getInvStack(1).getCount() >= amount1
-						&& input2.test(inv.getInvStack(0)) && inv.getInvStack(0).getCount() >= amount2);
+		return (input1.test(inv.getStack(0)) && inv.getStack(0).getCount() >= amount1
+				&& input2.test(inv.getStack(1)) && inv.getStack(1).getCount() >= amount2)
+				|| (input1.test(inv.getStack(1)) && inv.getStack(1).getCount() >= amount1
+						&& input2.test(inv.getStack(0)) && inv.getStack(0).getCount() >= amount2);
 	}
 
 	@Override
 	public ItemStack craft(Inventory inv) {
-		inv.takeInvStack(0, amount1);
-		inv.takeInvStack(1, amount2);
+		inv.removeStack(0, amount1);
+		inv.removeStack(1, amount2);
 		return getOutput();
 	}
 

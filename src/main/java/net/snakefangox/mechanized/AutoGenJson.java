@@ -1,16 +1,16 @@
 package net.snakefangox.mechanized;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.item.Item;
+import net.minecraft.util.registry.Registry;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.item.Item;
-import net.minecraft.util.registry.Registry;
 
 public class AutoGenJson {
 

@@ -28,7 +28,7 @@ public class SteamChargerEntityRenderer extends BlockEntityRenderer<SteamCharger
 			matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(180));
 		matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(facing.asRotation()));
 		matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(90));
-		MinecraftClient.getInstance().getItemRenderer().renderItem(blockEntity.getInvStack(0), ModelTransformation.Mode.FIXED, light, overlay,
+		MinecraftClient.getInstance().getItemRenderer().renderItem(blockEntity.getStack(0), ModelTransformation.Mode.FIXED, light, overlay,
 				matrices, vertexConsumers);
 		matrices.pop();
 	}

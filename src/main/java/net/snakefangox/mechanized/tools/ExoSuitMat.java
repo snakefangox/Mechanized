@@ -57,4 +57,9 @@ public enum ExoSuitMat implements ArmorMaterial {
 		return 1;
 	}
 
+	@Override
+	public float getKnockbackResistance() {
+		return 0;
+	}
+
 }

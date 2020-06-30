@@ -1,8 +1,5 @@
 package net.snakefangox.mechanized.blocks.entity;
 
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -20,6 +17,9 @@ import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.SteamFractionatingTower;
 import net.snakefangox.mechanized.steam.Steam;
 import net.snakefangox.mechanized.steam.SteamUtil;
+
+import java.util.List;
+import java.util.Random;
 
 public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 
@@ -71,7 +71,7 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 		BlockState blockState = world.getBlockState(minePos);
 		float hardness = blockState.getHardness(getWorld(), minePos);
 		if (!world.isAir(minePos)
-				&& (blockState.getMaterial() == Material.STONE || blockState.getMaterial() == Material.SAND)
+				&& (blockState.getMaterial() == Material.STONE || blockState.getMaterial() == Material.AGGREGATE)
 				&& hardness < 100 && hardness >= 0) {
 			BlockEntity blockEntity = blockState.getBlock().hasBlockEntity() ? world.getBlockEntity(minePos) : null;
 			Block.dropStacks(blockState, world, minePos, blockEntity, null, ItemStack.EMPTY);
@@ -90,12 +90,13 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 
 	private boolean checkIsPositionValid() {
 		boolean foundBedrock = false;
-		BlockPos.Mutable searchPos = new BlockPos.Mutable(pos);
+		BlockPos.Mutable searchPos = new BlockPos.Mutable();
+		searchPos.add(pos);
 		for (int i = pos.getY(); i >= 0; i--) {
 			searchPos.set(searchPos.getX(), searchPos.getY() - 1, searchPos.getZ());
 			BlockState state = world.getBlockState(searchPos);
 			Block atPos = state.getBlock();
-			if (atPos.getMaterial(state) == Material.STONE)
+			if (state.getMaterial() == Material.STONE)
 				stoneLevel = i;
 			if (atPos == Blocks.BEDROCK) {
 				foundBedrock = true;
@@ -147,8 +148,8 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 	}
 
 	@Override
-	public void fromTag(CompoundTag tag) {
-		super.fromTag(tag);
+	public void fromTag(BlockState state, CompoundTag tag) {
+		super.fromTag(state, tag);
 		level = tag.getInt("level");
 	}
 

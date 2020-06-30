@@ -1,32 +1,28 @@
 package net.snakefangox.mechanized.reiplugin.alloy_furnace;
 
+import me.shedaniel.math.Point;
+import me.shedaniel.math.Rectangle;
+import me.shedaniel.rei.api.EntryStack;
+import me.shedaniel.rei.api.RecipeCategory;
+import me.shedaniel.rei.api.RecipeDisplay;
+import me.shedaniel.rei.api.widgets.Widgets;
+import me.shedaniel.rei.gui.widget.Widget;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.resource.language.I18n;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
+import net.snakefangox.mechanized.MRegister;
+import net.snakefangox.mechanized.Mechanized;
+import net.snakefangox.mechanized.recipes.AlloyRecipe;
+import net.snakefangox.mechanized.reiplugin.alloy_furnace.AlloyCategory.AlloyRecipeDisplay;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Supplier;
 
-import me.shedaniel.math.api.Point;
-import me.shedaniel.math.api.Rectangle;
-import me.shedaniel.rei.api.EntryStack;
-import me.shedaniel.rei.api.RecipeCategory;
-import me.shedaniel.rei.api.RecipeDisplay;
-import me.shedaniel.rei.gui.widget.EntryWidget;
-import me.shedaniel.rei.gui.widget.RecipeArrowWidget;
-import me.shedaniel.rei.gui.widget.RecipeBaseWidget;
-import me.shedaniel.rei.gui.widget.Widget;
-import me.shedaniel.rei.plugin.DefaultPlugin;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
-import net.snakefangox.mechanized.MRegister;
-import net.snakefangox.mechanized.Mechanized;
-import net.snakefangox.mechanized.blocks.entity.AlloyFurnaceEntity;
-import net.snakefangox.mechanized.recipes.AlloyRecipe;
-import net.snakefangox.mechanized.reiplugin.alloy_furnace.AlloyCategory.AlloyRecipeDisplay;
-
+@Environment(EnvType.CLIENT)
 public class AlloyCategory implements RecipeCategory<AlloyRecipeDisplay> {
 
 	public static final Identifier ALLOY_CAT = new Identifier(Mechanized.MODID, "plugins/alloy_furnace");
@@ -47,29 +43,16 @@ public class AlloyCategory implements RecipeCategory<AlloyRecipeDisplay> {
 	}
 
 	@Override
-	public List<Widget> setupDisplay(Supplier<AlloyRecipeDisplay> recipeDisplaySupplier, Rectangle bounds) {
-		final RecipeDisplay recipeDisplay = recipeDisplaySupplier.get();
+	public List<Widget> setupDisplay(AlloyRecipeDisplay recipeDisplay, Rectangle bounds) {
 		Point startPoint = new Point(bounds.getCenterX() - 41, bounds.getCenterY() - 17);
-		List<Widget> widgets = new LinkedList<>(Collections.singletonList(new RecipeBaseWidget(bounds) {
-			@Override
-			public void render(int mouseX, int mouseY, float delta) {
-				super.render(mouseX, mouseY, delta);
-				MinecraftClient.getInstance().getTextureManager().bindTexture(DefaultPlugin.getDisplayTexture());
-				blit(startPoint.x - 7, startPoint.y, 0, 177, 25, 35);
-				int height = 14 - MathHelper.ceil((System.currentTimeMillis() / 250d % 14d) / 1f);
-				blit(startPoint.x - 5, startPoint.y + 31 + (3 - height), 82, 77 + (14 - height), 14, height);
-
-			}
-		}));
-		
-		widgets.add(RecipeArrowWidget.create(new Point(startPoint.x + 24, startPoint.y + 8), true)
-				.time(AlloyFurnaceEntity.SMELT_TIME * 50));
-		widgets.add(EntryWidget.create(startPoint.x - 16, startPoint.y + 1)
-				.entries(recipeDisplay.getInputEntries().get(0)).markIsInput());
-		widgets.add(EntryWidget.create(startPoint.x + 2, startPoint.y + 1)
-				.entries(recipeDisplay.getInputEntries().get(1)).markIsInput());
-		widgets.add(EntryWidget.create(startPoint.x + 55, startPoint.y + 9).entries(recipeDisplay.getOutputEntries())
-				.markIsOutput());
+		List<Widget> widgets = new LinkedList<>();
+		widgets.add(Widgets.createRecipeBase(bounds));
+		widgets.add(Widgets.createResultSlotBackground(new Point(startPoint.x + 61, startPoint.y + 9)));
+		widgets.add(Widgets.createBurningFire(new Point(startPoint.x - 5, startPoint.y + 20)).animationDurationMS(10000.0D));
+		widgets.add(Widgets.createArrow(new Point(startPoint.x + 24, startPoint.y + 8)).animationDurationTicks(400));
+		widgets.add(Widgets.createSlot(new Point(startPoint.x - 16, startPoint.y + 1)).entries(recipeDisplay.getInputEntries().get(0)).markInput());
+		widgets.add(Widgets.createSlot(new Point(startPoint.x + 2, startPoint.y + 1)).entries(recipeDisplay.getInputEntries().get(1)).markInput());
+		widgets.add(Widgets.createSlot(new Point(startPoint.x + 61, startPoint.y + 9)).entries(recipeDisplay.getOutputEntries()).disableBackground().markOutput());
 		return widgets;
 	}
 

@@ -1,13 +1,13 @@
 package net.snakefangox.mechanized.networking;
 
-import java.util.Random;
-
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+
+import java.util.Random;
 
 public class ToClientHandlers {
 

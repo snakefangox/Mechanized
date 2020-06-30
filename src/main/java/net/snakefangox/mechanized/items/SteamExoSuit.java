@@ -1,7 +1,5 @@
 package net.snakefangox.mechanized.items;
 
-import java.util.List;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.TooltipContext;
@@ -25,6 +23,8 @@ import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.steam.Steam;
 import net.snakefangox.mechanized.steam.SteamItem;
 import net.snakefangox.mechanized.tools.ExoSuitMat;
+
+import java.util.List;
 
 public class SteamExoSuit extends ArmorItem implements SteamItem, Upgradable {
 

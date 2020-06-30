@@ -1,0 +1,28 @@
+{
+	"name": "Steam Saw",
+	"icon": "mechanized:steam_saw",
+	"category": "gear",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_saw",
+			"text": "The steam saw acts as a steam powered axe, cutting down trees faster the more pressure it holds in it's tank. It can also be upgraded to act as a weapon."
+		},
+		
+		{
+			"type": "text",
+			"text": "This item is upgradable, possible upgrades are listed on the following pages."
+		},
+		
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_canister",
+			"text": "Adding a steam canister doubles the saw's steam tank capacity."
+		},
+		{
+			"type": "spotlight",
+			"item": "minecraft:iron_sword",
+			"text": "Adding an iron sword increases the damage the saw does to match."
+		}
+	]
+}

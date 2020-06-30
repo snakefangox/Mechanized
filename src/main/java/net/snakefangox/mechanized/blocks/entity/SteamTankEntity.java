@@ -1,7 +1,7 @@
 package net.snakefangox.mechanized.blocks.entity;
 
 import io.github.cottonmc.cotton.gui.PropertyDelegateHolder;
-import net.minecraft.container.PropertyDelegate;
+import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.util.math.Direction;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.steam.Steam;

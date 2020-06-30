@@ -1,5 +1,6 @@
 package net.snakefangox.mechanized.blocks.entity;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.CompoundTag;
@@ -36,8 +37,8 @@ public abstract class AbstractSteamEntity extends BlockEntity implements Steam, 
 	}
 
 	@Override
-	public void fromTag(CompoundTag tag) {
-		super.fromTag(tag);
+	public void fromTag(BlockState state, CompoundTag tag) {
+		super.fromTag(state, tag);
 		steamAmount = tag.getInt("steamAmount");
 	}
 

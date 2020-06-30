@@ -1,23 +1,23 @@
 package net.snakefangox.mechanized.gui;
 
-import io.github.cottonmc.cotton.gui.CottonCraftingController;
+import io.github.cottonmc.cotton.gui.SyncedGuiDescription;
 import io.github.cottonmc.cotton.gui.client.CottonInventoryScreen;
 import io.github.cottonmc.cotton.gui.widget.WBar;
 import io.github.cottonmc.cotton.gui.widget.WBar.Direction;
 import io.github.cottonmc.cotton.gui.widget.WGridPanel;
 import io.github.cottonmc.cotton.gui.widget.WItemSlot;
-import net.minecraft.container.BlockContext;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.recipe.RecipeType;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.text.Text;
+import net.snakefangox.mechanized.MRegister;
 
-public class AlloyFurnaceContainer extends CottonCraftingController {
+public class AlloyFurnaceContainer extends SyncedGuiDescription {
 
 	WBar fire;
 	WBar progress;
 
-	public AlloyFurnaceContainer(int syncID, PlayerInventory playerInventory, BlockContext context) {
-		super(RecipeType.SMELTING, syncID, playerInventory, getBlockInventory(context),
+	public AlloyFurnaceContainer(int syncID, PlayerInventory playerInventory, ScreenHandlerContext context) {
+		super(MRegister.ALLOY_FURNACE_CONTAINER, syncID, playerInventory, getBlockInventory(context),
 				getBlockPropertyDelegate(context));
 		WGridPanel root = new WGridPanel();
 		setRootPanel(root);
@@ -45,8 +45,8 @@ public class AlloyFurnaceContainer extends CottonCraftingController {
 	}
 
 	public static class AlloyFurnaceScreen extends CottonInventoryScreen<AlloyFurnaceContainer> {
-		public AlloyFurnaceScreen(AlloyFurnaceContainer container, PlayerEntity player) {
-			super(container, player);
+		public AlloyFurnaceScreen(AlloyFurnaceContainer container, PlayerInventory player, Text text) {
+			super(container, player.player);
 		}
 	}
 }

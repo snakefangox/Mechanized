@@ -1,13 +1,5 @@
 package net.snakefangox.mechanized.mixin;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +14,13 @@ import net.minecraft.util.registry.Registry;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.items.SteamDrill;
 import net.snakefangox.mechanized.steam.SteamItem;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Mixin(PlayerManager.class)
 public abstract class LoginMixin implements ServerLoginPacketListener {

@@ -54,8 +54,8 @@ public class BreakerEntity extends AbstractSteamEntity {
 	}
 
 	@Override
-	public void fromTag(CompoundTag tag) {
-		super.fromTag(tag);
+	public void fromTag(BlockState state, CompoundTag tag) {
+		super.fromTag(state, tag);
 		extended = tag.getBoolean("extended");
 	}
 

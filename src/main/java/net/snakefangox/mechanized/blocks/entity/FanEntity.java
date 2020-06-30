@@ -1,21 +1,21 @@
 package net.snakefangox.mechanized.blocks.entity;
 
-import java.util.List;
-import java.util.stream.Stream;
-
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.server.PlayerStream;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.PacketByteBuf;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.networking.PacketIdentifiers;
 import net.snakefangox.mechanized.steam.Steam;
 import net.snakefangox.mechanized.steam.SteamUtil;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 public class FanEntity extends AbstractSteamEntity {
 

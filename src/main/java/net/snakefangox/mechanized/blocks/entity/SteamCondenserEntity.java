@@ -1,12 +1,11 @@
 package net.snakefangox.mechanized.blocks.entity;
 
-import java.util.List;
-
 import alexiil.mc.lib.attributes.Simulation;
 import alexiil.mc.lib.attributes.fluid.amount.FluidAmount;
 import alexiil.mc.lib.attributes.fluid.impl.SimpleFixedFluidInv;
 import alexiil.mc.lib.attributes.fluid.volume.FluidKeys;
 import alexiil.mc.lib.attributes.fluid.volume.FluidVolume;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
@@ -18,6 +17,8 @@ import net.minecraft.util.math.Direction;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.mixininterfaces.FurnaceInterface;
 import net.snakefangox.mechanized.steam.Steam;
+
+import java.util.List;
 
 public class SteamCondenserEntity extends AbstractSteamEntity {
 
@@ -61,8 +62,8 @@ public class SteamCondenserEntity extends AbstractSteamEntity {
 	}
 
 	@Override
-	public void fromTag(CompoundTag tag) {
-		super.fromTag(tag);
+	public void fromTag(BlockState state, CompoundTag tag) {
+		super.fromTag(state, tag);
 		tank.fromTag(tag.getCompound("tank"));
 	}
 

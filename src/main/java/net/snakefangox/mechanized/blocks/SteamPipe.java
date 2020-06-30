@@ -1,11 +1,7 @@
 package net.snakefangox.mechanized.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Waterloggable;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.EntityContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
@@ -22,7 +18,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.entity.SteamPipeEntity;
@@ -52,15 +48,15 @@ public class SteamPipe extends Block implements BlockEntityProvider, Waterloggab
 				.with(CONNECTED_EAST, false).with(CONNECTED_WEST, false).with(CONNECTED_UP, false)
 				.with(CONNECTED_DOWN, false).with(Properties.WATERLOGGED, false));
 		Box box = BOX_N.getBoundingBox();
-		BOX_E = VoxelShapes.cuboid(1F - box.z1, box.y1, box.x1, 1F - box.z2, box.y2, box.x2);
-		BOX_S = VoxelShapes.cuboid(box.x1, box.y1, 1F - box.z1, box.x2, box.y2, 1F - box.z2);
-		BOX_W = VoxelShapes.cuboid(box.z1, box.y1, box.x1, box.z2, box.y2, box.x2);
-		BOX_U = VoxelShapes.cuboid(box.x1, 1F - box.z1, box.y1, box.x2, 1F - box.z2, box.y2);
-		BOX_D = VoxelShapes.cuboid(box.x1, box.z1, box.y1, box.x2, box.z2, box.y2);
+		BOX_E = VoxelShapes.cuboid(1F - box.minZ, box.minY, box.minX, 1F - box.maxZ, box.maxY, box.maxX);
+		BOX_S = VoxelShapes.cuboid(box.minX, box.minY, 1F - box.minZ, box.maxX, box.maxY, 1F - box.maxZ);
+		BOX_W = VoxelShapes.cuboid(box.minZ, box.minY, box.minX, box.maxZ, box.maxY, box.maxX);
+		BOX_U = VoxelShapes.cuboid(box.minX, 1F - box.minZ, box.minY, box.maxX, 1F - box.maxZ, box.maxY);
+		BOX_D = VoxelShapes.cuboid(box.minX, box.minZ, box.minY, box.maxX, box.maxZ, box.maxY);
 	}
 
 	@Override
-	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, EntityContext context) {
+	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
 		VoxelShape shape = MAIN_BOX;
 		if (state.get(CONNECTED_NORTH))
 			shape = VoxelShapes.union(shape, BOX_N);
@@ -91,7 +87,7 @@ public class SteamPipe extends Block implements BlockEntityProvider, Waterloggab
 	}
 
 	public BlockState getStateForNeighborUpdate(BlockState state, Direction facing, BlockState neighborState,
-			IWorld world, BlockPos pos, BlockPos neighborPos) {
+			WorldAccess world, BlockPos pos, BlockPos neighborPos) {
 		boolean isWaterlogged = state.get(Properties.WATERLOGGED);
 		if (isWaterlogged) {
 			world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
@@ -138,7 +134,7 @@ public class SteamPipe extends Block implements BlockEntityProvider, Waterloggab
 		}
 	}
 
-	private BlockState getStateForPipe(IWorld world, BlockPos pos) {
+	private BlockState getStateForPipe(WorldAccess world, BlockPos pos) {
 		BlockEntity north = world.getBlockEntity(pos.offset(Direction.NORTH));
 		BlockEntity south = world.getBlockEntity(pos.offset(Direction.SOUTH));
 		BlockEntity east = world.getBlockEntity(pos.offset(Direction.EAST));

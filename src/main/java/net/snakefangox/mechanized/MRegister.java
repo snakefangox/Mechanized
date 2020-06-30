@@ -1,118 +1,86 @@
 package net.snakefangox.mechanized;
 
 import com.google.common.base.Supplier;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
 import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.container.BlockContext;
-import net.minecraft.entity.EntityCategory;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.snakefangox.mechanized.blocks.AlloyFurnace;
-import net.snakefangox.mechanized.blocks.Breaker;
-import net.snakefangox.mechanized.blocks.Fan;
-import net.snakefangox.mechanized.blocks.Placer;
-import net.snakefangox.mechanized.blocks.PressureValve;
-import net.snakefangox.mechanized.blocks.Pump;
-import net.snakefangox.mechanized.blocks.SteamBoiler;
-import net.snakefangox.mechanized.blocks.SteamCharger;
-import net.snakefangox.mechanized.blocks.SteamCondenser;
-import net.snakefangox.mechanized.blocks.SteamFractionatingTower;
-import net.snakefangox.mechanized.blocks.SteamPipe;
-import net.snakefangox.mechanized.blocks.SteamPiston;
-import net.snakefangox.mechanized.blocks.SteamSource;
-import net.snakefangox.mechanized.blocks.SteamTank;
-import net.snakefangox.mechanized.blocks.UpgradeTable;
-import net.snakefangox.mechanized.blocks.entity.AlloyFurnaceEntity;
-import net.snakefangox.mechanized.blocks.entity.BasicBoilerEntity;
-import net.snakefangox.mechanized.blocks.entity.BlastBoilerEntity;
-import net.snakefangox.mechanized.blocks.entity.BreakerEntity;
-import net.snakefangox.mechanized.blocks.entity.FanEntity;
-import net.snakefangox.mechanized.blocks.entity.PlacerEntity;
-import net.snakefangox.mechanized.blocks.entity.PressureValveEntity;
-import net.snakefangox.mechanized.blocks.entity.PumpEntity;
-import net.snakefangox.mechanized.blocks.entity.SteamChargerEntity;
-import net.snakefangox.mechanized.blocks.entity.SteamCondenserEntity;
-import net.snakefangox.mechanized.blocks.entity.SteamFractionatingTowerEntity;
-import net.snakefangox.mechanized.blocks.entity.SteamPipeEntity;
-import net.snakefangox.mechanized.blocks.entity.SteamPistonEntity;
-import net.snakefangox.mechanized.blocks.entity.SteamSourceEntity;
-import net.snakefangox.mechanized.blocks.entity.SteamTankEntity;
+import net.snakefangox.mechanized.blocks.*;
+import net.snakefangox.mechanized.blocks.entity.*;
 import net.snakefangox.mechanized.effects.ExoEffect;
 import net.snakefangox.mechanized.entities.FlyingBlockEntity;
-import net.snakefangox.mechanized.gui.AlloyFurnaceContainer;
-import net.snakefangox.mechanized.gui.PlacerContainer;
-import net.snakefangox.mechanized.gui.PressureValveContainer;
-import net.snakefangox.mechanized.gui.SteamBoilerContainer;
-import net.snakefangox.mechanized.gui.UpgradeTableContainer;
-import net.snakefangox.mechanized.items.PressureGauge;
-import net.snakefangox.mechanized.items.SteamCanister;
-import net.snakefangox.mechanized.items.SteamDrill;
-import net.snakefangox.mechanized.items.SteamExoSuit;
+import net.snakefangox.mechanized.gui.*;
+import net.snakefangox.mechanized.items.*;
 import net.snakefangox.mechanized.recipes.AlloyRecipe;
+
+import java.util.function.ToIntFunction;
 
 public class MRegister {
 
 	// Blocks
-	//TODO Set mining level back up when fapi fixed
 	public static final Block COPPER_ORE = new Block(FabricBlockSettings.of(Material.STONE).hardness(5).resistance(3)
-			.breakByTool(FabricToolTags.PICKAXES, 0).build());
+			.breakByTool(FabricToolTags.PICKAXES, 1).requiresTool());
 	public static final Block ZINC_ORE = new Block(FabricBlockSettings.of(Material.STONE).hardness(5).resistance(3)
-			.breakByTool(FabricToolTags.PICKAXES, 0).build());
+			.breakByTool(FabricToolTags.PICKAXES, 1).requiresTool());
 	public static final Block ALLOY_FURNACE = new AlloyFurnace(FabricBlockSettings.of(Material.STONE).hardness(4)
-			.resistance(3).breakByTool(FabricToolTags.PICKAXES).nonOpaque().build());
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES).nonOpaque().lightLevel(createLightLevelFromBlockState(13)));
 	public static final Block BASIC_BOILER = new SteamBoiler(FabricBlockSettings.of(Material.METAL).hardness(4)
-			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build(), BasicBoilerEntity::new);
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES).lightLevel(createLightLevelFromBlockState(13)), BasicBoilerEntity::new);
 	public static final Block BLAST_BOILER = new SteamBoiler(FabricBlockSettings.of(Material.METAL).hardness(4)
-			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build(), BlastBoilerEntity::new);
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES).lightLevel(createLightLevelFromBlockState(13)), BlastBoilerEntity::new);
 	public static final Block STEAM_PIPE = new SteamPipe(FabricBlockSettings.of(Material.METAL).hardness(3)
-			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES));
 	public static final Block STEAM_TANK = new SteamTank(FabricBlockSettings.of(Material.METAL).hardness(4)
-			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES));
 	public static final Block PUMP = new Pump(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
-			.breakByTool(FabricToolTags.PICKAXES).build());
+			.breakByTool(FabricToolTags.PICKAXES));
 	public static final Block BREAKER = new Breaker(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
-			.breakByTool(FabricToolTags.PICKAXES).build());
+			.breakByTool(FabricToolTags.PICKAXES));
 	public static final Block PLACER = new Placer(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
-			.breakByTool(FabricToolTags.PICKAXES).build());
+			.breakByTool(FabricToolTags.PICKAXES));
 	public static final Block STEAM_PISTON = new SteamPiston(FabricBlockSettings.of(Material.METAL).hardness(4)
-			.resistance(3).breakByTool(FabricToolTags.PICKAXES).nonOpaque().build());
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES).nonOpaque());
 	public static final Block FAN = new Fan(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
-			.breakByTool(FabricToolTags.PICKAXES).build());
+			.breakByTool(FabricToolTags.PICKAXES));
 	public static final Block PRESSURE_VALVE = new PressureValve(FabricBlockSettings.of(Material.METAL).hardness(4)
-			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES));
 	public static final Block STEAM_CHARGER = new SteamCharger(FabricBlockSettings.of(Material.METAL).hardness(4)
-			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES));
 	public static final Block UPGRADE_TABLE = new UpgradeTable(FabricBlockSettings.of(Material.METAL).hardness(4)
-			.resistance(3).breakByTool(FabricToolTags.PICKAXES).build());
+			.resistance(3).breakByTool(FabricToolTags.PICKAXES));
 	public static final Block STEAM_FRACTIONATING_TOWER = new SteamFractionatingTower(FabricBlockSettings
-			.of(Material.METAL).hardness(4).resistance(3).breakByTool(FabricToolTags.PICKAXES).nonOpaque().build());
+			.of(Material.METAL).hardness(4).resistance(3).breakByTool(FabricToolTags.PICKAXES).nonOpaque());
 	public static final Block BRASS_FRAME = new Block(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
-			.breakByTool(FabricToolTags.PICKAXES).nonOpaque().build());
+			.breakByTool(FabricToolTags.PICKAXES).nonOpaque());
 	public static final Block STEAM_CONDENSER = new SteamCondenser(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
-			.breakByTool(FabricToolTags.PICKAXES).nonOpaque().build());
+			.breakByTool(FabricToolTags.PICKAXES).nonOpaque());
 	public static final Block STEAM_SOURCE = new SteamSource(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
-			.breakByTool(FabricToolTags.PICKAXES).build());
+			.breakByTool(FabricToolTags.PICKAXES));
 
 	// BlockEntities
 	public static BlockEntityType<AlloyFurnaceEntity> ALLOY_FURNACE_ENTITY;
@@ -132,11 +100,11 @@ public class MRegister {
 	public static BlockEntityType<SteamCondenserEntity> STEAM_CONDENSER_ENTITY;
 
 	// Containers
-	public static final Identifier ALLOY_FURNACE_CONTAINER = new Identifier(Mechanized.MODID, "alloy_furnace");
-	public static final Identifier STEAM_BOILER_CONTAINER = new Identifier(Mechanized.MODID, "steam_boiler");
-	public static final Identifier PRESSURE_VALVE_CONTAINER = new Identifier(Mechanized.MODID, "pressure_valve");
-	public static final Identifier UPGRADE_TABLE_CONTAINER = new Identifier(Mechanized.MODID, "upgrade_table");
-	public static final Identifier PLACER_CONTAINER = new Identifier(Mechanized.MODID, "placer");
+	public static ScreenHandlerType<AlloyFurnaceContainer> ALLOY_FURNACE_CONTAINER;
+	public static ScreenHandlerType<SteamBoilerContainer> STEAM_BOILER_CONTAINER;
+	public static ScreenHandlerType<PressureValveContainer> PRESSURE_VALVE_CONTAINER;
+	public static ScreenHandlerType<UpgradeTableContainer> UPGRADE_TABLE_CONTAINER;
+	public static ScreenHandlerType<PlacerContainer> PLACER_CONTAINER;
 
 	// Items
 	public static final Item COPPER_INGOT = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
@@ -149,6 +117,8 @@ public class MRegister {
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamCanister.STEAM_CAPACITY));
 	public static final Item STEAM_DRILL = new SteamDrill(
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamDrill.STEAM_CAPACITY));
+	public static final Item STEAM_SAW = new SteamSaw(
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamSaw.STEAM_CAPACITY));
 	public static final Item STEAM_EXOSUIT_HELMET = new SteamExoSuit(EquipmentSlot.HEAD,
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamExoSuit.STEAM_CAPACITY));
 	public static final Item STEAM_EXOSUIT_CHEST = new SteamExoSuit(EquipmentSlot.CHEST,
@@ -172,12 +142,12 @@ public class MRegister {
 	public static final EntityType<FlyingBlockEntity> FLYING_BLOCK = Registry.register(Registry.ENTITY_TYPE,
 			new Identifier(Mechanized.MODID, "flying_block"),
 			FabricEntityTypeBuilder
-					.create(EntityCategory.MISC, (EntityType.EntityFactory<FlyingBlockEntity>) FlyingBlockEntity::new)
+					.create(SpawnGroup.MISC, (EntityType.EntityFactory<FlyingBlockEntity>) FlyingBlockEntity::new)
 					.size(EntityDimensions.fixed(1, 1)).build());
 
 	public static void registerEverything() {
-		registerBlock(COPPER_ORE, new Identifier(Mechanized.MODID, "copper_ore"), RenderLayerEnum.CUTOUT);
-		registerBlock(ZINC_ORE, new Identifier(Mechanized.MODID, "zinc_ore"), RenderLayerEnum.CUTOUT);
+		registerBlock(COPPER_ORE, new Identifier(Mechanized.MODID, "copper_ore"));
+		registerBlock(ZINC_ORE, new Identifier(Mechanized.MODID, "zinc_ore"));
 		ALLOY_FURNACE_ENTITY = registerBlock(ALLOY_FURNACE, new Identifier(Mechanized.MODID, "alloy_furnace"),
 				AlloyFurnaceEntity::new);
 		BASIC_BOILER_ENTITY = registerBlock(BASIC_BOILER, new Identifier(Mechanized.MODID, "steam_boiler"),
@@ -188,8 +158,7 @@ public class MRegister {
 				SteamPipeEntity::new);
 		STEAM_TANK_ENTITY = registerBlock(STEAM_TANK, new Identifier(Mechanized.MODID, "steam_tank"),
 				SteamTankEntity::new);
-		PUMP_ENTITY = registerBlock(PUMP, new Identifier(Mechanized.MODID, "pump"), PumpEntity::new,
-				RenderLayerEnum.CUTOUT);
+		PUMP_ENTITY = registerBlock(PUMP, new Identifier(Mechanized.MODID, "pump"), PumpEntity::new);
 		BREAKER_ENTITY = registerBlock(BREAKER, new Identifier(Mechanized.MODID, "breaker"), BreakerEntity::new);
 		PLACER_ENTITY = registerBlock(PLACER, new Identifier(Mechanized.MODID, "placer"), PlacerEntity::new);
 		STEAM_PISTON_ENTITY = registerBlock(STEAM_PISTON, new Identifier(Mechanized.MODID, "steam_piston"),
@@ -208,21 +177,6 @@ public class MRegister {
 		STEAM_CONDENSER_ENTITY = registerBlock(STEAM_CONDENSER, new Identifier(Mechanized.MODID, "steam_condenser"),
 				SteamCondenserEntity::new);
 
-		ContainerProviderRegistry.INSTANCE.registerFactory(ALLOY_FURNACE_CONTAINER,
-				(syncId, id, player, buf) -> new AlloyFurnaceContainer(syncId, player.inventory,
-						BlockContext.create(player.world, buf.readBlockPos())));
-		ContainerProviderRegistry.INSTANCE.registerFactory(STEAM_BOILER_CONTAINER,
-				(syncId, id, player, buf) -> new SteamBoilerContainer(syncId, player.inventory,
-						BlockContext.create(player.world, buf.readBlockPos())));
-		ContainerProviderRegistry.INSTANCE.registerFactory(PRESSURE_VALVE_CONTAINER,
-				(syncId, id, player, buf) -> new PressureValveContainer(syncId, player.inventory,
-						BlockContext.create(player.world, buf.readBlockPos())));
-		ContainerProviderRegistry.INSTANCE.registerFactory(UPGRADE_TABLE_CONTAINER,
-				(syncId, id, player, buf) -> new UpgradeTableContainer(syncId, player.inventory));
-		ContainerProviderRegistry.INSTANCE.registerFactory(PLACER_CONTAINER,
-				(syncId, id, player, buf) -> new PlacerContainer(syncId, player.inventory,
-						BlockContext.create(player.world, buf.readBlockPos())));
-
 		registerItem(COPPER_INGOT, new Identifier(Mechanized.MODID, "copper_ingot"));
 		registerItem(ZINC_INGOT, new Identifier(Mechanized.MODID, "zinc_ingot"));
 		registerItem(BRASS_INGOT, new Identifier(Mechanized.MODID, "brass_ingot"));
@@ -230,6 +184,7 @@ public class MRegister {
 		registerItem(PRESSURE_GAUGE, new Identifier(Mechanized.MODID, "pressure_gauge"));
 		registerItem(STEAM_CANISTER, new Identifier(Mechanized.MODID, "steam_canister"));
 		registerItem(STEAM_DRILL, new Identifier(Mechanized.MODID, "steam_drill"));
+		registerItem(STEAM_SAW, new Identifier(Mechanized.MODID, "steam_saw"));
 		registerItem(STEAM_EXOSUIT_HELMET, new Identifier(Mechanized.MODID, "steam_exosuit_helm"));
 		registerItem(STEAM_EXOSUIT_CHEST, new Identifier(Mechanized.MODID, "steam_exosuit_chest"));
 		registerItem(STEAM_EXOSUIT_LEGS, new Identifier(Mechanized.MODID, "steam_exosuit_legs"));
@@ -237,15 +192,31 @@ public class MRegister {
 
 		EXOSUIT_STRENGTH = Registry.register(Registry.STATUS_EFFECT,
 				new Identifier(Mechanized.MODID, "exosuit_strength"),
-				new ExoEffect().addAttributeModifier(EntityAttributes.ATTACK_DAMAGE,
+				new ExoEffect().addAttributeModifier(EntityAttributes.GENERIC_ATTACK_DAMAGE,
 						"6551312b-037b-4152-8c44-e81e9065bae6", 2, EntityAttributeModifier.Operation.ADDITION));
 		EXOSUIT_SPEED = Registry.register(Registry.STATUS_EFFECT, new Identifier(Mechanized.MODID, "exosuit_speed"),
-				new ExoEffect().addAttributeModifier(EntityAttributes.MOVEMENT_SPEED,
+				new ExoEffect().addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED,
 						"d859def7-792c-40c2-881b-7d2703fc5760", 0.15D,
 						EntityAttributeModifier.Operation.MULTIPLY_TOTAL));
 		EXOSUIT_PROTECC = Registry.register(Registry.STATUS_EFFECT, new Identifier(Mechanized.MODID, "exosuit_protecc"),
-				new ExoEffect().addAttributeModifier(EntityAttributes.ARMOR, "1b7e6f75-78d3-4a4d-85af-330e09d2470e", 2,
+				new ExoEffect().addAttributeModifier(EntityAttributes.GENERIC_ARMOR, "1b7e6f75-78d3-4a4d-85af-330e09d2470e", 2,
 						EntityAttributeModifier.Operation.ADDITION));
+
+		ALLOY_FURNACE_CONTAINER = ScreenHandlerRegistry.registerExtended(
+				new Identifier(Mechanized.MODID, "alloy_furnace"), (syncID, player, buf) ->
+						new AlloyFurnaceContainer(syncID, player, ScreenHandlerContext.create(player.player.world, buf.readBlockPos())));
+		STEAM_BOILER_CONTAINER = ScreenHandlerRegistry.registerExtended(
+				new Identifier(Mechanized.MODID, "steam_boiler"), (syncID, player, buf) ->
+						new SteamBoilerContainer(syncID, player, ScreenHandlerContext.create(player.player.world, buf.readBlockPos())));
+		PRESSURE_VALVE_CONTAINER = ScreenHandlerRegistry.registerExtended(
+				new Identifier(Mechanized.MODID, "pressure_valve"), (syncID, player, buf) ->
+						new PressureValveContainer(syncID, player, ScreenHandlerContext.create(player.player.world, buf.readBlockPos())));
+		UPGRADE_TABLE_CONTAINER = ScreenHandlerRegistry.registerSimple(
+				new Identifier(Mechanized.MODID, "upgrade_table"), (syncID, player) ->
+						new UpgradeTableContainer(syncID, player));
+		PLACER_CONTAINER = ScreenHandlerRegistry.registerExtended(
+				new Identifier(Mechanized.MODID, "placer"), (syncID, player, buf) ->
+						new PlacerContainer(syncID, player, ScreenHandlerContext.create(player.player.world, buf.readBlockPos())));
 
 		STEAM_INJECT = registerSoundEvent(new Identifier(Mechanized.MODID, "steam_inject"));
 		STEAM_HIT = registerSoundEvent(new Identifier(Mechanized.MODID, "steam_hit"));
@@ -256,10 +227,11 @@ public class MRegister {
 
 	}
 
-	private static void registerBlock(Block block, Identifier id, RenderLayerEnum layer) {
-		registerBlock(block, id);
-		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT)
-			setRenderLayer(block, layer);
+	@Environment(EnvType.CLIENT)
+	public static void setRenderLayers() {
+		setRenderLayer(PUMP, RenderLayerEnum.CUTOUT);
+		setRenderLayer(COPPER_ORE, RenderLayerEnum.CUTOUT);
+		setRenderLayer(ZINC_ORE, RenderLayerEnum.CUTOUT);
 	}
 
 	private static void registerBlock(Block block, Identifier id) {
@@ -274,28 +246,29 @@ public class MRegister {
 
 	@SuppressWarnings("unchecked")
 	private static <T extends BlockEntity> BlockEntityType<T> registerBlock(Block block, Identifier id,
-			Supplier<BlockEntity> be) {
+																			Supplier<BlockEntity> be) {
 		registerBlock(block, id);
 		return (BlockEntityType<T>) Registry.register(Registry.BLOCK_ENTITY_TYPE, id,
 				BlockEntityType.Builder.create(be, block).build(null));
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <T extends BlockEntity> BlockEntityType<T> registerBlock(Block block, Identifier id,
-			Supplier<BlockEntity> be, RenderLayerEnum layer) {
-		registerBlock(block, id, layer);
-		return (BlockEntityType<T>) Registry.register(Registry.BLOCK_ENTITY_TYPE, id,
-				BlockEntityType.Builder.create(be, block).build(null));
+	private static ToIntFunction<BlockState> createLightLevelFromBlockState(int litLevel) {
+		return (blockState) -> {
+			return (Boolean) blockState.get(Properties.LIT) ? litLevel : 0;
+		};
 	}
 
 	@Environment(EnvType.CLIENT)
 	private static void setRenderLayer(Block block, RenderLayerEnum layer) {
 		switch (layer) {
-		case CUTOUT:
-			BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
-			break;
-		default:
-			break;
+			case CUTOUT:
+				BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
+				break;
+			case TRANSLUCENT:
+				BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getTranslucent());
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -303,7 +276,7 @@ public class MRegister {
 		Registry.register(Registry.ITEM, id, item);
 	}
 
-	public static enum RenderLayerEnum {
-		CUTOUT;
+	public enum RenderLayerEnum {
+		CUTOUT, TRANSLUCENT;
 	}
 }

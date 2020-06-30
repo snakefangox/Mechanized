@@ -1,12 +1,5 @@
 package net.snakefangox.mechanized.steam;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import blue.endless.jankson.annotation.Nullable;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.CompoundTag;
@@ -16,6 +9,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.World;
 import net.snakefangox.mechanized.Mechanized;
+
+import java.util.*;
 
 public class SteamPipeNetworkStorage extends PersistentState {
 

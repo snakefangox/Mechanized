@@ -1,5 +1,6 @@
 package net.snakefangox.mechanized.blocks.entity;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.world.ServerWorld;
@@ -53,8 +54,8 @@ public class SteamPipeEntity extends BlockEntity implements Steam, NetworkMember
 	}
 
 	@Override
-	public void fromTag(CompoundTag tag) {
-		super.fromTag(tag);
+	public void fromTag(BlockState state, CompoundTag tag) {
+		super.fromTag(state, tag);
 		pipeNetworkID = tag.getInt("pipeNetworkID");
 	}
 

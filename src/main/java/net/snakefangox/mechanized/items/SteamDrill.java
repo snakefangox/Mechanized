@@ -1,23 +1,23 @@
 package net.snakefangox.mechanized.items;
 
-import java.util.List;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.tool.attribute.v1.DynamicAttributeTool;
+import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
+import net.fabricmc.fabric.impl.tool.attribute.ToolManagerImpl;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidDrainable;
+import net.minecraft.block.Material;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.PickaxeItem;
+import net.minecraft.item.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.tag.Tag;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
@@ -29,6 +29,8 @@ import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.steam.SteamItem;
 import net.snakefangox.mechanized.tools.SteamToolMaterial;
+
+import java.util.List;
 
 public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, DynamicAttributeTool {
 
@@ -52,8 +54,18 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, Dy
 	}
 
 	@Override
-	public float getMiningSpeed(ItemStack stack, BlockState state) {
-		return getPressure(stack) * getMaterial().getMiningSpeed();
+	public float getMiningSpeedMultiplier(Tag<Item> tag, BlockState state, ItemStack stack, LivingEntity user) {
+		Material mat = state.getMaterial();
+		if (mat == Material.AGGREGATE || mat == Material.METAL || mat == Material.STONE || mat == Material.REPAIR_STATION || mat == Material.SOIL) {
+			return getPressure(stack) * 10;
+		} else {
+			return 1.0F;
+		}
+	}
+
+	@Override
+	public int getMiningLevel(Tag<Item> tag, BlockState state, ItemStack stack, LivingEntity user) {
+		return getMaterial().getMiningLevel() + (Integer) getUpgradeFromStack(stack)[0];
 	}
 
 	@Override
@@ -172,15 +184,5 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, Dy
 		if (tag.getInt("bucketUpgrade") > 0)
 			items[i++] = Items.BUCKET;
 		return items;
-	}
-
-	@Override
-	public int getMiningLevel(ItemStack stack, LivingEntity user) {
-		return getMaterial().getMiningLevel() + (Integer) getUpgradeFromStack(stack)[0];
-	}
-
-	@Override
-	public float getMiningSpeedMultiplier(ItemStack stack, LivingEntity user) {
-		return getPressure(stack) * getMaterial().getMiningSpeed();
 	}
 }

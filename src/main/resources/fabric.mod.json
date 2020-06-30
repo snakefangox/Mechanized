@@ -37,9 +37,9 @@
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": ">=0.10.0",
-    "minecraft": "1.15.2",
-	"libgui": "^1.8.0",
-	"libblockattributes": ">=0.6.6"
+    "minecraft": "1.16.1",
+	"libgui": ">=2.0.0",
+	"libblockattributes": ">=0.7.0"
   },
   "suggests": {
     "flamingo": "*",

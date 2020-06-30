@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import net.snakefangox.mechanized.MRegister;
 
@@ -42,22 +43,21 @@ public class SteamFractionatingTower extends Block implements BlockEntityProvide
 	}
 
 	@Override
-	public void onBlockRemoved(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-		super.onBlockRemoved(state, world, pos, newState, moved);
-		
+	public void onBroken(WorldAccess world, BlockPos pos, BlockState state) {
+		super.onBroken(world, pos, state);
+
 		int level = state.get(LEVEL);
-		world.setBlockEntity(pos, null);
 		if (level != 0) {
-			world.setBlockState(pos.offset(Direction.DOWN), Blocks.AIR.getDefaultState());
+			world.setBlockState(pos.offset(Direction.DOWN), Blocks.AIR.getDefaultState(), 3);
 		}
 		if (level > 1) {
-			world.setBlockState(pos.offset(Direction.DOWN, 2), Blocks.AIR.getDefaultState());
+			world.setBlockState(pos.offset(Direction.DOWN, 2), Blocks.AIR.getDefaultState(), 3);
 		}
 		if (level < 2) {
-			world.setBlockState(pos.offset(Direction.UP), Blocks.AIR.getDefaultState());
+			world.setBlockState(pos.offset(Direction.UP), Blocks.AIR.getDefaultState(), 3);
 		}
 		if (level < 1) {
-			world.setBlockState(pos.offset(Direction.UP, 2), Blocks.AIR.getDefaultState());
+			world.setBlockState(pos.offset(Direction.UP, 2), Blocks.AIR.getDefaultState(), 3);
 		}
 	}
 

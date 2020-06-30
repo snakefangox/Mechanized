@@ -1,22 +1,32 @@
 package net.snakefangox.mechanized.blocks.entity;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.AutomaticItemPlacementContext;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.ScreenHandlerFactory;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.DefaultedList;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.Placer;
+import net.snakefangox.mechanized.gui.PlacerContainer;
 import net.snakefangox.mechanized.parts.StandardInventory;
 import net.snakefangox.mechanized.steam.Steam;
 import net.snakefangox.mechanized.steam.SteamUtil;
 
-public class PlacerEntity extends AbstractSteamEntity implements StandardInventory {
+public class PlacerEntity extends AbstractSteamEntity implements StandardInventory, NamedScreenHandlerFactory {
 
 	private static final int STEAM_CAPACITY = Steam.UNIT;
 	private static final int COST_PER_OP = (int) (Steam.UNIT * 0.05);
@@ -41,7 +51,7 @@ public class PlacerEntity extends AbstractSteamEntity implements StandardInvento
 			ItemStack stack = block.get(0);
 			if (world.isAir(placepos) && !stack.isEmpty() && stack.getItem() instanceof BlockItem) {
 				Block bl = ((BlockItem) stack.getItem()).getBlock();
-				if (bl.getHardness(bl.getDefaultState(), world, placepos) < 0)
+				if (bl.getDefaultState().getHardness(world, placepos) < 0)
 					return;
 				((BlockItem) stack.getItem()).place(
 						new AutomaticItemPlacementContext(world, placepos, getCachedState().get(Properties.FACING),
@@ -65,8 +75,8 @@ public class PlacerEntity extends AbstractSteamEntity implements StandardInvento
 	}
 
 	@Override
-	public void fromTag(CompoundTag tag) {
-		super.fromTag(tag);
+	public void fromTag(BlockState state, CompoundTag tag) {
+		super.fromTag(state, tag);
 		Inventories.toTag(tag, getItems());
 		extended = tag.getBoolean("extended");
 	}
@@ -84,7 +94,17 @@ public class PlacerEntity extends AbstractSteamEntity implements StandardInvento
 	}
 
 	@Override
-	public boolean isValidInvStack(int slot, ItemStack stack) {
+	public boolean isValid(int slot, ItemStack stack) {
 		return stack.getItem() instanceof BlockItem;
+	}
+
+	@Override
+	public Text getDisplayName() {
+		return new TranslatableText(getCachedState().getBlock().getTranslationKey());
+	}
+
+	@Override
+	public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
+		return new PlacerContainer(syncId, inv, ScreenHandlerContext.create(world, pos));
 	}
 }

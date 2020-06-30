@@ -4,11 +4,11 @@
 	"package": "net.snakefangox.mechanized.mixin",
 	"compatibilityLevel": "JAVA_8",
 	"mixins": [
-		"FurnaceMixin",
-		"LoginMixin",
-		"PlayerMixin",
-		"PistonHandlerMixin"
-	],
+      "FurnaceMixin",
+      "LoginMixin",
+      "PistonHandlerMixin",
+      "PlayerMixin"
+    ],
 	"client": [
 	"EffectRenderMixin"
 	],

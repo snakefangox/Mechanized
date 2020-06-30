@@ -34,5 +34,6 @@
 "block.mechanized.steam_source": "Creative Steam Source",
 "block.mechanized.blast_boiler": "Blast Boiler",
 "item.mechanized.blast_boiler": "Blast Boiler",
-"block.mechanized.steam_condenser": "Steam Condenser"
+"block.mechanized.steam_condenser": "Steam Condenser",
+"item.mechanized.steam_saw": "Steam Saw"
 }
