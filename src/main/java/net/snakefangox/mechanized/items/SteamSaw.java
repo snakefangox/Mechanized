@@ -10,7 +10,6 @@ import net.snakefangox.mechanized.steam.SteamItem;
 import net.snakefangox.mechanized.tools.SteamToolMaterial;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Material;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -32,7 +31,6 @@ import net.minecraft.world.World;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.tool.attribute.v1.DynamicAttributeTool;
-import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
 
 public class SteamSaw extends AxeItem implements SteamItem, Upgradable, DynamicAttributeTool {
 
@@ -58,12 +56,7 @@ public class SteamSaw extends AxeItem implements SteamItem, Upgradable, DynamicA
 
 	@Override
 	public float getMiningSpeedMultiplier(Tag<Item> tag, BlockState state, ItemStack stack, LivingEntity user) {
-		Material mat = state.getMaterial();
-		if (mat == Material.WOOD || mat == Material.PLANT) {
-			return getPressure(stack) * 10;
-		} else {
-			return 1.0F;
-		}
+		return getPressure(stack) * 10;
 	}
 
 	@Override

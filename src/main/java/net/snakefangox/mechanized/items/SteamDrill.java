@@ -1,10 +1,10 @@
 package net.snakefangox.mechanized.items;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.tool.attribute.v1.DynamicAttributeTool;
-import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
-import net.fabricmc.fabric.impl.tool.attribute.ToolManagerImpl;
+import java.util.List;
+
+import net.snakefangox.mechanized.MRegister;
+import net.snakefangox.mechanized.steam.SteamItem;
+import net.snakefangox.mechanized.tools.SteamToolMaterial;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidDrainable;
@@ -14,7 +14,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.PickaxeItem;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.tag.Tag;
@@ -26,11 +29,10 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.RayTraceContext;
 import net.minecraft.world.World;
-import net.snakefangox.mechanized.MRegister;
-import net.snakefangox.mechanized.steam.SteamItem;
-import net.snakefangox.mechanized.tools.SteamToolMaterial;
 
-import java.util.List;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.tool.attribute.v1.DynamicAttributeTool;
 
 public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, DynamicAttributeTool {
 
@@ -55,12 +57,7 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, Dy
 
 	@Override
 	public float getMiningSpeedMultiplier(Tag<Item> tag, BlockState state, ItemStack stack, LivingEntity user) {
-		Material mat = state.getMaterial();
-		if (mat == Material.AGGREGATE || mat == Material.METAL || mat == Material.STONE || mat == Material.REPAIR_STATION || mat == Material.SOIL) {
-			return getPressure(stack) * 10;
-		} else {
-			return 1.0F;
-		}
+		return getPressure(stack) * 10;
 	}
 
 	@Override
@@ -75,10 +72,11 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, Dy
 
 	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-		if (world.isClient)
+		if (world.isClient) {
 			return TypedActionResult.pass(user.getStackInHand(hand));
+		}
 		ItemStack stack = user.getStackInHand(hand);
-		if((Integer)getUpgradeFromStack(stack)[2] == 0 || getPressure(stack) <= 0.01) {
+		if ((Integer) getUpgradeFromStack(stack)[2] == 0 || getPressure(stack) <= 0.01) {
 			return TypedActionResult.pass(user.getStackInHand(hand));
 		}
 		HitResult hit = rayTrace(world, user, RayTraceContext.FluidHandling.SOURCE_ONLY);
@@ -88,12 +86,12 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, Dy
 			BlockPos pos = new BlockPos(hit.getPos());
 			BlockState state = world.getBlockState(pos);
 			if (state.getBlock() instanceof FluidDrainable) {
-                Fluid fluid = ((FluidDrainable)state.getBlock()).tryDrainFluid(world, pos, state);
-                if(fluid == Fluids.LAVA) {
-                	addSteam(stack, STEAM_PER_BLOCK * 32);
-                }else {
-                	removeSteam(stack, STEAM_PER_BLOCK * 16);
-                }
+				Fluid fluid = ((FluidDrainable) state.getBlock()).tryDrainFluid(world, pos, state);
+				if (fluid == Fluids.LAVA) {
+					addSteam(stack, STEAM_PER_BLOCK * 32);
+				} else {
+					removeSteam(stack, STEAM_PER_BLOCK * 16);
+				}
 			}
 			return TypedActionResult.consume(stack);
 		}
@@ -159,7 +157,7 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, Dy
 	@Override
 	public Object[] getUpgradeFromStack(ItemStack stack) {
 		CompoundTag tag = stack.getOrCreateTag();
-		return new Object[] { tag.getInt("miningUpgrade"), tag.getInt("steamExtra"), tag.getInt	("bucketUpgrade") };
+		return new Object[] {tag.getInt("miningUpgrade"), tag.getInt("steamExtra"), tag.getInt("bucketUpgrade")};
 	}
 
 	@Override
@@ -177,12 +175,15 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, Dy
 		CompoundTag tag = stack.getOrCreateTag();
 		Item[] items = new Item[upgradeSlotCount(stack.getItem())];
 		int i = 0;
-		if (tag.getInt("miningUpgrade") > 0)
+		if (tag.getInt("miningUpgrade") > 0) {
 			items[i++] = Items.DIAMOND;
-		if (tag.getInt("steamExtra") > 0)
+		}
+		if (tag.getInt("steamExtra") > 0) {
 			items[i++] = MRegister.STEAM_CANISTER;
-		if (tag.getInt("bucketUpgrade") > 0)
+		}
+		if (tag.getInt("bucketUpgrade") > 0) {
 			items[i++] = Items.BUCKET;
+		}
 		return items;
 	}
 }
