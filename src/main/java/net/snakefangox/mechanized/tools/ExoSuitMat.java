@@ -13,7 +13,7 @@ public enum ExoSuitMat implements ArmorMaterial {
 
 	@Override
 	public int getDurability(EquipmentSlot slot) {
-		return Steam.UNIT;
+		return 0;
 	}
 
 	@Override

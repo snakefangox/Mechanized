@@ -66,11 +66,6 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, Dy
 	}
 
 	@Override
-	public boolean isDamageable() {
-		return true;
-	}
-
-	@Override
 	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
 		if (world.isClient) {
 			return TypedActionResult.pass(user.getStackInHand(hand));
@@ -112,8 +107,6 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, Dy
 	public void setSteamAmount(ItemStack stack, int amount) {
 		CompoundTag tag = stack.getOrCreateTag();
 		tag.putInt(TAG_KEY, amount);
-		stack.setDamage((int) (stack.getMaxDamage()
-				- (stack.getMaxDamage() * (float) ((float) amount / (float) getMaxSteamAmount(stack)))));
 	}
 
 	@Override

@@ -1,5 +1,13 @@
 package net.snakefangox.mechanized.blocks.entity;
 
+import java.util.List;
+import java.util.Random;
+
+import net.snakefangox.mechanized.MRegister;
+import net.snakefangox.mechanized.blocks.SteamFractionatingTower;
+import net.snakefangox.mechanized.steam.Steam;
+import net.snakefangox.mechanized.steam.SteamUtil;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -13,20 +21,13 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
-import net.snakefangox.mechanized.MRegister;
-import net.snakefangox.mechanized.blocks.SteamFractionatingTower;
-import net.snakefangox.mechanized.steam.Steam;
-import net.snakefangox.mechanized.steam.SteamUtil;
-
-import java.util.List;
-import java.util.Random;
 
 public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 
 	public static final int STEAM_CAPACITY = Steam.UNIT;
 	public static final int STEAM_USE_PER_OP = Steam.UNIT / 4;
 	public static final int MINE_DIAMETER = 16;
-	public static final int MINE_AMOUNT_MAX = 18;
+	public static final int MINE_AMOUNT_MAX = 24;
 	public static final float BREAK_CHANCE = 0.1F;
 	private static final Random RAND = new Random();
 
@@ -39,8 +40,9 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 
 	@Override
 	public void tick() {
-		if (world.isClient)
+		if (world.isClient) {
 			return;
+		}
 		if (world.getTime() % 5 == 0 && level == 2) {
 			SteamUtil.directionalEqualizeSteam(world, this, pos, Direction.UP, Direction.UP);
 		}
@@ -75,8 +77,7 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 				&& hardness < 100 && hardness >= 0) {
 			BlockEntity blockEntity = blockState.getBlock().hasBlockEntity() ? world.getBlockEntity(minePos) : null;
 			Block.dropStacks(blockState, world, minePos, blockEntity, null, ItemStack.EMPTY);
-			if (RAND.nextFloat() > BREAK_CHANCE && pos.getX() != minePos.getX() && pos.getZ() != minePos.getZ())
-				world.breakBlock(minePos, false);
+			world.breakBlock(minePos, false);
 			List<ItemEntity> items = world.getEntities(ItemEntity.class, new Box(minePos), null);
 			items.forEach(ie -> {
 				double x = ie.getX();
@@ -89,45 +90,42 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 	}
 
 	private boolean checkIsPositionValid() {
-		boolean foundBedrock = false;
+		int stoneCount = 0;
 		BlockPos.Mutable searchPos = new BlockPos.Mutable();
 		searchPos.add(pos);
 		for (int i = pos.getY(); i >= 0; i--) {
 			searchPos.set(searchPos.getX(), searchPos.getY() - 1, searchPos.getZ());
 			BlockState state = world.getBlockState(searchPos);
 			Block atPos = state.getBlock();
-			if (state.getMaterial() == Material.STONE)
+			if (state.getMaterial() == Material.STONE) {
 				stoneLevel = i;
-			if (atPos == Blocks.BEDROCK) {
-				foundBedrock = true;
-				break;
-				// I know that isAir is the better check, I don't want to break on cave air and
-				// I never get to void air
-			} else if (atPos == Blocks.AIR) {
-				break;
+				++stoneCount;
 			}
 		}
-		return foundBedrock;
+		return stoneCount > 3;
 	}
 
 	@Override
 	public int getSteamAmount(Direction dir) {
-		if (dir == Direction.UP && level == 2)
+		if (dir == Direction.UP && level == 2) {
 			return steamAmount;
+		}
 		return 0;
 	}
 
 	@Override
 	public int getMaxSteamAmount(Direction dir) {
-		if (dir == Direction.UP && level == 2)
+		if (dir == Direction.UP && level == 2) {
 			return STEAM_CAPACITY;
+		}
 		return 0;
 	}
 
 	@Override
 	public void setSteamAmount(Direction dir, int amount) {
-		if (dir == Direction.UP && level == 2)
+		if (dir == Direction.UP && level == 2) {
 			steamAmount = amount;
+		}
 	}
 
 	@Override
@@ -141,8 +139,9 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 			return getPressurePSB(Direction.UP);
 		} else {
 			BlockEntity be = world.getBlockEntity(pos.offset(Direction.UP, 2 - level));
-			if (be instanceof SteamFractionatingTowerEntity)
+			if (be instanceof SteamFractionatingTowerEntity) {
 				return (2 - level + 1) * ((SteamFractionatingTowerEntity) be).getPressurePSBForReadout(dir);
+			}
 		}
 		return 0;
 	}

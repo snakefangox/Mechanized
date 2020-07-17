@@ -96,11 +96,6 @@ public class SteamExoSuit extends ArmorItem implements SteamItem, Upgradable {
 	}
 
 	@Override
-	public boolean isDamageable() {
-		return true;
-	}
-
-	@Override
 	public int getSteamAmount(ItemStack stack) {
 		CompoundTag tag = stack.getOrCreateTag();
 		if (tag.contains(SteamItem.TAG_KEY)) {
@@ -115,8 +110,6 @@ public class SteamExoSuit extends ArmorItem implements SteamItem, Upgradable {
 	public void setSteamAmount(ItemStack stack, int amount) {
 		CompoundTag tag = stack.getOrCreateTag();
 		tag.putInt(TAG_KEY, amount);
-		stack.setDamage((int) (stack.getMaxDamage()
-				- (stack.getMaxDamage() * (float) ((float) amount / (float) getMaxSteamAmount(stack)))));
 	}
 
 	@Override
@@ -172,7 +165,7 @@ public class SteamExoSuit extends ArmorItem implements SteamItem, Upgradable {
 
 	@Override
 	public Ingredient validUpgrades(Item item) {
-		Item[] items = null;
+		Item[] items;
 		if (item == MRegister.STEAM_EXOSUIT_BOOTS) {
 			items = new Item[] { MRegister.STEAM_PISTON.asItem(), Items.DIAMOND_CHESTPLATE, MRegister.STEAM_CANISTER };
 		} else if (item == MRegister.STEAM_EXOSUIT_HELMET) {

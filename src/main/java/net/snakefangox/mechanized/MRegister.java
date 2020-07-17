@@ -114,19 +114,19 @@ public class MRegister {
 	public static final Item PRESSURE_GAUGE = new PressureGauge(
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final Item STEAM_CANISTER = new SteamCanister(
-			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamCanister.STEAM_CAPACITY));
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final Item STEAM_DRILL = new SteamDrill(
-			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamDrill.STEAM_CAPACITY));
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final Item STEAM_SAW = new SteamSaw(
-			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamSaw.STEAM_CAPACITY));
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final Item STEAM_EXOSUIT_HELMET = new SteamExoSuit(EquipmentSlot.HEAD,
-			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamExoSuit.STEAM_CAPACITY));
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final Item STEAM_EXOSUIT_CHEST = new SteamExoSuit(EquipmentSlot.CHEST,
-			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamExoSuit.STEAM_CAPACITY));
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final Item STEAM_EXOSUIT_LEGS = new SteamExoSuit(EquipmentSlot.LEGS,
-			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamExoSuit.STEAM_CAPACITY));
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final Item STEAM_EXOSUIT_BOOTS = new SteamExoSuit(EquipmentSlot.FEET,
-			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1).maxDamage(SteamExoSuit.STEAM_CAPACITY));
+			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 
 	// Status Effects
 	public static StatusEffect EXOSUIT_STRENGTH;

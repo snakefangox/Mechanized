@@ -73,11 +73,6 @@ public class SteamSaw extends AxeItem implements SteamItem, Upgradable, DynamicA
 	}
 
 	@Override
-	public boolean isDamageable() {
-		return true;
-	}
-
-	@Override
 	public int getSteamAmount(ItemStack stack) {
 		CompoundTag tag = stack.getOrCreateTag();
 		if (tag.contains(SteamItem.TAG_KEY)) {
@@ -92,8 +87,6 @@ public class SteamSaw extends AxeItem implements SteamItem, Upgradable, DynamicA
 	public void setSteamAmount(ItemStack stack, int amount) {
 		CompoundTag tag = stack.getOrCreateTag();
 		tag.putInt(TAG_KEY, amount);
-		stack.setDamage((int) (stack.getMaxDamage()
-				- (stack.getMaxDamage() * (float) ((float) amount / (float) getMaxSteamAmount(stack)))));
 	}
 
 	@Override

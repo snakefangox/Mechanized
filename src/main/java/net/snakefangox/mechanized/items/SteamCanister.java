@@ -14,11 +14,6 @@ public class SteamCanister extends Item implements SteamItem {
 	}
 
 	@Override
-	public boolean isDamageable() {
-		return true;
-	}
-
-	@Override
 	public int getSteamAmount(ItemStack stack) {
 		CompoundTag tag = stack.getOrCreateTag();
 		if (tag.contains(SteamItem.TAG_KEY)) {
@@ -33,7 +28,6 @@ public class SteamCanister extends Item implements SteamItem {
 	public void setSteamAmount(ItemStack stack, int amount) {
 		CompoundTag tag = stack.getOrCreateTag();
 		tag.putInt(TAG_KEY, amount);
-		stack.setDamage(STEAM_CAPACITY - amount);
 	}
 
 	@Override
