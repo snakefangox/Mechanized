@@ -1,0 +1,12 @@
+{
+	"name": "合金炉",
+	"icon": "mechanized:alloy_furnace",
+	"category": "basics",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:alloy_furnace",
+			"text": "当燃料、铜锭和锌锭按2铜1锌的比例配给时，合金炉会将它们熔炼成黄铜。黄铜是大部分机器和装置的合成材料。"
+		}
+	]
+}

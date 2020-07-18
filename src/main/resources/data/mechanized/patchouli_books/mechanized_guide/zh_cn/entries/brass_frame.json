@@ -1,0 +1,12 @@
+{
+	"name": "黄铜框架",
+	"icon": "mechanized:brass_frame",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:brass_frame",
+			"text": "和粘液块、蜂蜜块一样，黄铜框架可以连接方块。"
+		}
+	]
+}

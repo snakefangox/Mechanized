@@ -1,0 +1,12 @@
+{
+	"name": "鼓风锅炉",
+	"icon": "mechanized:blast_boiler",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:blast_boiler",
+			"text": "这台机器的运作方式和$(l:basic_boiler)锅炉$()相似，但它燃烧的温度更高。因此，它每秒产生的蒸汽是原来的四倍，它消耗两倍的水和燃料来产生同等数量的蒸汽。"
+		}
+	]
+}

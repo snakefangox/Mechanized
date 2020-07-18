@@ -1,0 +1,12 @@
+{
+	"name": "压力表",
+	"icon": "mechanized:pressure_gauge",
+	"category": "gear",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:pressure_gauge",
+			"text": "右击(或shift+右击)存储蒸汽的方块可读取其PSB压力。"
+		}
+	]
+}

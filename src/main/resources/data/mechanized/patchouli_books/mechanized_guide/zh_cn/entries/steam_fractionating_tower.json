@@ -1,0 +1,12 @@
+{
+	"name": "蒸汽分馏塔",
+	"icon": "mechanized:steam_fractionating_tower",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_fractionating_tower",
+			"text": "这台3格高的机器将加压大量的蒸汽，并将其注入地下。这将冲走地下的岩石、沙子、矿石和粉末。它冲掉的材料会在它的基座周围形成一个大气泡。在它运行时，它会缓慢耗尽区域中的资源，因此你需要移动它。它能存储1单位的蒸汽。"
+		}
+	]
+}

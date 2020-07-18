@@ -1,0 +1,12 @@
+{
+	"name": "锅炉",
+	"icon": "mechanized:steam_boiler",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_boiler",
+			"text": "这台机器使用燃料将水加热成蒸汽。可以用水桶、$(l:pump)汽泵$()或其它管道输入水。它能容纳3个单位的蒸汽，每8个单位燃料产生1单位蒸汽。"
+		}
+	]
+}

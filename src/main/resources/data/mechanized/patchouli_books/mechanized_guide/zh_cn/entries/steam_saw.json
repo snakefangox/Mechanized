@@ -1,0 +1,28 @@
+{
+	"name": "汽动锯",
+	"icon": "mechanized:steam_saw",
+	"category": "gear",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_saw",
+			"text": "汽动锯就是一把蒸汽驱动的斧头，压力越多，砍伐速度越快。也可将其升级作为武器使用。"
+		},
+		
+		{
+			"type": "text",
+			"text": "这件物品可以升级，升级方式请查看后面几页。"
+		},
+		
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_canister",
+			"text": "添加一个蒸汽罐使汽动锯的汽罐容量加倍。"
+		},
+		{
+			"type": "spotlight",
+			"item": "minecraft:iron_sword",
+			"text": "添加一把铁剑增加汽动锯的伤害。"
+		}
+	]
+}

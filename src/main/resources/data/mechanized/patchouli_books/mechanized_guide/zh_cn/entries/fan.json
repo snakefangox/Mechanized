@@ -1,0 +1,12 @@
+{
+	"name": "风扇",
+	"icon": "mechanized:fan",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:fan",
+			"text": "这台机器会在其前后产生可以推动实体的气流。风扇承受的压力越大，气流就更强。它的内部储罐能装下1个单位的蒸汽。可以用红石信号关闭。"
+		}
+	]
+}

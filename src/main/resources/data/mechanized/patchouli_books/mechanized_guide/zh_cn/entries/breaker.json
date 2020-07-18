@@ -1,0 +1,12 @@
+{
+	"name": "破坏器",
+	"icon": "mechanized:breaker",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:breaker",
+			"text": "当PSB等于或高于方块的硬度时，该机器将破坏其朝向的方块。它的内部储罐能装下1个单位的蒸汽。可以用红石信号关闭机器。"
+		}
+	]
+}

@@ -1,0 +1,12 @@
+{
+	"name": "压力阀",
+	"icon": "mechanized:pressure_valve",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:pressure_valve",
+			"text": "此阀门可设置为特定的压力，当压力上升到设定值以上时，它将排出蒸汽直到压力再次降到设定值以下。它的内部储罐能装下1个单位的蒸汽。"
+		}
+	]
+}

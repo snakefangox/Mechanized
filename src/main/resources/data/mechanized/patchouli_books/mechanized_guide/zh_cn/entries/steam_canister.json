@@ -1,0 +1,12 @@
+{
+	"name": "蒸汽罐",
+	"icon": "mechanized:steam_canister",
+	"category": "gear",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_canister",
+			"text": "以物品的形式容纳1个单位的蒸汽。"
+		}
+	]
+}

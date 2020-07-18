@@ -1,0 +1,12 @@
+{
+	"name": "蒸汽充能器",
+	"icon": "mechanized:steam_charger",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_charger",
+			"text": "正常情况下，这个装置不能存储蒸汽。然而，当一件有内部储罐的物品放在其中时它会将物品的蒸汽罐视为己有。不过这个充能器无法给物品充能。蒸汽也会根据这里的压力进行平衡，所以将一个几乎充满蒸汽的物品放在充能器里并连接到一个低压系统将会放能。"
+		}
+	]
+}
