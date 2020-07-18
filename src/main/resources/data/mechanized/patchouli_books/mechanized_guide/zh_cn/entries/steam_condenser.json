@@ -1,0 +1,12 @@
+{
+	"name": "蒸汽冷凝器",
+	"icon": "mechanized:steam_condenser",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_condenser",
+			"text": "蒸汽冷凝器将蒸汽冷凝成水。这个过程产生的热量被泵入顶部的板中，可以用于加热熔炉。小心烫脚。"
+		}
+	]
+}

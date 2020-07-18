@@ -1,0 +1,12 @@
+{
+	"name": "升级台",
+	"icon": "mechanized:upgrade_table",
+	"category": "gear",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:upgrade_table",
+			"text": "可用于升级物品。"
+		}
+	]
+}

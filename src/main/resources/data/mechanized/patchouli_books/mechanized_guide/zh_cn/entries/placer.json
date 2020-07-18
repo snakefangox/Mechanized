@@ -1,0 +1,12 @@
+{
+	"name": "放置器",
+	"icon": "mechanized:placer",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:placer",
+			"text": "这台机器可在其朝向放置方块。它的内部储罐能装下1个单位的蒸汽。可以用红石信号关闭。"
+		}
+	]
+}

@@ -1,0 +1,12 @@
+{
+	"name": "蒸汽活塞",
+	"icon": "mechanized:steam_piston",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_piston",
+			"text": "这台机器的运作有点像原版的活塞，但有更高的效力。当提供红石信号和蒸汽时，它将发射任何接触其朝向的东西。压力越大，发射越远。它的内部储罐能容纳1个单位的蒸汽。"
+		}
+	]
+}

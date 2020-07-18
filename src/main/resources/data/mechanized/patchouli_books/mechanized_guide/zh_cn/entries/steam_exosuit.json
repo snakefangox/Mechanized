@@ -1,0 +1,60 @@
+{
+	"name": "蒸汽动力装甲",
+	"icon": "mechanized:steam_exosuit_chest",
+	"category": "gear",
+	"pages": [
+		{
+			"type": "text",
+			"text": "蒸汽动力装甲和普通盔甲的不同之处在与其拥有蒸汽储罐而没有耐久。穿上这套装甲会固定消耗蒸汽并获得被动效果。用光蒸汽后效果将会消失。"
+		},
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_exosuit_boots",
+			"text": "蒸汽动力鞋子可以回收利用从高处摔落得到的动能。拥有蒸汽时你会受到更少的摔落伤害。另外在摔落后你会跳得更高。"
+		},
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_exosuit_legs",
+			"text": "蒸汽动力护腿增强你的肌肉运动能力。拥有蒸汽时你可以更快速地移动。"
+		},
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_exosuit_chest",
+			"text": "蒸汽动力胸甲提供额外的攻击能力。拥有蒸汽时你的近战伤害增加2。"
+		},
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_exosuit_helm",
+			"text": "蒸汽动力头盔没有被动效果，但可以升级2次。"
+		},
+		{
+			"type": "text",
+			"text": "这些物品都可以升级，升级方式请看后面几页。"
+		},
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_canister",
+			"text": "添加蒸汽罐会使装甲的储罐容量翻倍。"
+		},
+		{
+			"type": "spotlight",
+			"item": "minecraft:diamond_chestplate",
+			"text": "添加钻石胸甲可提供2点额外的护甲值。"
+		},
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_piston",
+			"text": "只有鞋子可以使用这个升级。添加蒸汽活塞可使你的跳跃高度变为3格。每次跳跃消耗2秒的蒸汽量。"
+		},
+		{
+			"type": "spotlight",
+			"item": "minecraft:ender_eye",
+			"text": "只有头盔可以使用这个升级。添加末影之眼可以获得夜视效果。"
+		},
+		{
+			"type": "spotlight",
+			"item": "minecraft:spectral_arrow",
+			"text": "只有头盔可以使用这个升级。 添加光灵箭可以让你看见墙后的生物。"
+		}
+	]
+}

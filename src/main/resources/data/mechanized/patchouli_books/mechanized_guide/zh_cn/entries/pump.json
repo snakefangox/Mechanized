@@ -1,0 +1,12 @@
+{
+	"name": "汽泵",
+	"icon": "mechanized:pump",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:pump",
+			"text": "这台机器从它下方收集水，并试图将水输送到机器或其输出口处的管道中。它需要顶部或侧面输入的蒸汽驱动。它的内部储罐可以容纳1个单位的蒸汽。"
+		}
+	]
+}

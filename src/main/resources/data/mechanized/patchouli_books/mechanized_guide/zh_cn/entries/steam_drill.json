@@ -1,0 +1,33 @@
+{
+	"name": "蒸汽钻头",
+	"icon": "mechanized:steam_drill",
+	"category": "gear",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_drill",
+			"text": "这种钻头对泥土等软质材料和石头等硬质材料同等有效。它的挖掘速度取决于内部储罐的压力，压力越大，挖掘速度越快。"
+		},
+		
+		{
+			"type": "text",
+			"text": "这件物品可以升级，升级方式见后面几页。"
+		},
+		
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_canister",
+			"text": "添加一个蒸汽罐可使钻头的蒸汽容量加倍。"
+		},
+		{
+			"type": "spotlight",
+			"item": "minecraft:diamond",
+			"text": "添加一个钻石可使钻头挖掘钻石才能挖得动的方块，比如黑曜石。"
+		},
+		{
+			"type": "spotlight",
+			"item": "minecraft:bucket",
+			"text": "添加一个桶可以让钻头吸取岩浆和水。钻头的蒸汽会使水蒸发。而岩浆则作为燃料使钻头的储罐增压。"
+		}
+	]
+}

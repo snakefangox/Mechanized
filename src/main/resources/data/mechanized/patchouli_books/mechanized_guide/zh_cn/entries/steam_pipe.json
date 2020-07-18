@@ -1,0 +1,12 @@
+{
+	"name": "蒸汽管道",
+	"icon": "mechanized:steam_pipe",
+	"category": "basics",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_pipe",
+			"text": "运输蒸汽最安全的方式。一个管道系统可以容纳1个单位的蒸汽。破坏管道会释放管道系统中所有储存的蒸汽，但不会释放相连的机器中的蒸汽。你最多只会失去1个单位的蒸汽。"
+		}
+	]
+}

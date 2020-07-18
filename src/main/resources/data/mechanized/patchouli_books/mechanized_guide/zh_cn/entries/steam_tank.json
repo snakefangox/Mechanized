@@ -1,0 +1,12 @@
+{
+	"name": "蒸汽罐",
+	"icon": "mechanized:steam_tank",
+	"category": "machines",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_tank",
+			"text": "这个罐子可以存储16个单位的蒸汽。请注意如此大的容量将会大大降低蒸汽系统的压力。"
+		}
+	]
+}
