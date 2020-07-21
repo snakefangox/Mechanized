@@ -38,12 +38,6 @@ public interface SteamItem {
 	 */
 	public int getMaxSteamAmount(ItemStack stack);
 
-	default public void validateSteam(ItemStack stack) {
-		int steam = getSteamAmount(stack);
-		setSteamAmount(stack, 0);
-		addSteam(stack, steam);
-	}
-
 	/**
 	 * Gets the pressure for the steam tank linked to the given side
 	 * 

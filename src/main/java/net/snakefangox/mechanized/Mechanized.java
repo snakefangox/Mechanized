@@ -9,20 +9,27 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+
+import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
+import me.sargunvohra.mcmods.autoconfig1u.serializer.Toml4jConfigSerializer;
 import net.snakefangox.mechanized.networking.ToServerHandlers;
 
-public class Mechanized implements ModInitializer, ClientModInitializer {
+public class Mechanized implements ModInitializer {
 
 	public static final String MODID = "mechanized";
 	public static final String MOD_NAME = "Mechanized";
 
 	public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.build(new Identifier(MODID, "general"),
 			() -> new ItemStack(MRegister.BASIC_BOILER));
+	public static MConfig config;
 
 	public static final String COTTON_R_MODID = "cotton-resources";
 
 	@Override
 	public void onInitialize() {
+		AutoConfig.register(MConfig.class, Toml4jConfigSerializer::new);
+		config = AutoConfig.getConfigHolder(MConfig.class).getConfig();
+
 		MRegister.registerEverything();
 
 		ToServerHandlers.initPacketHandlers();
@@ -35,11 +42,6 @@ public class Mechanized implements ModInitializer, ClientModInitializer {
 
 		if (FabricLoader.getInstance().isDevelopmentEnvironment())
 			AutoGenJson.autoGenerateJson(MODID, "D:\\Code\\Fabric_mods\\Mechanized");
-	}
-
-	@Override
-	public void onInitializeClient() {
-		MClientRegister.registerClient();
 	}
 
 }

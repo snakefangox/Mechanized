@@ -1,0 +1,28 @@
+{
+	"name": "Steam Jet",
+	"icon": "mechanized:steam_jet",
+	"category": "gear",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_jet",
+			"text": "This jet stores and releases pressurised steam to propel the user. Normally it's much to weak to lift the user (but see upgrades) however it may prove very useful in providing speed to someone already held aloft by some other means."
+		},
+		
+		{
+			"type": "text",
+			"text": "This item is upgradable, possible upgrades are listed on the following pages."
+		},
+		
+		{
+			"type": "spotlight",
+			"item": "mechanized:steam_canister",
+			"text": "Adding a steam canister doubles the jet's steam tank capacity."
+		},
+		{
+			"type": "spotlight",
+			"item": "mechanized:pressure_valve",
+			"text": "Adding a pressure valve increases the speed of the escaping steam, increasing the users speed. With this upgrade it it possible to lift slowly off the ground using only the steam jet."
+		}
+	]
+}

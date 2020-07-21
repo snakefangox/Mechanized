@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " ii",
+        "gbi",
+        "gg "
+    ],
+    "key": {
+        "i": {
+            "tag": "c:brass_ingots"
+        },
+         "b": {
+            "item": "mechanized:steam_canister"
+        },
+         "g": {
+            "item": "minecraft:iron_ingot"
+        }
+    },
+    "result": {
+        "item": "mechanized:steam_jet",
+        "count": 1
+    }
+}

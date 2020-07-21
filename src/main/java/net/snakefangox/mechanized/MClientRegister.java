@@ -1,5 +1,6 @@
 package net.snakefangox.mechanized;
 
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
@@ -16,7 +17,7 @@ import net.snakefangox.mechanized.gui.UpgradeTableContainer.UpgradeTableScreen;
 import net.snakefangox.mechanized.networking.ToClientHandlers;
 
 @Environment(EnvType.CLIENT)
-public class MClientRegister {
+public class MClientRegister implements ClientModInitializer {
 
 	public static void registerClient() {
 
@@ -35,4 +36,8 @@ public class MClientRegister {
 		EntityRendererRegistry.INSTANCE.register(MRegister.FLYING_BLOCK, (entityRenderDispatcher, context) -> new FallingBlockEntityRenderer(entityRenderDispatcher));
 	}
 
+	@Override
+	public void onInitializeClient() {
+		registerClient();
+	}
 }

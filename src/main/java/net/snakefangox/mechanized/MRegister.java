@@ -1,13 +1,53 @@
 package net.snakefangox.mechanized;
 
+import java.util.function.ToIntFunction;
+
 import com.google.common.base.Supplier;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
-import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
+import net.snakefangox.mechanized.blocks.AlloyFurnace;
+import net.snakefangox.mechanized.blocks.Breaker;
+import net.snakefangox.mechanized.blocks.Fan;
+import net.snakefangox.mechanized.blocks.Placer;
+import net.snakefangox.mechanized.blocks.PressureValve;
+import net.snakefangox.mechanized.blocks.Pump;
+import net.snakefangox.mechanized.blocks.SteamBoiler;
+import net.snakefangox.mechanized.blocks.SteamCharger;
+import net.snakefangox.mechanized.blocks.SteamCondenser;
+import net.snakefangox.mechanized.blocks.SteamFractionatingTower;
+import net.snakefangox.mechanized.blocks.SteamPipe;
+import net.snakefangox.mechanized.blocks.SteamPiston;
+import net.snakefangox.mechanized.blocks.SteamSource;
+import net.snakefangox.mechanized.blocks.SteamTank;
+import net.snakefangox.mechanized.blocks.UpgradeTable;
+import net.snakefangox.mechanized.blocks.entity.AlloyFurnaceEntity;
+import net.snakefangox.mechanized.blocks.entity.BasicBoilerEntity;
+import net.snakefangox.mechanized.blocks.entity.BlastBoilerEntity;
+import net.snakefangox.mechanized.blocks.entity.BreakerEntity;
+import net.snakefangox.mechanized.blocks.entity.FanEntity;
+import net.snakefangox.mechanized.blocks.entity.PlacerEntity;
+import net.snakefangox.mechanized.blocks.entity.PressureValveEntity;
+import net.snakefangox.mechanized.blocks.entity.PumpEntity;
+import net.snakefangox.mechanized.blocks.entity.SteamChargerEntity;
+import net.snakefangox.mechanized.blocks.entity.SteamCondenserEntity;
+import net.snakefangox.mechanized.blocks.entity.SteamFractionatingTowerEntity;
+import net.snakefangox.mechanized.blocks.entity.SteamPipeEntity;
+import net.snakefangox.mechanized.blocks.entity.SteamPistonEntity;
+import net.snakefangox.mechanized.blocks.entity.SteamSourceEntity;
+import net.snakefangox.mechanized.blocks.entity.SteamTankEntity;
+import net.snakefangox.mechanized.effects.ExoEffect;
+import net.snakefangox.mechanized.entities.FlyingBlockEntity;
+import net.snakefangox.mechanized.gui.AlloyFurnaceContainer;
+import net.snakefangox.mechanized.gui.PlacerContainer;
+import net.snakefangox.mechanized.gui.PressureValveContainer;
+import net.snakefangox.mechanized.gui.SteamBoilerContainer;
+import net.snakefangox.mechanized.gui.UpgradeTableContainer;
+import net.snakefangox.mechanized.items.PressureGauge;
+import net.snakefangox.mechanized.items.SteamCanister;
+import net.snakefangox.mechanized.items.SteamDrill;
+import net.snakefangox.mechanized.items.SteamExoSuit;
+import net.snakefangox.mechanized.items.SteamJet;
+import net.snakefangox.mechanized.items.SteamSaw;
+import net.snakefangox.mechanized.recipes.AlloyRecipe;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
@@ -23,22 +63,20 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.snakefangox.mechanized.blocks.*;
-import net.snakefangox.mechanized.blocks.entity.*;
-import net.snakefangox.mechanized.effects.ExoEffect;
-import net.snakefangox.mechanized.entities.FlyingBlockEntity;
-import net.snakefangox.mechanized.gui.*;
-import net.snakefangox.mechanized.items.*;
-import net.snakefangox.mechanized.recipes.AlloyRecipe;
 
-import java.util.function.ToIntFunction;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
+import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
 
 public class MRegister {
 
@@ -115,9 +153,9 @@ public class MRegister {
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final Item STEAM_CANISTER = new SteamCanister(
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
-	public static final Item STEAM_DRILL = new SteamDrill(
+	public static final SteamDrill STEAM_DRILL = new SteamDrill(
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
-	public static final Item STEAM_SAW = new SteamSaw(
+	public static final SteamSaw STEAM_SAW = new SteamSaw(
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final Item STEAM_EXOSUIT_HELMET = new SteamExoSuit(EquipmentSlot.HEAD,
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
@@ -127,6 +165,7 @@ public class MRegister {
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final Item STEAM_EXOSUIT_BOOTS = new SteamExoSuit(EquipmentSlot.FEET,
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
+	public static final Item STEAM_JET = new SteamJet(new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 
 	// Status Effects
 	public static StatusEffect EXOSUIT_STRENGTH;
@@ -146,8 +185,10 @@ public class MRegister {
 					.size(EntityDimensions.fixed(1, 1)).build());
 
 	public static void registerEverything() {
-		registerBlock(COPPER_ORE, new Identifier(Mechanized.MODID, "copper_ore"));
-		registerBlock(ZINC_ORE, new Identifier(Mechanized.MODID, "zinc_ore"));
+		if (Mechanized.config.enableOres) {
+			registerBlock(COPPER_ORE, new Identifier(Mechanized.MODID, "copper_ore"));
+			registerBlock(ZINC_ORE, new Identifier(Mechanized.MODID, "zinc_ore"));
+		}
 		ALLOY_FURNACE_ENTITY = registerBlock(ALLOY_FURNACE, new Identifier(Mechanized.MODID, "alloy_furnace"),
 				AlloyFurnaceEntity::new);
 		BASIC_BOILER_ENTITY = registerBlock(BASIC_BOILER, new Identifier(Mechanized.MODID, "steam_boiler"),
@@ -177,8 +218,10 @@ public class MRegister {
 		STEAM_CONDENSER_ENTITY = registerBlock(STEAM_CONDENSER, new Identifier(Mechanized.MODID, "steam_condenser"),
 				SteamCondenserEntity::new);
 
-		registerItem(COPPER_INGOT, new Identifier(Mechanized.MODID, "copper_ingot"));
-		registerItem(ZINC_INGOT, new Identifier(Mechanized.MODID, "zinc_ingot"));
+		if (Mechanized.config.enableIngots) {
+			registerItem(COPPER_INGOT, new Identifier(Mechanized.MODID, "copper_ingot"));
+			registerItem(ZINC_INGOT, new Identifier(Mechanized.MODID, "zinc_ingot"));
+		}
 		registerItem(BRASS_INGOT, new Identifier(Mechanized.MODID, "brass_ingot"));
 		registerItem(FAN_BLADE, new Identifier(Mechanized.MODID, "fan_blade"));
 		registerItem(PRESSURE_GAUGE, new Identifier(Mechanized.MODID, "pressure_gauge"));
@@ -189,6 +232,7 @@ public class MRegister {
 		registerItem(STEAM_EXOSUIT_CHEST, new Identifier(Mechanized.MODID, "steam_exosuit_chest"));
 		registerItem(STEAM_EXOSUIT_LEGS, new Identifier(Mechanized.MODID, "steam_exosuit_legs"));
 		registerItem(STEAM_EXOSUIT_BOOTS, new Identifier(Mechanized.MODID, "steam_exosuit_boots"));
+		registerItem(STEAM_JET, new Identifier(Mechanized.MODID, "steam_jet"));
 
 		EXOSUIT_STRENGTH = Registry.register(Registry.STATUS_EFFECT,
 				new Identifier(Mechanized.MODID, "exosuit_strength"),
@@ -230,8 +274,10 @@ public class MRegister {
 	@Environment(EnvType.CLIENT)
 	public static void setRenderLayers() {
 		setRenderLayer(PUMP, RenderLayerEnum.CUTOUT);
-		setRenderLayer(COPPER_ORE, RenderLayerEnum.CUTOUT);
-		setRenderLayer(ZINC_ORE, RenderLayerEnum.CUTOUT);
+		if (Mechanized.config.enableOres) {
+			setRenderLayer(COPPER_ORE, RenderLayerEnum.CUTOUT);
+			setRenderLayer(ZINC_ORE, RenderLayerEnum.CUTOUT);
+		}
 	}
 
 	private static void registerBlock(Block block, Identifier id) {
@@ -261,14 +307,14 @@ public class MRegister {
 	@Environment(EnvType.CLIENT)
 	private static void setRenderLayer(Block block, RenderLayerEnum layer) {
 		switch (layer) {
-			case CUTOUT:
-				BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
-				break;
-			case TRANSLUCENT:
-				BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getTranslucent());
-				break;
-			default:
-				break;
+		case CUTOUT:
+			BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getCutout());
+			break;
+		case TRANSLUCENT:
+			BlockRenderLayerMap.INSTANCE.putBlock(block, RenderLayer.getTranslucent());
+			break;
+		default:
+			break;
 		}
 	}
 

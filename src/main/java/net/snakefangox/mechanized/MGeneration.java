@@ -10,7 +10,7 @@ import net.minecraft.world.gen.feature.OreFeatureConfig;
 public class MGeneration {
 
 	public static void addOreToBiome(Biome biome) {
-		if (biome.getCategory() != Biome.Category.NETHER && biome.getCategory() != Biome.Category.THEEND) {
+		if (Mechanized.config.enableOres && biome.getCategory() != Biome.Category.NETHER && biome.getCategory() != Biome.Category.THEEND) {
 			biome.addFeature(GenerationStep.Feature.UNDERGROUND_ORES,
 					Feature.ORE.configure(new OreFeatureConfig(OreFeatureConfig.Target.NATURAL_STONE,
 							MRegister.COPPER_ORE.getDefaultState(), 14)).createDecoratedFeature(

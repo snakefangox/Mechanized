@@ -2,7 +2,6 @@
   "schemaVersion": 1,
   "id": "mechanized",
   "version": "${version}",
-
   "name": "Mechanized",
   "description": "Steam, gears and brass. Harness the power of steam and shape your world. Or just use it to make a really cool trampoline.",
   "authors": [
@@ -10,40 +9,40 @@
     "Art by Zane O'Shannassy"
   ],
   "contact": {
-  	"discord":"snakefangox#8137",
-  	"sources":"https://github.com/Snakefangox/Mechanized",
-  	"website":"https://www.curseforge.com/minecraft/mc-mods/mechanized-steam-power"
+    "discord": "snakefangox#8137",
+    "sources": "https://github.com/Snakefangox/Mechanized",
+    "website": "https://www.curseforge.com/minecraft/mc-mods/mechanized-steam-power"
   },
-
   "license": "MIT",
   "icon": "assets/mechanized/textures/item/steam_drill.png",
-
   "environment": "*",
   "entrypoints": {
     "main": [
       "net.snakefangox.mechanized.Mechanized"
     ],
-	"client": [
-      "net.snakefangox.mechanized.Mechanized"
+    "client": [
+      "net.snakefangox.mechanized.MClientRegister"
     ],
     "rei_plugins_v0": [
       "net.snakefangox.mechanized.reiplugin.REIEntryPoint"
+    ],
+    "autoswitch": [
+      "net.snakefangox.mechanized.modcompat.AutoSwitch"
     ]
   },
   "mixins": [
     "mechanized.mixins.json"
   ],
-
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": ">=0.10.0",
     "minecraft": "1.16.1",
-	"libgui": ">=2.0.0",
-	"libblockattributes": ">=0.7.0"
+    "libgui": ">=2.0.0",
+    "libblockattributes": ">=0.7.0"
   },
   "suggests": {
     "flamingo": "*",
-	"patchouli": "*",
-	"roughlyenoughitems": "*"
+    "patchouli": "*",
+    "roughlyenoughitems": "*"
   }
 }

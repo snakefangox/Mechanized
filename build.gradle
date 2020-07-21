@@ -19,6 +19,7 @@ repositories {
         name = "CottonMC"
         url = "http://server.bbkr.space:8081/artifactory/libs-release"
     }
+	maven { url 'https://jitpack.io' }
 }
 dependencies {
 	//to change the versions see the gradle.properties file
@@ -38,6 +39,9 @@ dependencies {
 	modCompile "me.shedaniel:RoughlyEnoughItems:${project.roughlyenoughitems_version}"
 	modCompile "io.github.cottonmc:LibCD:${project.libcd_version}"
 	include "io.github.cottonmc:LibCD:${project.libcd_version}"
+	modImplementation 'com.github.dexman545:autoswitch-api:-SNAPSHOT'
+	modApi "me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}"
+	include "me.sargunvohra.mcmods:autoconfig1u:${project.autoconfig_version}"
 }
 
 processResources {

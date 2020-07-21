@@ -95,9 +95,6 @@ public class UpgradeTableContainer extends SyncedGuiDescription {
 			upgradeList[i] = blockInventory.getStack(i + 1).getItem();
 		}
 		up.getUpgradeTag(stack, upgradeList);
-		if (up instanceof SteamItem) {
-			((SteamItem) up).validateSteam(stack);
-		}
 	}
 
 	public void updateSlot(int slotID, ItemStack stack) {
