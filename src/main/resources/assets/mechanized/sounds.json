@@ -17,5 +17,11 @@
 		"sounds": [
 			"mechanized:steam_inject"
 		]
+	},
+	"ratchet_clunk": {
+		"subtitle": "Ratchet Clunks",
+		"sounds": [
+			"mechanized:ratchet_clunk"
+		]
 	}
 }

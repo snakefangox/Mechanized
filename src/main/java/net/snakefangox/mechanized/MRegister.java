@@ -6,6 +6,7 @@ import com.google.common.base.Supplier;
 import net.snakefangox.mechanized.blocks.AlloyFurnace;
 import net.snakefangox.mechanized.blocks.Breaker;
 import net.snakefangox.mechanized.blocks.Fan;
+import net.snakefangox.mechanized.blocks.FrameRatchet;
 import net.snakefangox.mechanized.blocks.Placer;
 import net.snakefangox.mechanized.blocks.PressureValve;
 import net.snakefangox.mechanized.blocks.Pump;
@@ -23,6 +24,7 @@ import net.snakefangox.mechanized.blocks.entity.BasicBoilerEntity;
 import net.snakefangox.mechanized.blocks.entity.BlastBoilerEntity;
 import net.snakefangox.mechanized.blocks.entity.BreakerEntity;
 import net.snakefangox.mechanized.blocks.entity.FanEntity;
+import net.snakefangox.mechanized.blocks.entity.FrameRatchetBE;
 import net.snakefangox.mechanized.blocks.entity.PlacerEntity;
 import net.snakefangox.mechanized.blocks.entity.PressureValveEntity;
 import net.snakefangox.mechanized.blocks.entity.PumpEntity;
@@ -119,6 +121,8 @@ public class MRegister {
 			.breakByTool(FabricToolTags.PICKAXES).nonOpaque());
 	public static final Block STEAM_SOURCE = new SteamSource(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
 			.breakByTool(FabricToolTags.PICKAXES));
+	public static final Block FRAME_RATCHET = new FrameRatchet(FabricBlockSettings.of(Material.METAL).hardness(4).resistance(3)
+			.breakByTool(FabricToolTags.PICKAXES).nonOpaque());
 
 	// BlockEntities
 	public static BlockEntityType<AlloyFurnaceEntity> ALLOY_FURNACE_ENTITY;
@@ -136,6 +140,7 @@ public class MRegister {
 	public static BlockEntityType<SteamFractionatingTowerEntity> STEAM_FRACTIONATING_TOWER_ENTITY;
 	public static BlockEntityType<SteamSourceEntity> STEAM_SOURCE_ENTITY;
 	public static BlockEntityType<SteamCondenserEntity> STEAM_CONDENSER_ENTITY;
+	public static BlockEntityType<FrameRatchetBE> FRAME_RATCHET_ENTITY;
 
 	// Containers
 	public static ScreenHandlerType<AlloyFurnaceContainer> ALLOY_FURNACE_CONTAINER;
@@ -149,6 +154,7 @@ public class MRegister {
 	public static final Item ZINC_INGOT = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
 	public static final Item BRASS_INGOT = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
 	public static final Item FAN_BLADE = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
+	public static final Item BRASS_GEAR = new Item(new Item.Settings().group(Mechanized.ITEM_GROUP));
 	public static final Item PRESSURE_GAUGE = new PressureGauge(
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final Item STEAM_CANISTER = new SteamCanister(
@@ -176,6 +182,7 @@ public class MRegister {
 	public static SoundEvent STEAM_INJECT;
 	public static SoundEvent STEAM_ESCAPES;
 	public static SoundEvent STEAM_HIT;
+	public static SoundEvent RATCHET_CLUNK;
 
 	// Entities
 	public static final EntityType<FlyingBlockEntity> FLYING_BLOCK = Registry.register(Registry.ENTITY_TYPE,
@@ -217,6 +224,8 @@ public class MRegister {
 				SteamSourceEntity::new);
 		STEAM_CONDENSER_ENTITY = registerBlock(STEAM_CONDENSER, new Identifier(Mechanized.MODID, "steam_condenser"),
 				SteamCondenserEntity::new);
+		FRAME_RATCHET_ENTITY = registerBlock(FRAME_RATCHET, new Identifier(Mechanized.MODID, "frame_ratchet"),
+				FrameRatchetBE::new);
 
 		if (Mechanized.config.enableIngots) {
 			registerItem(COPPER_INGOT, new Identifier(Mechanized.MODID, "copper_ingot"));
@@ -224,6 +233,7 @@ public class MRegister {
 		}
 		registerItem(BRASS_INGOT, new Identifier(Mechanized.MODID, "brass_ingot"));
 		registerItem(FAN_BLADE, new Identifier(Mechanized.MODID, "fan_blade"));
+		registerItem(BRASS_GEAR, new Identifier(Mechanized.MODID, "brass_gear"));
 		registerItem(PRESSURE_GAUGE, new Identifier(Mechanized.MODID, "pressure_gauge"));
 		registerItem(STEAM_CANISTER, new Identifier(Mechanized.MODID, "steam_canister"));
 		registerItem(STEAM_DRILL, new Identifier(Mechanized.MODID, "steam_drill"));
@@ -265,6 +275,7 @@ public class MRegister {
 		STEAM_INJECT = registerSoundEvent(new Identifier(Mechanized.MODID, "steam_inject"));
 		STEAM_HIT = registerSoundEvent(new Identifier(Mechanized.MODID, "steam_hit"));
 		STEAM_ESCAPES = registerSoundEvent(new Identifier(Mechanized.MODID, "steam_escapes"));
+		RATCHET_CLUNK = registerSoundEvent(new Identifier(Mechanized.MODID, "ratchet_clunk"));
 
 		Registry.register(Registry.RECIPE_SERIALIZER, AlloyRecipe.ID, AlloyRecipe.AlloyRecipeSerializer.INSTANCE);
 		Registry.register(Registry.RECIPE_TYPE, AlloyRecipe.ID, AlloyRecipe.AlloyRecipeType.INSTANCE);

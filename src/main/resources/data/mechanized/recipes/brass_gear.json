@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " i ",
+        "iii",
+        " i "
+    ],
+    "key": {
+        "i": {
+            "tag": "c:brass_ingots"
+        }
+    },
+    "result": {
+        "item": "mechanized:brass_gear",
+        "count": 2
+    }
+}

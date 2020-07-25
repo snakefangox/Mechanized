@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "mechanized:block/frame_ratchet" },
+    "facing=south": { "model": "mechanized:block/frame_ratchet", "y": 180 },
+    "facing=west": { "model": "mechanized:block/frame_ratchet", "y": 270 },
+    "facing=east": { "model": "mechanized:block/frame_ratchet", "y": 90 }
+  }
+}

@@ -36,5 +36,7 @@
 "item.mechanized.blast_boiler": "Blast Boiler",
 "block.mechanized.steam_condenser": "Steam Condenser",
 "item.mechanized.steam_saw": "Steam Saw",
-"item.mechanized.steam_jet": "Steam Jet"
+"item.mechanized.steam_jet": "Steam Jet",
+"item.mechanized.brass_gear": "Brass Gear",
+"block.mechanized.frame_ratchet": "Frame Ratchet"
 }
