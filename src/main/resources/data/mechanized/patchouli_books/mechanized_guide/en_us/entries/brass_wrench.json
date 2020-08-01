@@ -1,0 +1,12 @@
+{
+	"name": "Brass Wrench",
+	"icon": "mechanized:brass_wrench",
+	"category": "gear",
+	"pages": [
+		{
+			"type": "spotlight",
+			"item": "mechanized:brass_wrench",
+			"text": "Can be used on a block to rotate it without dropping its contents, either steam or items."
+		}
+	]
+}

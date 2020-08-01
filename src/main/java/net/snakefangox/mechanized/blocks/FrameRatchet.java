@@ -20,7 +20,7 @@ public class FrameRatchet extends Block implements BlockEntityProvider {
 
 	@Override
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
-		Direction dir = Direction.fromHorizontal(ctx.getPlayerFacing().getOpposite().getHorizontal());
+		Direction dir = Direction.fromHorizontal(ctx.getPlayerFacing().getHorizontal());
 		return getDefaultState().with(HorizontalFacingBlock.FACING, dir);
 	}
 

@@ -42,6 +42,7 @@ import net.snakefangox.mechanized.gui.PlacerContainer;
 import net.snakefangox.mechanized.gui.PressureValveContainer;
 import net.snakefangox.mechanized.gui.SteamBoilerContainer;
 import net.snakefangox.mechanized.gui.UpgradeTableContainer;
+import net.snakefangox.mechanized.items.BrassWrench;
 import net.snakefangox.mechanized.items.PressureGauge;
 import net.snakefangox.mechanized.items.SteamCanister;
 import net.snakefangox.mechanized.items.SteamDrill;
@@ -172,6 +173,7 @@ public class MRegister {
 	public static final Item STEAM_EXOSUIT_BOOTS = new SteamExoSuit(EquipmentSlot.FEET,
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final Item STEAM_JET = new SteamJet(new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
+	public static final Item BRASS_WRENCH = new BrassWrench(new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 
 	// Status Effects
 	public static StatusEffect EXOSUIT_STRENGTH;
@@ -243,6 +245,7 @@ public class MRegister {
 		registerItem(STEAM_EXOSUIT_LEGS, new Identifier(Mechanized.MODID, "steam_exosuit_legs"));
 		registerItem(STEAM_EXOSUIT_BOOTS, new Identifier(Mechanized.MODID, "steam_exosuit_boots"));
 		registerItem(STEAM_JET, new Identifier(Mechanized.MODID, "steam_jet"));
+		registerItem(BRASS_WRENCH, new Identifier(Mechanized.MODID, "brass_wrench"));
 
 		EXOSUIT_STRENGTH = Registry.register(Registry.STATUS_EFFECT,
 				new Identifier(Mechanized.MODID, "exosuit_strength"),
