@@ -57,6 +57,7 @@ import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.enchantment.KnockbackEnchantment;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -164,13 +165,13 @@ public class MRegister {
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final SteamSaw STEAM_SAW = new SteamSaw(
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
-	public static final Item STEAM_EXOSUIT_HELMET = new SteamExoSuit(EquipmentSlot.HEAD,
+	public static final SteamExoSuit STEAM_EXOSUIT_HELMET = new SteamExoSuit(EquipmentSlot.HEAD,
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
-	public static final Item STEAM_EXOSUIT_CHEST = new SteamExoSuit(EquipmentSlot.CHEST,
+	public static final SteamExoSuit STEAM_EXOSUIT_CHEST = new SteamExoSuit(EquipmentSlot.CHEST,
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
-	public static final Item STEAM_EXOSUIT_LEGS = new SteamExoSuit(EquipmentSlot.LEGS,
+	public static final SteamExoSuit STEAM_EXOSUIT_LEGS = new SteamExoSuit(EquipmentSlot.LEGS,
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
-	public static final Item STEAM_EXOSUIT_BOOTS = new SteamExoSuit(EquipmentSlot.FEET,
+	public static final SteamExoSuit STEAM_EXOSUIT_BOOTS = new SteamExoSuit(EquipmentSlot.FEET,
 			new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final Item STEAM_JET = new SteamJet(new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
 	public static final Item BRASS_WRENCH = new BrassWrench(new Item.Settings().group(Mechanized.ITEM_GROUP).maxCount(1));
@@ -179,6 +180,7 @@ public class MRegister {
 	public static StatusEffect EXOSUIT_STRENGTH;
 	public static StatusEffect EXOSUIT_SPEED;
 	public static StatusEffect EXOSUIT_PROTECC;
+	public static StatusEffect EXOSUIT_KNOCK;
 
 	// Sound Events
 	public static SoundEvent STEAM_INJECT;
@@ -250,7 +252,7 @@ public class MRegister {
 		EXOSUIT_STRENGTH = Registry.register(Registry.STATUS_EFFECT,
 				new Identifier(Mechanized.MODID, "exosuit_strength"),
 				new ExoEffect().addAttributeModifier(EntityAttributes.GENERIC_ATTACK_DAMAGE,
-						"6551312b-037b-4152-8c44-e81e9065bae6", 2, EntityAttributeModifier.Operation.ADDITION));
+						"6551312b-037b-4152-8c44-e81e9065bae6", 1, EntityAttributeModifier.Operation.ADDITION));
 		EXOSUIT_SPEED = Registry.register(Registry.STATUS_EFFECT, new Identifier(Mechanized.MODID, "exosuit_speed"),
 				new ExoEffect().addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED,
 						"d859def7-792c-40c2-881b-7d2703fc5760", 0.15D,
@@ -258,6 +260,9 @@ public class MRegister {
 		EXOSUIT_PROTECC = Registry.register(Registry.STATUS_EFFECT, new Identifier(Mechanized.MODID, "exosuit_protecc"),
 				new ExoEffect().addAttributeModifier(EntityAttributes.GENERIC_ARMOR, "1b7e6f75-78d3-4a4d-85af-330e09d2470e", 2,
 						EntityAttributeModifier.Operation.ADDITION));
+		EXOSUIT_KNOCK = Registry.register(Registry.STATUS_EFFECT, new Identifier(Mechanized.MODID, "exosuit_knock"),
+						new ExoEffect().addAttributeModifier(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, "c21fa0b4-3ac6-4d28-8f4c-5205c9ca2dc1", 5,
+										EntityAttributeModifier.Operation.ADDITION));
 
 		ALLOY_FURNACE_CONTAINER = ScreenHandlerRegistry.registerExtended(
 				new Identifier(Mechanized.MODID, "alloy_furnace"), (syncID, player, buf) ->
@@ -269,8 +274,7 @@ public class MRegister {
 				new Identifier(Mechanized.MODID, "pressure_valve"), (syncID, player, buf) ->
 						new PressureValveContainer(syncID, player, ScreenHandlerContext.create(player.player.world, buf.readBlockPos())));
 		UPGRADE_TABLE_CONTAINER = ScreenHandlerRegistry.registerSimple(
-				new Identifier(Mechanized.MODID, "upgrade_table"), (syncID, player) ->
-						new UpgradeTableContainer(syncID, player));
+				new Identifier(Mechanized.MODID, "upgrade_table"), UpgradeTableContainer::new);
 		PLACER_CONTAINER = ScreenHandlerRegistry.registerExtended(
 				new Identifier(Mechanized.MODID, "placer"), (syncID, player, buf) ->
 						new PlacerContainer(syncID, player, ScreenHandlerContext.create(player.player.world, buf.readBlockPos())));

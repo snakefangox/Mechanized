@@ -55,6 +55,11 @@
 			"type": "spotlight",
 			"item": "minecraft:spectral_arrow",
 			"text": "Only the helm can accept this upgrade. Adding a spectral arrow grants the ability to see creatures through walls while the helm has steam."
+		},
+		{
+			"type": "spotlight",
+			"item": "minecraft:piston",
+			"text": "Only the chest can accept this upgrade. Adding a piston gives your hits one hell of a follow through. Doing so requires a significant amount of steam per hit."
 		}
 	]
 }

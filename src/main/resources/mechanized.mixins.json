@@ -7,7 +7,8 @@
 		"FurnaceMixin",
 		"LoginMixin",
 		"PistonHandlerMixin",
-		"PlayerMixin"
+		"PlayerMixin",
+		"EnchantmentHelperMixin"
 	],
 	"client": [
 		"EffectRenderMixin",
