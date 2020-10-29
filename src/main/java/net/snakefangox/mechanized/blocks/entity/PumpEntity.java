@@ -23,7 +23,7 @@ import net.snakefangox.mechanized.steam.SteamUtil;
 public class PumpEntity extends BlockEntity implements Steam, Tickable, PropertyDelegateHolder {
 
 	private static final int STEAM_CAPACITY = Steam.UNIT;
-	private static final int PUMP_COST = (int) (Steam.UNIT * 0.005);
+	private static final int PUMP_COST = (int) (Steam.UNIT * 0.02);
 	int steamAmount = 0;
 
 	private static final FluidAmount TANK_CAPACITY = FluidAmount.ofWhole(1);
@@ -43,8 +43,8 @@ public class PumpEntity extends BlockEntity implements Steam, Tickable, Property
 			SteamUtil.directionalEqualizeSteam(world, this, pos, dir, dir);
 			SteamUtil.directionalEqualizeSteam(world, this, pos, Direction.UP, Direction.UP);
 		}
-		if (world.getTime() % 10 == 0) {
-			if (getPressure(Direction.UP) >= 0.1 && tank
+		if (world.getTime() % 15 == 0) {
+			if (getSteamAmount(Direction.UP) >= PUMP_COST && tank
 					.attemptInsertion(FluidWorldUtil.drain(world, pos.offset(Direction.DOWN), Simulation.SIMULATE),
 							Simulation.SIMULATE)
 					.isEmpty()) {

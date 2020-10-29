@@ -49,11 +49,10 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 		if (level == -1) {
 			level = getCachedState().get(SteamFractionatingTower.LEVEL);
 		}
-		if (world.getTime() % 20 == 0 && level == 0) {
+		if (world.getTime() % 50 == 0 && level == 0) {
 			BlockEntity be = world.getBlockEntity(pos.offset(Direction.UP, 2));
 			if (be instanceof SteamFractionatingTowerEntity
-					&& ((SteamFractionatingTowerEntity) be).getPressure(Direction.UP) >= 1) {
-				if (checkIsPositionValid()) {
+					&& ((SteamFractionatingTowerEntity) be).getPressure(Direction.UP) >= 0.1) {
 					((SteamFractionatingTowerEntity) be).removeSteam(Direction.UP, STEAM_USE_PER_OP);
 					((ServerWorld) world).playSound(null, pos, MRegister.STEAM_INJECT, SoundCategory.BLOCKS, 4, 1);
 					for (int i = 0; i < MINE_AMOUNT_MAX; i++) {
@@ -61,7 +60,6 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 							doMine();
 						}
 					}
-				}
 			}
 		}
 	}
@@ -80,29 +78,13 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 			world.breakBlock(minePos, false);
 			List<ItemEntity> items = world.getEntities(ItemEntity.class, new Box(minePos), null);
 			items.forEach(ie -> {
-				double x = ie.getX();
-				double z = ie.getZ();
+				double x = (ie.getX() - pos.getX()) / 2 + pos.getX();
+				double z = (ie.getZ() - pos.getZ()) / 2 + pos.getZ();
 				ie.refreshPositionAndAngles(x, pos.getY(), z, ie.yaw, ie.pitch);
 				ie.addVelocity(0, 0.2, 0);
 				ie.velocityModified = true;
 			});
 		}
-	}
-
-	private boolean checkIsPositionValid() {
-		int stoneCount = 0;
-		BlockPos.Mutable searchPos = new BlockPos.Mutable();
-		searchPos.add(pos);
-		for (int i = pos.getY(); i >= 0; i--) {
-			searchPos.set(searchPos.getX(), searchPos.getY() - 1, searchPos.getZ());
-			BlockState state = world.getBlockState(searchPos);
-			Block atPos = state.getBlock();
-			if (state.getMaterial() == Material.STONE) {
-				stoneLevel = i;
-				++stoneCount;
-			}
-		}
-		return stoneCount > 3;
 	}
 
 	@Override
